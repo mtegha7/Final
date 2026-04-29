@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — IREA FDIVS</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-dark: #0f1923;
+            --accent-green: #35ac39;
+            --text-gray: #777;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background: var(--primary-dark);
+            color: white;
+            padding-top: 20px;
+            position: fixed;
+            width: 240px;
+        }
+
+        .sidebar h2 {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            color: #ccc;
+            padding: 15px 25px;
+            display: block;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-green);
+        }
+
+        .main-content {
+            margin-left: 240px;
+            padding: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+
+        .badge-fraud {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .badge-pending {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .badge-verified {
+            background-color: var(--accent-green);
+            color: white;
+        }
+
+        .btn-action {
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h2>IR<span>EA</span></h2>
+        <a href="#" class="active">Dashboard</a>
+        <a href="#" onclick="loadContent('listings')">Review Listings</a>
+        <a href="#" onclick="loadContent('users')">Manage Users</a>
+        <a href="#" onclick="loadContent('fraud')">Fraud Logs</a>
+        <hr style="border-color: rgba(255,255,255,0.1)">
+        <a href="#" onclick="logout()">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <header class="d-flex justify-content-between align-items-center mb-5">
+            <h1 style="font-family: 'Playfair Display';">Admin Overview</h1>
+            <div id="admin-name" class="font-weight-bold">System Administrator</div>
+        </header>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <small class="text-uppercase text-muted">Pending Verifications</small>
+                    <h3 id="stat-pending">--</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <small class="text-uppercase text-muted">Flagged Listings</small>
+                    <h3 id="stat-flagged" class="text-danger">--</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <small class="text-uppercase text-muted">Total Active Agents</small>
+                    <h3 id="stat-agents">--</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="d-flex justify-content-between mb-3">
+                <h4 id="table-title">Recent Property Submissions</h4>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr id="table-headers">
+                            <th>Property ID</th>
+                            <th>Agent</th>
+                            <th>Title</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-table-body">
+                        <tr>
+                            <td colspan="6" class="text-center">Loading secure data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/api.js"></script>
+    <script>
+        // Global function definitions
+        async function initDashboard() {
+            loadListings(); // Default view
+            loadStats();    // Load dashboard statistics from API
+        }
+
+        async function loadStats() {
+            try {
+                const res = await Iconics.call("admin/stats", "GET");
+                if (res.status === "success") {
+                    document.getElementById('stat-pending').innerText = res.data.pending || 0;
+                    document.getElementById('stat-flagged').innerText = res.data.flagged || 0;
+                    document.getElementById('stat-agents').innerText = res.data.agents || 0;
+                }
+            } catch (err) {
+                console.error("Failed to load stats:", err);
+                // Fallback to placeholder values
+                document.getElementById('stat-pending').innerText = "--";
+                document.getElementById('stat-flagged').innerText = "--";
+                document.getElementById('stat-agents').innerText = "--";
+            }
+        }
+
+        async function loadListings() {
+            const tableBody = document.getElementById('data-table-body');
+            tableBody.innerHTML = "<tr><td colspan='6' class='text-center'>Fetching listings...</td></tr>";
+
+            try {
+                const res = await Iconics.call("admin/listings", "GET");
+                if (res.status === "success") {
+                    tableBody.innerHTML = "";
+                    res.data.forEach(item => {
+                        const row = `
+                            <tr>
+                                <td>#${item.id}</td>
+                                <td>${item.agent_name || 'N/A'}</td>
+                                <td>${item.title}</td>
+                                <td>$${Number(item.price).toLocaleString()}</td>
+                                <td><span class="badge ${item.is_flagged ? 'badge-fraud' : 'badge-pending'}">${item.status}</span></td>
+                                <td>
+                                    <button onclick="approve(${item.id})" class="btn btn-success btn-action">Approve</button>
+                                    <button onclick="reject(${item.id})" class="btn btn-danger btn-action">Reject</button>
+                                </td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                }
+            } catch (err) {
+                tableBody.innerHTML = "<tr><td colspan='6' class='text-center text-danger'>Failed to load data.</td></tr>";
+            }
+        }
+
+        async function loadContent(section) {
+            // Load different admin sections
+            switch (section) {
+                case 'listings':
+                    document.getElementById('table-title').innerText = 'Review Listings';
+                    loadListings();
+                    break;
+                case 'users':
+                    document.getElementById('table-title').innerText = 'Manage Users';
+                    loadUsers();
+                    break;
+                case 'fraud':
+                    document.getElementById('table-title').innerText = 'Fraud Logs';
+                    loadFraudLogs();
+                    break;
+                default:
+                    loadListings();
+            }
+        }
+
+        async function loadUsers() {
+            const tableBody = document.getElementById('data-table-body');
+            tableBody.innerHTML = "<tr><td colspan='6' class='text-center'>Fetching users...</td></tr>";
+
+            try {
+                const res = await Iconics.call("admin/users", "GET");
+                if (res.status === "success") {
+                    tableBody.innerHTML = "";
+                    res.data.forEach(user => {
+                        const row = `
+                            <tr>
+                                <td>#${user.id}</td>
+                                <td>${user.full_name}</td>
+                                <td>${user.email}</td>
+                                <td><span class="badge badge-${user.role === 'admin' ? 'danger' : 'info'}">${user.role}</span></td>
+                                <td>${user.created_at || 'N/A'}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-secondary btn-action">View</button>
+                                </td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                }
+            } catch (err) {
+                tableBody.innerHTML = "<tr><td colspan='6' class='text-center text-danger'>Failed to load users.</td></tr>";
+            }
+        }
+
+        async function loadFraudLogs() {
+            const tableBody = document.getElementById('data-table-body');
+            tableBody.innerHTML = "<tr><td colspan='6' class='text-center'>Fetching fraud logs...</td></tr>";
+
+            try {
+                const res = await Iconics.call("admin/fraud_logs", "GET");
+                if (res.status === "success") {
+                    tableBody.innerHTML = "";
+                    res.data.forEach(log => {
+                        const row = `
+                            <tr>
+                                <td>#${log.id}</td>
+                                <td>${log.flagged_by || 'System'}</td>
+                                <td>${log.property_id || 'N/A'}</td>
+                                <td><span class="badge badge-fraud">${log.fraud_type}</span></td>
+                                <td>${log.reason || 'N/A'}</td>
+                                <td>${log.created_at || 'N/A'}</td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                }
+            } catch (err) {
+                tableBody.innerHTML = "<tr><td colspan='6' class='text-center text-danger'>Failed to load fraud logs.</td></tr>";
+            }
+        }
+
+        async function approve(id) {
+            if (confirm("Verify and approve this listing?")) {
+                const res = await Iconics.call("admin/approve_listing", "POST", { property_id: id });
+                if (res.status === "success") loadListings();
+            }
+        }
+
+        async function reject(id) {
+            if (confirm("Reject this listing?")) {
+                const res = await Iconics.call("admin/reject_listing", "POST", { property_id: id });
+                if (res.status === "success") loadListings();
+            }
+        }
+
+        async function logout() {
+            await Iconics.call("auth/logout", "POST");
+            window.location.href = "../auth.html";
+        }
+
+        // Check authentication on load
+        window.onload = async () => {
+            try {
+                const auth = await Iconics.check();
+
+                if (auth.status !== "success") {
+                    window.location.href = "../auth.html";
+                    return;
+                }
+
+                // Ensure the user is actually an admin
+                if (auth.data.user.role !== 'admin') {
+                    window.location.href = "../auth.html";
+                    return;
+                }
+
+                // Set admin name and initialize
+                document.getElementById('admin-name').innerText = "Welcome, " + (auth.data.user.name || "Admin");
+                initDashboard();
+
+            } catch (error) {
+                console.error("Authentication error:", error);
+                window.location.href = "../auth.html";
+            }
+        };
+    </script>
+</body>
+
+</html>

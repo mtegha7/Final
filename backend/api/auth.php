@@ -6,24 +6,29 @@ $controller = new AuthController();
 
 $method = $_GET['action'] ?? '';
 
-switch ($method) {
+try {
 
-    case 'register':
-        $controller->register();
-        break;
+    switch ($method) {
 
-    case 'login':
-        $controller->login();
-        break;
+        case 'register':
+            $controller->register();
+            break;
 
-    case 'check':
-        $controller->check();
-        break;
+        case 'login':
+            $controller->login();
+            break;
 
-    case 'logout':
-        $controller->logout();
-        break;
+        case 'check':
+            $controller->check();
+            break;
 
-    default:
-        Response::error("Invalid auth route", 404);
+        case 'logout':
+            $controller->logout();
+            break;
+
+        default:
+            Response::error("Invalid auth route", 404);
+    }
+} catch (Exception $e) {
+    Response::error("Server error: " . $e->getMessage(), 500);
 }

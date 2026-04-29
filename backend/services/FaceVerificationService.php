@@ -17,7 +17,7 @@ class FaceVerificationService
 
     public function verify($userId, $idPath, $selfiePath)
     {
-        // 🔥 Call Python AI
+        // Call Python AI
         $result = PythonBridge::run('face_verify.py', [
             $idPath,
             $selfiePath
@@ -32,7 +32,7 @@ class FaceVerificationService
 
         $confidence = floatval($result['confidence']);
 
-        // 🔥 NEW DECISION LOGIC (SAFE + REALISTIC)
+        // NEW DECISION LOGIC (SAFE + REALISTIC)
 
         if ($confidence >= 85) {
             $status = "verified";
@@ -41,7 +41,7 @@ class FaceVerificationService
             $status = "pending_review";
             $risk = "medium";
         } else {
-            $status = "pending_review";   // 👈 NOT rejected anymore
+            $status = "pending_review";
             $risk = "high";
 
             $this->fraudModel->logIdentityRisk(
@@ -50,7 +50,7 @@ class FaceVerificationService
             );
         }
 
-        // 🔥 Save everything
+        // Save everything
         $this->agentModel->updateVerificationStatus(
             $userId,
             $idPath,

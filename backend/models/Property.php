@@ -1,4 +1,7 @@
 <?php
+
+require_once dirname(__DIR__) . '/config/database.php';
+
 class Property
 {
     private $db;
@@ -11,12 +14,10 @@ class Property
     public function create($data)
     {
         $sql = "INSERT INTO properties 
-                (agent_id, title, description, price, property_type, area_name, latitude, longitude, status)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+                (agent_id, title, description, price, property_type, area_name, latitude, longitude, status, is_flagged)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
-
-        $stmt->execute([
+        return $stmt->execute([
             $data['agent_id'],
             $data['title'],
             $data['description'],
@@ -25,10 +26,9 @@ class Property
             $data['area_name'],
             $data['latitude'],
             $data['longitude'],
-            $data['status'] ?? 'pending'
+            $data['status'] ?? 'pending',
+            $data['is_flagged'] ?? 0
         ]);
-
-        return $this->db->lastInsertId();
     }
 
     public function getAllApproved()
@@ -36,13 +36,28 @@ class Property
         $sql = "SELECT p.*, u.full_name, ap.trust_score
                 FROM properties p
                 JOIN users u ON p.agent_id = u.id
-                JOIN agent_profiles ap ON u.id = ap.user_id
+                LEFT JOIN agent_profiles ap ON u.id = ap.user_id
                 WHERE p.status = 'approved'
                 ORDER BY p.created_at DESC";
-
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-        return $stmt->fetchAll();
+    public function getAll()
+    {
+        $sql = "SELECT p.*, u.full_name as agent_name FROM properties p 
+                LEFT JOIN users u ON p.agent_id = u.id ORDER BY p.created_at DESC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateStatus($id, $status)
+    {
+        $isFlagged = ($status === 'approved') ? 0 : 1;
+        $sql = "UPDATE properties SET status = ?, is_flagged = ? WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$status, $isFlagged, $id]);
     }
 }

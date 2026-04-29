@@ -11,6 +11,10 @@ switch ($action) {
     case 'verify':
         $controller->verifyIdentity();
         break;
+    
+    case 'dashboard':
+        $controller->getDashboard();
+        break;
 
     default:
         Response::error("Invalid agent route", 404);

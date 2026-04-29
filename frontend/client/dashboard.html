@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard — IREA FDIVS</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-dark: #0f1923;
+            --accent-green: #35ac39;
+            --text-gray: #777;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background: var(--primary-dark);
+            color: white;
+            padding-top: 20px;
+            position: fixed;
+            width: 240px;
+        }
+
+        .sidebar h2 {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            color: #ccc;
+            padding: 15px 25px;
+            display: block;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-green);
+        }
+
+        .main-content {
+            margin-left: 240px;
+            padding: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .stat-card h3 {
+            margin: 0;
+            color: var(--accent-green);
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .stat-card small {
+            color: var(--text-gray);
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+
+        .btn-action {
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h2>IR<span>EA</span></h2>
+        <a href="#" class="active">Dashboard</a>
+        <a href="#" onclick="loadContent('search')">Search Properties</a>
+        <a href="#" onclick="loadContent('favorites')">Favorite Properties</a>
+        <a href="#" onclick="loadContent('profile')">My Profile</a>
+        <hr style="border-color: rgba(255,255,255,0.1)">
+        <a href="#" onclick="logout()">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <header class="d-flex justify-content-between align-items-center mb-5">
+            <h1 style="font-family: 'Playfair Display';">Client Dashboard</h1>
+            <div id="client-name" class="font-weight-bold">Guest User</div>
+        </header>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <small class="text-uppercase text-muted">Favorite Properties</small>
+                    <h3 id="stat-favorites">--</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <small class="text-uppercase text-muted">Total Properties</small>
+                    <h3 id="stat-properties">--</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <small class="text-uppercase text-muted">New Listings</small>
+                    <h3 id="stat-new">--</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="d-flex justify-content-between mb-3">
+                <h4 id="table-title">Recent Properties</h4>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr id="table-headers">
+                            <th>Property ID</th>
+                            <th>Title</th>
+                            <th>Location</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-table-body">
+                        <tr>
+                            <td colspan="6" class="text-center">Loading properties...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/api.js"></script>
+    <script>
+        // Global function definitions
+        async function initDashboard() {
+            loadProperties();
+            loadStats();
+        }
+
+        async function loadStats() {
+            try {
+                // Placeholder stats - in a real app you would fetch these from an API
+                document.getElementById('stat-favorites').innerText = "0";
+                document.getElementById('stat-properties').innerText = "--";
+                document.getElementById('stat-new').innerText = "--";
+            } catch (err) {
+                console.error("Failed to load stats:", err);
+            }
+        }
+
+        async function loadProperties() {
+            const tableBody = document.getElementById('data-table-body');
+            tableBody.innerHTML = "<tr><td colspan='6' class='text-center'>Fetching properties...</td></tr>";
+
+            try {
+                const res = await Iconics.call("properties", "GET");
+                if (res.status === "success") {
+                    tableBody.innerHTML = "";
+                    res.data.forEach(item => {
+                        const row = `
+                            <tr>
+                                <td>#${item.id}</td>
+                                <td>${item.title}</td>
+                                <td>${item.area_name || 'N/A'}</td>
+                                <td>$${Number(item.price).toLocaleString()}</td>
+                                <td><span class="badge badge-success">Approved</span></td>
+                                <td>
+                                    <button onclick="viewProperty(${item.id})" class="btn btn-sm btn-primary btn-action">View</button>
+                                </td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                }
+            } catch (err) {
+                tableBody.innerHTML = "<tr><td colspan='6' class='text-center text-danger'>Failed to load properties.</td></tr>";
+            }
+        }
+
+        async function loadContent(section) {
+            // Load different client sections
+            switch (section) {
+                case 'search':
+                    document.getElementById('table-title').innerText = 'Search Properties';
+                    loadProperties();
+                    break;
+                case 'favorites':
+                    document.getElementById('table-title').innerText = 'Favorite Properties';
+                    alert('Favorites feature coming soon');
+                    break;
+                case 'profile':
+                    alert('Profile management coming soon');
+                    break;
+                default:
+                    loadProperties();
+            }
+        }
+
+        function viewProperty(id) {
+            window.location.href = '../property-details.html?id=' + id;
+        }
+
+        async function logout() {
+            await Iconics.call("auth/logout", "POST");
+            window.location.href = "../auth.html";
+        }
+
+        // Check authentication on load
+        window.onload = async () => {
+            const auth = await Iconics.check();
+            if (!auth.success) {
+                window.location.href = "../auth.html";
+            } else {
+                // Set user name from session/response
+                document.getElementById('client-name').innerText = "Welcome, " + (auth.data.user.name || "User");
+                initDashboard();
+            }
+        };
+    </script>
+</body>
+
+</html>

@@ -1,81 +1,71 @@
 const API_BASE = "http://localhost/Final/backend/index.php";
 
 const Iconics = {
-
-
-    // CORE API CALL WRAPPER 
     async call(route, method = "POST", data = null) {
         try {
-            const url = `${API_BASE}?route=${route}`;
+            // Split "auth/login" into main route ("auth") and action ("login")
+            const parts = route.split('/');
+            const mainRoute = parts[0];
+            const action = parts[1];
 
-            const res = await fetch(url, {
-                method,
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-                body: data ? JSON.stringify(data) : null
-            });
-
-            const json = await res.json();
-
-            if (!res.ok) {
-                console.error("API Error:", json);
+            // Build URL with parameters expected by your PHP files
+            let url = `${API_BASE}?route=${mainRoute}`;
+            if (action) {
+                url += `&action=${action}`;
             }
 
-            return json;
+            const options = {
+                method,
+                credentials: "include", // Required for Session cookies
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            };
+
+            if (data && method !== "GET") {
+                options.body = JSON.stringify(data);
+            }
+
+            const res = await fetch(url, options);
+            return await res.json();
 
         } catch (err) {
-            console.error("Network Error:", err);
-            return {
-                success: false,
-                message: "Network error"
-            };
+            console.error("API Error:", err);
+            return { success: false, message: "Network connection failed" };
         }
     },
 
-
-    // AUTH CHECK + ROLE GUARD 
-    async checkAuth(requiredRole = null) {
-        const res = await this.call("auth/check", "GET");
-
-        if (!res || !res.success || !res.user) {
-            window.location.href = "/Final/frontend/login.html";
-            return null;
-        }
-
-        const user = res.user;
-
-        // Role validation
-        if (requiredRole && user.role !== requiredRole) {
-            alert("Unauthorized Access");
-
-            // smart redirect
-            this.redirectByRole(user.role);
-            return null;
-        }
-
-        return user;
+    login(data) {
+        return this.call("auth/login", "POST", data);
     },
 
+    register(data) {
+        return this.call("auth/register", "POST", data);
+    },
 
-    // ROLE ROUTING
+    check() {
+        return this.call("auth/check", "GET");
+    },
+
     redirectByRole(role) {
+        console.log("Redirecting role:", role);
+
+        // This path must match your folder name in htdocs exactly
+        const BASE_URL = window.location.origin + "/Final/frontend/";
+
+        let target = "";
         if (role === "admin") {
-            window.location.href = "/Final/frontend/admin/dashboard.html";
+            target = "admin/dashboard.html";
         } else if (role === "agent") {
-            window.location.href = "/Final/frontend/agent/dashboard.html";
-        } else if (role === "client") {
-            window.location.href = "/Final/frontend/client/dashboard.html";
+            target = "agent/dashboard.html";
         } else {
-            window.location.href = "/Final/frontend/login.html";
+            target = "client/dashboard.html";
         }
-    },
 
+        const destination = BASE_URL + target;
+        console.log("Navigating to:", destination);
 
-    // LOGOUT 
-    async logout() {
-        await this.call("auth/logout", "POST");
-        window.location.href = "/Final/frontend/login.html";
+        // Force the redirect
+        window.location.assign(destination);
     }
 };

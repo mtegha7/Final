@@ -18,12 +18,12 @@ class Database
                 $this->username,
                 $this->password
             );
-
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
+            header('Content-Type: application/json');
             die(json_encode([
-                "error" => "Database connection failed",
-                "message" => $e->getMessage()
+                "status" => "error",
+                "message" => "Database connection failed: " . $e->getMessage()
             ]));
         }
     }

@@ -3,173 +3,275 @@
 
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>IREA - Iconics Real Estate Agency</title>
+    <title>IREA - Real Estate Platform</title>
+
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/themify-icons.css">
+    <link rel="stylesheet" href="assets/owlcarousel/css/owl.carousel.css">
+    <link rel="stylesheet" href="assets/owlcarousel/css/owl.theme.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="assets/css/menu.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
 
     <style>
+        /* Core Branding & Typography */
         body {
-            margin: 0;
             font-family: 'Montserrat', sans-serif;
-            background: #0f1923;
+            background-color: #ffffff;
+            color: #333;
         }
 
-        .navbar-default {
-            background: rgba(255, 255, 255, 0.98);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 14px 0;
-        }
-
-        .navbar-brand {
+        h1,
+        h2,
+        h3,
+        h4,
+        .irea-brand {
             font-family: 'Playfair Display', serif;
-            font-size: 26px;
-            font-weight: 900;
-            color: #1d293e !important;
-        }
-
-        .navbar-brand span {
-            color: #35ac39;
-        }
-
-        .menu-top ul {
-            list-style: none;
-            display: flex;
-            gap: 6px;
-            justify-content: flex-end;
-        }
-
-        .menu-top li a {
-            font-size: 12px;
             font-weight: 700;
-            text-transform: uppercase;
-            color: #1d293e;
-            padding: 8px 14px;
-            border-radius: 6px;
-            text-decoration: none;
         }
 
-        .menu-top li a:hover {
-            background: rgba(53, 172, 57, 0.1);
-            color: #35ac39;
-        }
-
-        .home_bg {
-            min-height: 100vh;
-            padding-top: 90px;
+        /* Fix loader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 9999;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, #0f1923 0%, #1d293e 55%, #163d2a 100%);
+            justify-content: center;
         }
 
-        .hero-text {
+        /* Navbar Styling */
+        .site-navbar {
+            padding: 15px 0;
+            background: transparent;
+        }
+
+        .irea-brand {
+            font-size: 30px;
+            color: #1a1a1a !important;
+            letter-spacing: 1px;
+            text-decoration: none !important;
+        }
+
+        /* HERO SECTION - High Visibility Adaptation */
+        .home_bg {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            color: white;
+            /* White wash overlay to maintain light theme vibe */
+            background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
+                url('assets/img/bg/home-bg.jpg') no-repeat center center;
+            background-size: cover;
+        }
+
+        .hero-text-container {
+            background: rgba(255, 255, 255, 0.92);
+            padding: 60px 40px;
+            border-radius: 4px;
+            max-width: 800px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .hero-text h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 60px;
-            font-weight: 900;
+            color: #1a1a1a !important;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
         }
 
-        .hero-text em {
-            color: #35ac39;
+        .hero-text p {
+            color: #444 !important;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 35px;
         }
 
-        .home_btn a {
-            display: inline-block;
-            padding: 13px 28px;
-            margin: 6px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
+        .hero-buttons .btn {
+            margin: 0 10px;
+            padding: 14px 30px;
+            font-weight: 600;
             text-transform: uppercase;
-            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 1px;
+            border-radius: 0;
+            transition: 0.3s;
         }
 
-        .home_btn_color_one {
+        .btn-primary {
+            background-color: #1a1a1a;
+            border-color: #1a1a1a;
+        }
+
+        .btn-primary:hover {
+            background-color: #35ac39;
+            /* Success green from auth.html */
+            border-color: #35ac39;
+        }
+
+        /* Property Listings */
+        .single_property {
             background: #fff;
-            color: #1d293e;
+            border: 1px solid #f0f0f0;
+            margin-bottom: 30px;
+            transition: 0.3s;
         }
 
-        .home_btn_color_two {
+        .single_property:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: "";
+            width: 50px;
+            height: 2px;
             background: #35ac39;
-            color: #fff;
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
         }
     </style>
 </head>
 
 <body>
 
-    <header class="navbar-default">
-        <div class="container">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-                <div class="navbar-brand">IR<span>EA</span></div>
+    <div class="preloader" id="preloader">
+        <div class="status">
+            <p style="font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700;">IREA</p>
+        </div>
+    </div>
 
-                <nav class="menu-top">
-                    <ul id="nav">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="property.html">Properties</a></li>
-                        <li><a href="auth.html">Login / Register</a></li>
-                    </ul>
-                </nav>
+    <header class="site-navbar js-sticky-header site-navbar-target">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <a href="index.html" class="irea-brand">IR<span>EA</span></a>
+                </div>
+                <div class="col-6 text-right">
+                    <a href="auth.html" class="btn btn-sm btn-outline-dark"
+                        style="font-weight:600; text-transform: uppercase; font-size: 12px; border-radius: 0;">Sign
+                        In</a>
+                </div>
             </div>
         </div>
     </header>
 
-    <section class="home_bg">
+    <section id="home" class="home_bg">
         <div class="container">
-            <div class="hero-text">
-                <h1>Real Estate You Can<br><em>Actually Trust</em></h1>
-
-                <p style="color: rgba(255,255,255,0.7); margin-top:15px;">
-                    Verified agents. GPS validated listings. Fraud-resistant platform.
-                </p>
-
-                <div class="home_btn">
-                    <a href="property.html" class="home_btn_color_one">Browse</a>
-                    <a href="auth.html" class="home_btn_color_two">Get Started</a>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="hero-text-container wow fadeInUp">
+                        <div class="hero-text">
+                            <h1>Refined Real Estate.</h1>
+                            <p>
+                                IREA is a modern platform designed to connect buyers, sellers, and agents
+                                in one seamless ecosystem. Discover verified listings and a smarter way to manage
+                                property transactions.
+                            </p>
+                            <div class="hero-buttons">
+                                <a href="#latest-listings" class="btn btn-primary btn-lg">Browse Properties</a>
+                                <a href="auth.html" class="btn btn-outline-dark btn-lg">Join Platform</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <script src="assets/js/auth.js"></script>
+    <section class="section-padding" id="latest-listings">
+        <div class="container">
+            <div class="section-title text-center">
+                <h2>Featured Sales</h2>
+            </div>
+            <div class="row" id="listings-grid">
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-area" style="padding: 60px 0; background: #fff; border-top: 1px solid #eee;">
+        <div class="container text-center">
+            <p style="color:#888; font-size: 13px; letter-spacing: 1px;">IREA © 2026. ALL RIGHTS RESERVED.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/jquery-1.12.4.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
 
     <script>
-        async function init() {
-            try {
-                const res = await Iconics.call("auth", "GET");
+        new WOW().init();
 
-                if (res.success) {
-                    document.getElementById("nav").innerHTML = `
-                <li><a href="index.html">Home</a></li>
-                <li><a href="property.html">Properties</a></li>
-                <li><a href="#" onclick="goDash('${res.user.role}')">Dashboard</a></li>
-                <li><a href="#" onclick="Iconics.logout()">Logout</a></li>
-            `;
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                const loader = document.getElementById("preloader");
+                if (loader) {
+                    loader.style.opacity = "0";
+                    setTimeout(() => loader.style.display = "none", 500);
                 }
-            } catch (e) { }
+            }, 500);
+        });
+
+        async function loadProperties() {
+            try {
+                const response = await fetch('Final/backend/api/property.php');
+                const result = await response.json();
+
+                if (result.success) {
+                    const listingsContainer = document.getElementById('listings-grid');
+                    listingsContainer.innerHTML = "";
+
+                    result.data.forEach(p => {
+                        const card = `
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="single_property wow fadeInUp">
+                                    <img src="assets/img/property/1.jpg" class="img-fluid" alt="${p.title}" />
+                                    <div class="single_property_content p-4">
+                                        <h4 style="font-size:20px;">${p.title}</h4>
+                                        <p style="font-size: 14px; color: #777;">${p.description || ''}</p>
+                                        <div style="margin-top: 15px; border-top: 1px solid #f0f0f0; padding-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="font-weight: 700; color: #1a1a1a;">$${Number(p.price).toLocaleString()}</span>
+                                            <small style="text-transform: uppercase; color: #35ac39; font-weight:600;">${p.area_name || ''}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        listingsContainer.innerHTML += card;
+                    });
+                }
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                document.getElementById('listings-grid').innerHTML = "<p class='text-center'>Property data unavailable.</p>";
+            }
         }
 
-        function goDash(role) {
-            if (role === "admin") location.href = "admin/dashboard.html";
-            if (role === "agent") location.href = "agent/dashboard.html";
-            if (role === "client") location.href = "client/dashboard.html";
-        }
-
-        window.onload = init;
+        document.addEventListener('DOMContentLoaded', loadProperties);
     </script>
-
 </body>
 
 </html>
