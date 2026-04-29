@@ -18,23 +18,27 @@ class PropertyController
     {
         try {
             $data = $this->propertyModel->getAllApproved();
-
-            echo json_encode([
-                'success' => true,
-                'data' => $data
-            ]);
+            Response::success($data);
         } catch (Throwable $e) {
-            echo json_encode([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
+            Response::error($e->getMessage());
+        }
+    }
+
+    public function getAllProperties()
+    {
+        try {
+            $data = $this->propertyModel->getAll();
+
+            Response::success($data);
+        } catch (Throwable $e) {
+            Response::error($e->getMessage(), 500);
         }
     }
 
     public function createProperty()
     {
         Session::start();
-        
+
         $userId = Session::get('user_id');
         if (!$userId) {
             Response::error("Unauthorized", 401);
@@ -73,34 +77,77 @@ class PropertyController
     public function getAdminStats()
     {
         Session::start();
-        
-        $userId = Session::get('user_id');
-        if (!$userId) {
+        if (!Session::get('user_id')) {
             Response::error("Unauthorized", 401);
         }
 
         try {
             $db = Database::getInstance()->conn;
-            
-            // Pending verifications
-            $stmt = $db->query("SELECT COUNT(*) as count FROM properties WHERE status = 'pending'");
-            $pending = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-            
-            // Flagged listings
-            $stmt = $db->query("SELECT COUNT(*) as count FROM properties WHERE is_flagged = 1");
-            $flagged = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-            
-            // Active agents
-            $stmt = $db->query("SELECT COUNT(*) as count FROM users WHERE role = 'agent'");
-            $agents = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-            
+
+            $pending = $db->query("SELECT COUNT(*) FROM properties WHERE status = 'pending'")->fetchColumn();
+            $flagged = $db->query("SELECT COUNT(*) FROM properties WHERE is_flagged = 1")->fetchColumn();
+            $agents = $db->query("SELECT COUNT(*) FROM users WHERE role = 'agent'")->fetchColumn();
+
             Response::success([
-                "pending" => $pending,
-                "flagged" => $flagged,
-                "agents" => $agents
+                "pending" => (int)$pending,
+                "flagged" => (int)$flagged,
+                "agents" => (int)$agents
             ]);
         } catch (Throwable $e) {
-            Response::error($e->getMessage(), 500);
+            Response::error($e->getMessage());
+        }
+    }
+
+
+    public function updateProperty()
+    {
+        $input = json_decode(file_get_contents("php://input"), true);
+        $id = $input['id'] ?? null;
+
+        if (!$id) return Response::error("Missing ID");
+
+        try {
+            $db = Database::getInstance()->conn;
+            $stmt = $db->prepare("UPDATE properties SET title = ?, price = ? WHERE id = ?");
+            $stmt->execute([$input['title'], $input['price'], $id]);
+            Response::success([], "Property updated");
+        } catch (Throwable $e) {
+            Response::error($e->getMessage());
+        }
+    }
+
+
+    public function changePropertyStatus()
+    {
+        $input = json_decode(file_get_contents("php://input"), true);
+        $id = $input['id'] ?? null;
+        $status = $input['status'] ?? null;
+
+        if (!$id || !$status) {
+            return Response::error("Invalid request parameters");
+        }
+
+        try {
+            // Uses the updateStatus method in your Property model
+            $this->propertyModel->updateStatus($id, $status);
+            Response::success([], "Status updated to " . $status);
+        } catch (Throwable $e) {
+            Response::error($e->getMessage());
+        }
+    }
+
+    public function deleteProperty()
+    {
+        $input = json_decode(file_get_contents("php://input"), true);
+        $id = $input['id'] ?? null;
+
+        try {
+            $db = Database::getInstance()->conn;
+            $stmt = $db->prepare("DELETE FROM properties WHERE id = ?");
+            $stmt->execute([$id]);
+            Response::success([], "Property deleted");
+        } catch (Throwable $e) {
+            Response::error($e->getMessage());
         }
     }
 }

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Management — Iconics Admin</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-dark: #0f1923;
+            --accent-green: #35ac39;
+            --accent-red: #d9534f;
+            --text-gray: #777;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background: var(--primary-dark);
+            color: white;
+            padding-top: 20px;
+            position: fixed;
+            width: 240px;
+        }
+
+        .sidebar h2 {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 30px;
+            color: var(--accent-green);
+        }
+
+        .nav-link {
+            color: #adb5bd;
+            padding: 12px 25px;
+            transition: 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .main-content {
+            margin-left: 240px;
+            padding: 40px;
+        }
+
+        .dashboard-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .trust-score {
+            font-weight: 700;
+            font-family: 'Courier New';
+        }
+
+        .verification-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h2>Iconics Admin</h2>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="dashboard.html">Dashboard</a>
+            <a class="nav-link" href="listings.html">Listings</a>
+            <a class="nav-link active" href="agents.html">Agents</a>
+            <hr style="background: rgba(255,255,255,0.1)">
+            <a class="nav-link text-danger" href="#" onclick="logout()">Logout</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="mb-5">
+            <h1 style="font-family: 'Playfair Display', serif;">Agent Management</h1>
+            <p class="text-muted">Review identity verifications and manage trust scores.</p>
+        </div>
+
+        <div class="dashboard-section">
+            <h5 class="mb-4 text-danger"><i class="ti-alert"></i> Pending Manual Verification (< 85% Score)</h5>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr class="text-muted small">
+                                    <th>AGENT</th>
+                                    <th>DEEPFACE SCORE</th>
+                                    <th>SUBMITTED</th>
+                                    <th class="text-end">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody id="verification-queue-body">
+                            </tbody>
+                        </table>
+                    </div>
+        </div>
+
+        <div class="dashboard-section">
+            <h5 class="mb-4" style="font-family: 'Playfair Display';">Agent Directory</h5>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr class="text-muted small">
+                            <th>NAME</th>
+                            <th>EMAIL</th>
+                            <th>STATUS</th>
+                            <th>TRUST SCORE</th>
+                            <th class="text-end">VIEW</th>
+                        </tr>
+                    </thead>
+                    <tbody id="agent-directory-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="verifyModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Identity Verification Check</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" title="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row text-center">
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted">Live Selfie</h6>
+                            <img id="view-selfie" src="" class="verification-image" alt="Live selfie for verification">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted">Uploaded ID</h6>
+                            <img id="view-id-card" src="" class="verification-image" alt="Uploaded ID card">
+                        </div>
+                    </div>
+                    <div class="alert alert-warning mt-3 text-center">
+                        System Confidence Score: <strong id="view-score">--</strong>%
+                    </div>
+                </div>
+                <div class="modal-footer border-0 justify-content-center pb-4">
+                    <button class="btn btn-outline-danger px-4" id="btn-deny">Deny Identity</button>
+                    <button class="btn btn-success px-4" id="btn-approve">Approve Agent</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function loadAgents() {
+            try {
+                const res = await Iconics.call("admin/list_agents", "GET");
+                if (res.status === "success") {
+                    // 1. Fill Queue (Score < 85 or Unverified)
+                    const queue = res.data.filter(a => a.is_verified == 0);
+                    document.getElementById('verification-queue-body').innerHTML = queue.map(a => `
+                        <tr>
+                            <td><strong>${a.full_name}</strong></td>
+                            <td class="trust-score text-danger">${a.trust_score}%</td>
+                            <td>${new Date(a.created_at).toLocaleDateString()}</td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-dark" onclick='openVerifyModal(${JSON.stringify(a)})'>Review ID</button>
+                            </td>
+                        </tr>
+                    `).join('') || '<tr><td colspan="4" class="text-center py-4">No pending verifications.</td></tr>';
+
+                    // 2. Fill Directory
+                    document.getElementById('agent-directory-body').innerHTML = res.data.map(a => `
+                        <tr>
+                            <td>${a.full_name}</td>
+                            <td>${a.email}</td>
+                            <td><span class="badge ${a.is_verified ? 'bg-success' : 'bg-warning'}">${a.is_verified ? 'Verified' : 'Pending'}</span></td>
+                            <td class="trust-score">${a.trust_score}%</td>
+                            <td class="text-end"><button class="btn btn-sm btn-outline-secondary">Profile</button></td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        let currentAgentId = null;
+        function openVerifyModal(a) {
+            currentAgentId = a.user_id;
+            document.getElementById('view-selfie').src = `../../uploads/verifications/${a.selfie_path}`;
+            document.getElementById('view-id-card').src = `../../uploads/verifications/${a.id_path}`;
+            document.getElementById('view-score').innerText = a.trust_score;
+            new bootstrap.Modal(document.getElementById('verifyModal')).show();
+        }
+
+        document.getElementById('btn-approve').onclick = async () => {
+            const res = await Iconics.call("admin/verify_agent", "POST", { user_id: currentAgentId, status: 'approved' });
+            if (res.status === "success") location.reload();
+        };
+
+        document.getElementById('btn-deny').onclick = async () => {
+            if (confirm("Deny this agent? They will need to re-upload.")) {
+                const res = await Iconics.call("admin/verify_agent", "POST", { user_id: currentAgentId, status: 'denied' });
+                if (res.status === "success") location.reload();
+            }
+        };
+
+        window.onload = loadAgents;
+        async function logout() { await Iconics.call("auth/logout", "POST"); window.location.href = "../auth.html"; }
+    </script>
+</body>
+
+</html>

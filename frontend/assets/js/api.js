@@ -1,22 +1,23 @@
-const API_BASE = "http://localhost/Final/backend/index.php";
+// Point this to the folder containing your individual PHP files
+const API_BASE = "http://localhost/Final/backend/api";
 
 const Iconics = {
     async call(route, method = "POST", data = null) {
         try {
-            // Split "auth/login" into main route ("auth") and action ("login")
+            // Split "property/list_all" into "property" and "list_all"
             const parts = route.split('/');
-            const mainRoute = parts[0];
-            const action = parts[1];
+            const mainRoute = parts[0]; // "property" or "auth"
+            const action = parts[1];    // "list_all", "stats", etc.
 
-            // Build URL with parameters expected by your PHP files
-            let url = `${API_BASE}?route=${mainRoute}`;
+            // Construct URL: http://localhost/Final/backend/api/property.php?action=list_all
+            let url = `${API_BASE}/${mainRoute}.php`;
             if (action) {
-                url += `&action=${action}`;
+                url += `?action=${action}`;
             }
 
             const options = {
                 method,
-                credentials: "include", // Required for Session cookies
+                credentials: "include", // Essential for PHP Session cookies
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -27,11 +28,20 @@ const Iconics = {
             }
 
             const res = await fetch(url, options);
+
+            // Check if the response is actually JSON before parsing
+            const contentType = res.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                const text = await res.text();
+                console.error("Server returned non-JSON response:", text);
+                return { status: "error", message: "Server error: Invalid response format" };
+            }
+
             return await res.json();
 
         } catch (err) {
             console.error("API Error:", err);
-            return { success: false, message: "Network connection failed" };
+            return { status: "error", message: "Network connection failed" };
         }
     },
 
@@ -45,27 +55,7 @@ const Iconics = {
 
     check() {
         return this.call("auth/check", "GET");
-    },
-
-    redirectByRole(role) {
-        console.log("Redirecting role:", role);
-
-        // This path must match your folder name in htdocs exactly
-        const BASE_URL = window.location.origin + "/Final/frontend/";
-
-        let target = "";
-        if (role === "admin") {
-            target = "admin/dashboard.html";
-        } else if (role === "agent") {
-            target = "agent/dashboard.html";
-        } else {
-            target = "client/dashboard.html";
-        }
-
-        const destination = BASE_URL + target;
-        console.log("Navigating to:", destination);
-
-        // Force the redirect
-        window.location.assign(destination);
     }
+
+    // ... keep your redirectByRole function as is ...
 };

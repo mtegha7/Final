@@ -236,37 +236,37 @@
             }, 500);
         });
 
+        // In index.html inside loadProperties()
         async function loadProperties() {
             try {
-                const response = await fetch('Final/backend/api/property.php');
+                const response = await fetch('/Final/backend/api/property.php');
                 const result = await response.json();
 
-                if (result.success) {
+                if (result.status === "success") {
                     const listingsContainer = document.getElementById('listings-grid');
                     listingsContainer.innerHTML = "";
 
                     result.data.forEach(p => {
                         const card = `
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <div class="single_property wow fadeInUp">
-                                    <img src="assets/img/property/1.jpg" class="img-fluid" alt="${p.title}" />
-                                    <div class="single_property_content p-4">
-                                        <h4 style="font-size:20px;">${p.title}</h4>
-                                        <p style="font-size: 14px; color: #777;">${p.description || ''}</p>
-                                        <div style="margin-top: 15px; border-top: 1px solid #f0f0f0; padding-top: 15px; display: flex; justify-content: space-between; align-items: center;">
-                                            <span style="font-weight: 700; color: #1a1a1a;">$${Number(p.price).toLocaleString()}</span>
-                                            <small style="text-transform: uppercase; color: #35ac39; font-weight:600;">${p.area_name || ''}</small>
-                                        </div>
-                                    </div>
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="single_property wow fadeInUp">
+                            <img src="assets/img/property/1.jpg" class="img-fluid" alt="${p.title}" />
+                            <div class="single_property_content p-4">
+                                <h4 style="font-size:20px;">${p.title}</h4>
+                                <p style="font-size: 14px; color: #777;">${p.description || ''}</p>
+                                <div style="margin-top: 15px; border-top: 1px solid #f0f0f0; padding-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-weight: 700; color: #1a1a1a;">$${Number(p.price).toLocaleString()}</span>
+                                    <small style="text-transform: uppercase; color: #35ac39; font-weight:600;">${p.area_name || ''}</small>
                                 </div>
                             </div>
-                        `;
+                        </div>
+                    </div>
+                `;
                         listingsContainer.innerHTML += card;
                     });
                 }
             } catch (error) {
                 console.error("Fetch Error:", error);
-                document.getElementById('listings-grid').innerHTML = "<p class='text-center'>Property data unavailable.</p>";
             }
         }
 

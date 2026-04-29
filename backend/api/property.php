@@ -11,6 +11,22 @@ $action = $_GET['action'] ?? 'list';
 
 try {
     switch ($action) {
+        case 'list_all':
+            $controller->getAllProperties();
+            break;
+
+        case 'update':
+            $controller->updateProperty();
+            break;
+
+        case 'update_status':
+            $controller->changePropertyStatus();
+            break;
+
+        case 'delete':
+            $controller->deleteProperty();
+            break;
+
         case 'list':
         case 'approved':
             // Fetch all approved properties (default public listing)
