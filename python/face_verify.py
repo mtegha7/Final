@@ -3,24 +3,26 @@ import json
 from deepface import DeepFace
 
 try:
+    if len(sys.argv) < 3:
+        raise Exception("Usage: face_verify.py <id_path> <selfie_path>")
+
     id_image = sys.argv[1]
     selfie_image = sys.argv[2]
 
-    result = DeepFace.verify(id_image, selfie_image, enforce_detection=False)
+    # model_name="VGG-Face" is the industry standard for this type of verification
+    result = DeepFace.verify(id_image, selfie_image, enforce_detection=True, model_name="VGG-Face")
 
+    # DeepFace 'distance' (0 to 1). We convert to 0-100 confidence.
     confidence = round((1 - result["distance"]) * 100, 2)
 
-    # High confidence = auto verified, everything else goes to admin
-    if confidence >= 70:
-        status = "verified"
-    else:
-        status = "manual_review"
+    # Business logic for auto-verification threshold
+    status = "verified" if confidence >= 75 else "manual_review"
 
     response = {
         "status": status,
         "verified": result["verified"],
-        "distance": result["distance"],
-        "confidence": confidence
+        "confidence": confidence,
+        "distance": result["distance"]
     }
 
     print(json.dumps(response))

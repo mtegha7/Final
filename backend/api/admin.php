@@ -6,7 +6,6 @@ require_once __DIR__ . '/../core/Session.php';
 
 $controller = new AdminController();
 
-// Get the action from the URL (e.g., ?route=admin&action=listings)
 $action = $_GET['action'] ?? '';
 
 // Security Check: Only allow logged-in admins
@@ -45,6 +44,14 @@ try {
         case 'stats':
             // Fetch admin dashboard statistics
             $controller->getStats();
+            break;
+
+        case 'audit_logs':
+            $controller->getAuditLogs();
+            break;
+
+        case 'update_user':
+            $controller->updateUser();
             break;
 
         default:

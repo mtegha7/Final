@@ -4,215 +4,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agent Dashboard — Iconics</title>
+    <title>Agent Dashboard — IREA FDIVS</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-dark: #0f1923;
+            --accent-green: #35ac39;
+            --warning-orange: #ff9800;
+            --danger-red: #ff4b2b;
+            --light-bg: #f8f9fa;
+        }
 
-    <link rel="stylesheet" href="../assets/css/main.css">
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            height: 100vh;
+            background: var(--primary-dark);
+            color: white;
+            padding-top: 20px;
+            position: fixed;
+            width: 240px;
+        }
+
+        .sidebar h2 {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+
+        .nav-link {
+            color: #adb5bd;
+            padding: 12px 25px;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--accent-green);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            margin-left: 240px;
+            padding: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border: none;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-val {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .stat-label {
+            color: #777;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Trust Score Badge */
+        .trust-gauge {
+            background: var(--primary-dark);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border: 4px solid var(--accent-green);
+            border-radius: 50%;
+            line-height: 72px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 10px auto;
+        }
+
+        /* Table & Badge Styling */
+        .card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .badge-verified {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-risk {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
 
-<body class="layout-agent">
+<body>
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
-
-        <div class="sidebar-logo">
-            <div class="logo-word">ICONICS</div>
-            <div class="logo-tag">Agent Panel</div>
-        </div>
-
-        <div class="sidebar-nav">
-            <div class="nav-item active">Dashboard</div>
-            <div class="nav-item" onclick="go('verify.html')">Verification</div>
-            <div class="nav-item" onclick="go('listings.html')">Listings</div>
-            <div class="nav-item" onclick="go('profile.html')">Profile</div>
-        </div>
-
-        <div class="sidebar-footer">
-            <div class="user-chip">
-                <div class="user-avatar agent-avatar" id="avatar">A</div>
-                <div>
-                    <div class="user-name" id="agentName">Agent</div>
-                    <div class="user-role">Agent</div>
-                </div>
-            </div>
-
-            <button class="btn-logout" onclick="logout()">Logout</button>
-        </div>
-
+        <h2>IREA Agent</h2>
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="dashboard.html">Dashboard</a>
+            <a class="nav-link" href="verify.html">Identify Verification</a>
+            <a class="nav-link" href="my_listings.html">My Listings</a>
+            <a class="nav-link text-danger mt-5" href="#" onclick="logout()">Logout</a>
+        </nav>
     </div>
 
-    <!-- MAIN -->
     <div class="main-content">
-
-        <!-- TOPBAR -->
-        <div class="topbar">
+        <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <div class="page-title">Dashboard</div>
-                <div class="page-sub">Overview of your activity</div>
+                <h1 id="agent-name" style="font-family: 'Playfair Display', serif;">Welcome Back</h1>
+                <p class="text-muted">Monitor your listing performance and trust status.</p>
             </div>
+            <div class="trust-gauge">
+                <div class="stat-label" style="color: #adb5bd;">Current Trust Score</div>
+                <div class="score-circle" id="trust-score">--</div>
+                <small id="verification-status">Status: Checking...</small>
+            </div>
+        </div>
 
-            <div class="topbar-right">
-                <div class="status-pill" id="statusPill">
-                    <div class="status-dot"></div>
-                    <span id="statusText">Loading...</span>
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <div class="stat-card text-center">
+                    <div class="stat-label">Total Listings</div>
+                    <div class="stat-val" id="total-listings">0</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card text-center">
+                    <div class="stat-label">Live & Approved</div>
+                    <div class="stat-val text-success" id="approved-listings">0</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card text-center">
+                    <div class="stat-label">Flagged for Review</div>
+                    <div class="stat-val text-danger" id="flagged-listings">0</div>
                 </div>
             </div>
         </div>
 
-        <!-- BODY -->
-        <div class="content-body">
-
-            <!-- VERIFY CARD -->
-            <div id="verifyCard" class="card" style="display:none;">
-                <div class="card-title">Verify your account</div>
-                <p class="form-note">
-                    You must verify your identity before creating listings.
-                </p>
-                <button class="btn-primary" onclick="go('verify.html')">
-                    Start Verification
-                </button>
+        <div class="card">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold">Recent Listings</h5>
+                <button class="btn btn-dark btn-sm" onclick="location.href='add_listing.html'">+ Add New</button>
             </div>
-
-            <!-- STATS -->
-            <div class="grid-4">
-
-                <div class="stat-card stat-success">
-                    <div class="stat-num" id="trustScore">0.0</div>
-                    <div class="stat-label">Trust Score</div>
-                </div>
-
-                <div class="stat-card stat-warning">
-                    <div class="stat-num" id="riskLevel">Low</div>
-                    <div class="stat-label">Risk Level</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-num" id="listingCount">0</div>
-                    <div class="stat-label">Listings</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-num" id="reviewCount">0</div>
-                    <div class="stat-label">Reviews</div>
-                </div>
-
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Property</th>
+                            <th>Location</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Date Posted</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listings-table">
+                    </tbody>
+                </table>
             </div>
-
-            <!-- ACTIONS -->
-            <div class="card">
-                <div class="card-title">Quick Actions</div>
-
-                <div class="grid-3">
-
-                    <button class="btn-primary" id="createBtn" onclick="go('listings.html')">
-                        ➕ Create Listing
-                    </button>
-
-                    <button class="btn-secondary" onclick="go('listings.html')">
-                        📋 Manage Listings
-                    </button>
-
-                    <button class="btn-secondary" onclick="go('profile.html')">
-                        👤 Profile & QR
-                    </button>
-
-                </div>
-            </div>
-
-            <!-- FRAUD ALERTS -->
-            <div class="card">
-                <div class="card-title">Fraud Alerts</div>
-                <div id="fraudList">No alerts</div>
-            </div>
-
-            <!-- RECENT LISTINGS -->
-            <div class="card">
-                <div class="card-title">Recent Listings</div>
-                <div id="listingList">No listings yet</div>
-            </div>
-
         </div>
-
     </div>
 
+    <script src="../assets/js/api.js"></script>
     <script>
+        async function initDashboard() {
+            const res = await Iconics.call("agent/dashboard", "GET");
 
-        const API = "http://localhost/Final/backend/api/";
+            if (res.status === "success") {
+                const { user, profile, listings, stats } = res.data;
 
-        function go(page) {
-            location.href = page;
-        }
+                // Update Profile Info
+                document.getElementById('agent-name').innerText = `Welcome, ${user.full_name}`;
+                document.getElementById('trust-score').innerText = profile.trust_score || '0.0';
 
-        function logout() {
-            fetch(API + "auth.php?action=logout", {
-                credentials: "include"
-            }).then(() => location.href = "../auth.html");
-        }
+                const statusEl = document.getElementById('verification-status');
+                statusEl.innerText = `Status: ${profile.verification_status.toUpperCase()}`;
+                statusEl.className = profile.is_verified == 1 ? 'text-success' : 'text-warning';
 
-        async function loadDashboard() {
-            const res = await fetch(API + "agent.php?action=dashboard", {
-                credentials: "include"
-            });
+                // Update Stats
+                document.getElementById('total-listings').innerText = stats.total_listings;
+                document.getElementById('approved-listings').innerText = stats.approved_listings;
+                document.getElementById('flagged-listings').innerText = stats.flagged_listings;
 
-            const data = await res.json();
-
-            if (!data.success) {
-                location.href = "../auth.html";
-                return;
+                // Render Table
+                const tbody = document.getElementById('listings-table');
+                if (listings.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">No listings found. Start by adding one!</td></tr>`;
+                } else {
+                    tbody.innerHTML = listings.map(p => `
+                        <tr>
+                            <td class="fw-semibold">${p.title}</td>
+                            <td>${p.area_name}</td>
+                            <td>K ${Number(p.price).toLocaleString()}</td>
+                            <td>
+                                <span class="badge ${p.status === 'approved' ? 'badge-verified' : 'badge-pending'}">
+                                    ${p.status}
+                                </span>
+                            </td>
+                            <td class="text-muted small">${new Date(p.created_at).toLocaleDateString()}</td>
+                        </tr>
+                    `).join('');
+                }
             }
-
-            const user = data.user;
-            const profile = data.profile;
-
-            document.getElementById("agentName").innerText = user.full_name;
-            document.getElementById("avatar").innerText = user.full_name[0];
-
-            // STATUS
-            const status = profile.verification_status;
-
-            document.getElementById("statusText").innerText = status;
-
-            if (status !== "verified") {
-                document.getElementById("verifyCard").style.display = "block";
-                document.getElementById("createBtn").disabled = true;
-            }
-
-            // STATS
-            document.getElementById("trustScore").innerText = profile.trust_score;
-            document.getElementById("riskLevel").innerText = profile.risk_level;
-
-            document.getElementById("listingCount").innerText = data.stats.listings;
-            document.getElementById("reviewCount").innerText = data.stats.reviews;
-
-            // FRAUD
-            const fraudHTML = data.fraud.map(f =>
-                `<div class="alert-item">
-            <div class="alert-content">
-                <div class="alert-title">${f.type}</div>
-                <div class="alert-meta">${f.message}</div>
-            </div>
-        </div>`
-            ).join("");
-
-            document.getElementById("fraudList").innerHTML = fraudHTML || "No alerts";
-
-            // LISTINGS
-            const listHTML = data.listings.map(p =>
-                `<div class="list-row">
-            <div>
-                <div class="list-title">${p.title}</div>
-                <div class="list-meta">${p.area_name}</div>
-            </div>
-            <span class="badge badge-gray">${p.status}</span>
-        </div>`
-            ).join("");
-
-            document.getElementById("listingList").innerHTML = listHTML || "No listings";
         }
 
-        loadDashboard();
+        async function logout() {
+            await Iconics.call("auth/logout", "POST");
+            window.location.href = "../auth.html";
+        }
 
+        window.onload = async () => {
+            const auth = await Iconics.check();
+            if (auth.status === "success" && auth.data.user.role === 'agent') {
+                initDashboard();
+            } else {
+                window.location.href = "../auth.html";
+            }
+        };
     </script>
-
 </body>
 
 </html>

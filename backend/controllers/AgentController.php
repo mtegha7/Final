@@ -20,141 +20,112 @@ class AgentController
         $this->trustService = new TrustScoreService();
     }
 
+
     public function verifyIdentity()
     {
         Session::start();
-
         $userId = Session::get('user_id');
+
         if (!$userId) {
-            Response::error("Unauthorized", 401);
+            Response::error("Unauthorized session", 401);
             return;
         }
 
         if (!isset($_FILES['id_image']) || !isset($_FILES['selfie'])) {
-            Response::error("Images required");
+            Response::error("Both National ID and Live Selfie images are required.");
             return;
         }
 
-        $uploadDir = __DIR__ . '/../uploads/ids/';
+        // Define the upload directory (Ensure this matches where Python looks)
+        $uploadDir = __DIR__ . '/../../uploads/ids/';
         if (!file_exists($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
 
-        $idPath = $uploadDir . uniqid() . "_id.jpg";
-        $selfiePath = __DIR__ . '/../uploads/selfies/' . uniqid() . "_selfie.jpg";
+        // Generate unique filenames to prevent overwriting
+        $timestamp = time();
+        $idName = "id_" . $userId . "_" . $timestamp . ".jpg";
+        $selfieName = "selfie_" . $userId . "_" . $timestamp . ".jpg";
 
-        // Ensure selfies directory exists
-        $selfiesDir = __DIR__ . '/../uploads/selfies/';
-        if (!file_exists($selfiesDir)) {
-            mkdir($selfiesDir, 0777, true);
-        }
+        $idPath = $uploadDir . $idName;
+        $selfiePath = $uploadDir . $selfieName;
 
-        // Upload files with error checking
-        if (!move_uploaded_file($_FILES['id_image']['tmp_name'], $idPath)) {
-            Response::error("Failed to upload ID image");
-            return;
-        }
-        if (!move_uploaded_file($_FILES['selfie']['tmp_name'], $selfiePath)) {
-            Response::error("Failed to upload selfie");
-            return;
-        }
+        if (
+            move_uploaded_file($_FILES['id_image']['tmp_name'], $idPath) &&
+            move_uploaded_file($_FILES['selfie']['tmp_name'], $selfiePath)
+        ) {
 
-        // Run AI verification
-        $result = $this->faceService->verify($userId, $idPath, $selfiePath);
+            try {
+                // Call the Service which handles the PythonBridge logic
+                // This returns [status, confidence, verification_status]
+                $result = $this->faceService->verify($userId, $idName, $selfieName);
 
-        if ($result['status'] === 'error') {
-            Response::error("Verification failed");
-            return;
-        }
-
-        $status = $result['status'];
-        $confidence = $result['confidence'];
-
-        // Determine risk level based on confidence
-        $riskLevel = ($confidence > 0.85) ? 'low' : (($confidence > 0.70) ? 'medium' : 'high');
-
-        // HANDLE STATUS FLOW
-        if ($status === "manual_review") {
-            // Save as pending review (NOT verified yet)
-            $this->agentModel->updateVerificationStatus(
-                $userId,
-                $idPath,
-                $selfiePath,
-                $confidence,
-                "pending_review",
-                $riskLevel
-            );
-            Response::success([
-                "status" => "pending_review",
-                "confidence" => $confidence,
-                "message" => "Sent for admin review"
-            ]);
-        } elseif ($status === "verified") {
-            $this->agentModel->updateVerificationStatus(
-                $userId,
-                $idPath,
-                $selfiePath,
-                $confidence,
-                "verified",
-                "low"
-            );
-            Response::success([
-                "status" => "verified",
-                "confidence" => $confidence
-            ]);
+                if ($result['status'] === 'success') {
+                    Response::success($result, "Verification processed. Status: " . $result['verification_status']);
+                } else {
+                    Response::error($result['message'] ?? "AI Verification failed.");
+                }
+            } catch (Throwable $e) {
+                Response::error("Service Error: " . $e->getMessage());
+            }
         } else {
-            $this->agentModel->updateVerificationStatus(
-                $userId,
-                $idPath,
-                $selfiePath,
-                $confidence,
-                "pending_review",
-                $riskLevel
-            );
-            Response::success([
-                "status" => "pending_review",
-                "confidence" => $confidence,
-                "message" => "Sent for admin review"
-            ]);
+            Response::error("Failed to save images to the server.");
         }
     }
 
+    /**
+     * Endpoint: action=dashboard
+     * Aggregates profile, stats, and listings for the agent UI
+     */
     public function getDashboard()
     {
         Session::start();
-
         $userId = Session::get('user_id');
+
         if (!$userId) {
             Response::error("Unauthorized", 401);
             return;
         }
 
         try {
-            // Get user info
-            $userQuery = "SELECT id, full_name, email FROM users WHERE id = ? AND role = 'agent'";
-            $stmt = Database::getInstance()->conn->prepare($userQuery);
+            $db = Database::getInstance()->conn;
+
+            // 1. Fetch User details
+            $userQuery = "SELECT full_name, email FROM users WHERE id = ? AND role = 'agent'";
+            $stmt = $db->prepare($userQuery);
             $stmt->execute([$userId]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$user) {
-                Response::error("User not found", 404);
+                Response::error("Agent record not found.", 404);
                 return;
             }
 
-            // Get agent profile
+            // 2. Fetch Agent Profile (ID paths, Trust Score, Risk Level)
             $profile = $this->agentModel->get($userId);
 
-            // Get agent's listings
-            $listingQuery = "SELECT id, title, area_name, price, status, created_at FROM properties WHERE agent_id = ? ORDER BY created_at DESC LIMIT 10";
-            $stmt = Database::getInstance()->conn->prepare($listingQuery);
+            // 3. Fetch Recent Listings
+            $listingQuery = "SELECT id, title, area_name, price, status, created_at 
+                             FROM properties 
+                             WHERE agent_id = ? 
+                             ORDER BY created_at DESC LIMIT 10";
+            $stmt = $db->prepare($listingQuery);
             $stmt->execute([$userId]);
-            $listings = $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];
+            $listings = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
-            // Get stats
-            $statsQuery = "SELECT COUNT(*) as total_listings, SUM(CASE WHEN status='approved' THEN 1 ELSE 0 END) as approved_listings FROM properties WHERE agent_id = ?";
-            $stmt = Database::getInstance()->conn->prepare($statsQuery);
+            // 4. Calculate Stats
+            $statsQuery = "SELECT 
+                            COUNT(*) as total_listings, 
+                            SUM(CASE WHEN status='approved' THEN 1 ELSE 0 END) as approved_listings,
+                            SUM(CASE WHEN is_flagged=1 THEN 1 ELSE 0 END) as flagged_listings
+                           FROM properties WHERE agent_id = ?";
+            $stmt = $db->prepare($statsQuery);
             $stmt->execute([$userId]);
-            $stats = $stmt->fetch(PDO::FETCH_ASSOC) ?? [];
+            $stats = $stmt->fetch(PDO::FETCH_ASSOC) ?: [
+                "total_listings" => 0,
+                "approved_listings" => 0,
+                "flagged_listings" => 0
+            ];
 
             Response::success([
                 "user" => $user,
@@ -163,7 +134,7 @@ class AgentController
                 "stats" => $stats
             ]);
         } catch (Throwable $e) {
-            Response::error($e->getMessage(), 500);
+            Response::error("Dashboard Error: " . $e->getMessage());
         }
     }
 }

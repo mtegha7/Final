@@ -1,189 +1,177 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auth — Iconics Real Estate</title>
-
-
+    <title>Authentication | IREA FDIVS</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
-
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <style>
+        :root {
+            --primary-dark: #0f1923;
+            --accent-green: #35ac39;
+            --bg-dull: #e5e7eb;
+        }
+
         body {
-            margin: 0;
             font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, #0f1923, #1d293e, #163d2a);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: var(--bg-dull);
+            /* Stronger Grid Pattern */
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.07) 1px, transparent 1px);
+            background-size: 40px 40px;
             height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
         }
 
         .auth-card {
-            background: #fff;
+            background: #ffffff;
             padding: 40px;
-            width: 360px;
             border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        .auth-logo {
+        .auth-header {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-dark);
             text-align: center;
             margin-bottom: 25px;
+            font-weight: 700;
         }
 
-        .auth-logo h1 {
-            font-family: 'Playfair Display', serif;
-            margin: 0;
-        }
-
-        .auth-logo span {
-            color: #35ac39;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 12px;
-            border-radius: 6px;
-            border: 1px solid #ddd;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 12px;
-            background: #35ac39;
-            color: white;
+        .btn-auth {
+            background: var(--primary-dark);
+            color: white !important;
             border: none;
+            padding: 12px;
+            width: 100%;
             border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
+            transition: 0.3s;
         }
 
-        .toggle {
-            text-align: center;
-            margin-top: 15px;
+        .btn-auth:hover {
+            background: #1a2a3a;
+            transform: translateY(-2px);
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #6b7280;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            color: var(--primary-dark);
+        }
+
+        .form-control {
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+            padding: 10px;
+        }
+
+        .toggle-link {
+            color: var(--accent-green);
             cursor: pointer;
-            color: #35ac39;
             font-weight: 600;
         }
-
-        .alert {
-            display: none;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            font-size: 13px;
-        }
-
-        .error {
-            background: #ffe5e5;
-            color: #c0392b;
-        }
-
-        .success {
-            background: #e6ffed;
-            color: #27ae60;
-        }
     </style>
-
-
 </head>
 
 <body>
 
     <div class="auth-card">
+        <a href="index.html" class="back-link">
+            <svg width="16" height="16" fill="currentColor" style="margin-right:8px" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+            </svg>
+            Back to Home
+        </a>
 
-
-        <div class="auth-logo">
-            <h1>IR<span>EA</span></h1>
-            <p id="title">Login</p>
+        <div id="login-section">
+            <h2 class="auth-header">Welcome Back</h2>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Email Address</label>
+                    <input type="email" name="email" class="form-control" required placeholder="admin@irea.com">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small fw-bold">Password</label>
+                    <input type="password" name="password" class="form-control" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-auth">Sign In</button>
+            </form>
+            <p class="text-center mt-4 small">Need an account? <span class="toggle-link"
+                    onclick="toggleAuth()">Register</span></p>
         </div>
 
-        <div id="alert" class="alert"></div>
-
-        <input type="text" id="name" placeholder="Full Name" style="display:none;">
-        <select id="role" style="display:none;">
-            <option value="client">Client</option>
-            <option value="agent">Agent</option>
-        </select>
-
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-
-        <button class="btn" onclick="submit()">Continue</button>
-
-        <div class="toggle" onclick="toggleMode()">
-            Switch to Register
+        <div id="register-section" style="display: none;">
+            <h2 class="auth-header">Create Account</h2>
+            <form id="registerForm">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Full Name</label>
+                    <input type="text" name="full_name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Email</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Password</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small fw-bold">I am an...</label>
+                    <select name="role" class="form-select">
+                        <option value="client">Client</option>
+                        <option value="agent">Agent</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-auth">Register</button>
+            </form>
+            <p class="text-center mt-4 small">Already joined? <span class="toggle-link"
+                    onclick="toggleAuth()">Login</span></p>
         </div>
-
-
     </div>
 
     <script src="assets/js/api.js"></script>
-
     <script>
-        let isLogin = true;
-
-        function toggleMode() {
-            isLogin = !isLogin;
-
-            document.getElementById("title").innerText = isLogin ? "Login" : "Register";
-            document.getElementById("name").style.display = isLogin ? "none" : "block";
-            document.getElementById("role").style.display = isLogin ? "none" : "block";
+        function toggleAuth() {
+            const login = document.getElementById('login-section');
+            const reg = document.getElementById('register-section');
+            const isLogin = login.style.display !== 'none';
+            login.style.display = isLogin ? 'none' : 'block';
+            reg.style.display = isLogin ? 'block' : 'none';
         }
 
-        function show(msg, type) {
-            const el = document.getElementById("alert");
-            el.style.display = "block";
-            el.className = "alert " + type;
-            el.innerText = msg;
-        }
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const data = Object.fromEntries(new FormData(e.target));
+            const res = await Iconics.login(data);
 
-        async function submit() {
-            const emailVal = document.getElementById("email").value;
-            const passwordVal = document.getElementById("password").value;
-
-            if (!emailVal || !passwordVal) return show("Fields required", "error");
-
-            try {
-                const res = isLogin ?
-                    await Iconics.login({ email: emailVal, password: passwordVal }) :
-                    await Iconics.register({
-                        full_name: document.getElementById("name").value,
-                        email: emailVal,
-                        password: passwordVal,
-                        role: document.getElementById("role").value
-                    });
-
-
-                if (res.status === "success") {
-                    show("Success! Redirecting...", "success");
-
-                    const role = res.data?.user?.role;
-                    if (role) {
-                        setTimeout(() => {
-                            Iconics.redirectByRole(role);
-                        }, 500);
-                    } else {
-                        show("User role missing", "error");
-                    }
-                } else {
-                    // Handle error messages from Response::error()
-                    show(res.message || "Authentication failed", "error");
-                }
-            } catch (err) {
-                show("Server connection failed", "error");
+            if (res.status === "success" && res.data.user) {
+                // REDIRECT LOGIC
+                Iconics.redirectByRole(res.data.user.role);
+            } else {
+                alert(res.message || "Invalid Login");
             }
-        }
-
+        };
     </script>
-
 </body>
 
 </html>

@@ -82,4 +82,55 @@ class AdminController
             Response::error($e->getMessage(), 500);
         }
     }
+
+    public function getAuditLogs()
+    {
+        try {
+            $db = Database::getInstance()->conn;
+            // Logic inspired by your audit_log.php file
+            $sql = "SELECT l.*, u.full_name, u.role as user_role 
+                FROM audit_logs l 
+                LEFT JOIN users u ON l.user_id = u.id 
+                ORDER BY l.logged_at DESC LIMIT 10";
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            Response::success($stmt->fetchAll(PDO::FETCH_ASSOC));
+        } catch (Throwable $e) {
+            Response::error($e->getMessage());
+        }
+    }
+
+    public function updateUser()
+    {
+        $input = json_decode(file_get_contents("php://input"), true);
+        $id = $input['id'] ?? null;
+
+        if (!$id) {
+            Response::error("User ID is required");
+            return;
+        }
+
+        try {
+            $db = Database::getInstance()->conn;
+            $sql = "UPDATE users SET full_name = ?, email = ?, role = ? WHERE id = ?";
+            $stmt = $db->prepare($sql);
+            $success = $stmt->execute([
+                $input['full_name'],
+                $input['email'],
+                $input['role'],
+                $id
+            ]);
+
+            // Only update password if a new one is provided
+            if (!empty($input['password'])) {
+                $hashed = password_hash($input['password'], PASSWORD_BCRYPT);
+                $pwStmt = $db->prepare("UPDATE users SET password = ? WHERE id = ?");
+                $pwStmt->execute([$hashed, $id]);
+            }
+
+            Response::success([], "User updated successfully");
+        } catch (Throwable $e) {
+            Response::error("Update failed: " . $e->getMessage());
+        }
+    }
 }
