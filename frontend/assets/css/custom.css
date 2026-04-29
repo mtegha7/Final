@@ -1,0 +1,31 @@
+/* IREA LANDING PAGE STYLES */
+
+.hero-section {
+    padding: 120px 0;
+    text-align: center;
+    background: #f7f7f7;
+}
+
+.hero-section h1 {
+    font-size: 42px;
+    font-weight: 700;
+}
+
+.hero-section p {
+    max-width: 700px;
+    margin: 20px auto;
+    font-size: 18px;
+    color: #555;
+}
+
+.hero-buttons {
+    margin-top: 30px;
+}
+
+/* Footer */
+.site-footer {
+    padding: 20px;
+    text-align: center;
+    background: #111;
+    color: #fff;
+}

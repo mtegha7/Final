@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Dashboard — Iconics</title>
+
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+
+<body class="layout-agent">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-word">ICONICS</div>
+            <div class="logo-tag">Agent Panel</div>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-item active">Dashboard</div>
+            <div class="nav-item" onclick="go('verify.html')">Verification</div>
+            <div class="nav-item" onclick="go('listings.html')">Listings</div>
+            <div class="nav-item" onclick="go('profile.html')">Profile</div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-avatar agent-avatar" id="avatar">A</div>
+                <div>
+                    <div class="user-name" id="agentName">Agent</div>
+                    <div class="user-role">Agent</div>
+                </div>
+            </div>
+
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+
+    </div>
+
+    <!-- MAIN -->
+    <div class="main-content">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div>
+                <div class="page-title">Dashboard</div>
+                <div class="page-sub">Overview of your activity</div>
+            </div>
+
+            <div class="topbar-right">
+                <div class="status-pill" id="statusPill">
+                    <div class="status-dot"></div>
+                    <span id="statusText">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BODY -->
+        <div class="content-body">
+
+            <!-- VERIFY CARD -->
+            <div id="verifyCard" class="card" style="display:none;">
+                <div class="card-title">Verify your account</div>
+                <p class="form-note">
+                    You must verify your identity before creating listings.
+                </p>
+                <button class="btn-primary" onclick="go('verify.html')">
+                    Start Verification
+                </button>
+            </div>
+
+            <!-- STATS -->
+            <div class="grid-4">
+
+                <div class="stat-card stat-success">
+                    <div class="stat-num" id="trustScore">0.0</div>
+                    <div class="stat-label">Trust Score</div>
+                </div>
+
+                <div class="stat-card stat-warning">
+                    <div class="stat-num" id="riskLevel">Low</div>
+                    <div class="stat-label">Risk Level</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-num" id="listingCount">0</div>
+                    <div class="stat-label">Listings</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-num" id="reviewCount">0</div>
+                    <div class="stat-label">Reviews</div>
+                </div>
+
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="card">
+                <div class="card-title">Quick Actions</div>
+
+                <div class="grid-3">
+
+                    <button class="btn-primary" id="createBtn" onclick="go('listings.html')">
+                        ➕ Create Listing
+                    </button>
+
+                    <button class="btn-secondary" onclick="go('listings.html')">
+                        📋 Manage Listings
+                    </button>
+
+                    <button class="btn-secondary" onclick="go('profile.html')">
+                        👤 Profile & QR
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- FRAUD ALERTS -->
+            <div class="card">
+                <div class="card-title">Fraud Alerts</div>
+                <div id="fraudList">No alerts</div>
+            </div>
+
+            <!-- RECENT LISTINGS -->
+            <div class="card">
+                <div class="card-title">Recent Listings</div>
+                <div id="listingList">No listings yet</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const API = "http://localhost/Final/backend/api/";
+
+        function go(page) {
+            location.href = page;
+        }
+
+        function logout() {
+            fetch(API + "auth.php?action=logout", {
+                credentials: "include"
+            }).then(() => location.href = "../auth.html");
+        }
+
+        async function loadDashboard() {
+            const res = await fetch(API + "agent.php?action=dashboard", {
+                credentials: "include"
+            });
+
+            const data = await res.json();
+
+            if (!data.success) {
+                location.href = "../auth.html";
+                return;
+            }
+
+            const user = data.user;
+            const profile = data.profile;
+
+            document.getElementById("agentName").innerText = user.full_name;
+            document.getElementById("avatar").innerText = user.full_name[0];
+
+            // STATUS
+            const status = profile.verification_status;
+
+            document.getElementById("statusText").innerText = status;
+
+            if (status !== "verified") {
+                document.getElementById("verifyCard").style.display = "block";
+                document.getElementById("createBtn").disabled = true;
+            }
+
+            // STATS
+            document.getElementById("trustScore").innerText = profile.trust_score;
+            document.getElementById("riskLevel").innerText = profile.risk_level;
+
+            document.getElementById("listingCount").innerText = data.stats.listings;
+            document.getElementById("reviewCount").innerText = data.stats.reviews;
+
+            // FRAUD
+            const fraudHTML = data.fraud.map(f =>
+                `<div class="alert-item">
+            <div class="alert-content">
+                <div class="alert-title">${f.type}</div>
+                <div class="alert-meta">${f.message}</div>
+            </div>
+        </div>`
+            ).join("");
+
+            document.getElementById("fraudList").innerHTML = fraudHTML || "No alerts";
+
+            // LISTINGS
+            const listHTML = data.listings.map(p =>
+                `<div class="list-row">
+            <div>
+                <div class="list-title">${p.title}</div>
+                <div class="list-meta">${p.area_name}</div>
+            </div>
+            <span class="badge badge-gray">${p.status}</span>
+        </div>`
+            ).join("");
+
+            document.getElementById("listingList").innerHTML = listHTML || "No listings";
+        }
+
+        loadDashboard();
+
+    </script>
+
+</body>
+
+</html>
