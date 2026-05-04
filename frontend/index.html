@@ -23,11 +23,20 @@
     <link rel="stylesheet" href="assets/css/responsive.css">
 
     <style>
+        :root {
+            --primary-dark: #0f1923;
+            --accent-green: #4CAF50;
+            --light-bg: #f8f9fa;
+            --text-dark: #333;
+            --text-light: #777;
+            --white: #ffffff;
+        }
+
         /* Core Branding & Typography */
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #ffffff;
-            color: #333;
+            background-color: var(--white);
+            color: var(--text-dark);
         }
 
         h1,
@@ -39,76 +48,28 @@
             font-weight: 700;
         }
 
-
-
         .navbar-brand {
-            color: #0f1923 !important;
-            /* Ensure logo text is visible */
+            color: var(--primary-dark) !important;
             font-family: 'Playfair Display', serif;
             font-weight: 800;
             font-size: 24px;
         }
 
-        .hero_section {
-            position: relative;
-            /* Darker overlay so white text/buttons pop */
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('assets/img/hero-bg.jpg');
-            background-size: cover;
-        }
-
-        .hero_content h1 {
-            color: #ffffff !important;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Fixed Button Visibility */
-        .btn-primary-irea {
-            background-color: #35ac39 !important;
-            color: #ffffff !important;
-            border: none;
-            padding: 12px 30px;
-            font-weight: 600;
-            display: inline-block;
-            border-radius: 4px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-outline-irea {
-            background-color: transparent !important;
-            color: #ffffff !important;
-            border: 2px solid #ffffff !important;
-            padding: 10px 28px;
-            font-weight: 600;
-        }
-
-        /* Fix loader */
-        .preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
         /* Navbar Styling */
         .site-navbar {
             padding: 15px 0;
-            background: transparent;
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .irea-brand {
             font-size: 30px;
-            color: #1a1a1a !important;
+            color: var(--primary-dark) !important;
             letter-spacing: 1px;
             text-decoration: none !important;
         }
 
-        /* HERO SECTION - High Visibility Adaptation */
+        /* HERO SECTION */
         .home_bg {
             position: relative;
             min-height: 100vh;
@@ -116,32 +77,34 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            /* White wash overlay to maintain light theme vibe */
-            background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
-                url('assets/img/bg/home-bg.jpg') no-repeat center center;
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('assets/img/bg/home-bg.jpg') no-repeat center center;
             background-size: cover;
+            color: var(--white);
         }
 
         .hero-text-container {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.95);
             padding: 60px 40px;
-            border-radius: 4px;
+            border-radius: 15px;
             max-width: 800px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .hero-text h1 {
-            color: #1a1a1a !important;
+            color: var(--primary-dark) !important;
             font-size: 3.5rem;
             margin-bottom: 20px;
+            font-weight: 800;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         .hero-text p {
-            color: #444 !important;
+            color: var(--text-dark) !important;
             font-size: 1.1rem;
             line-height: 1.8;
             margin-bottom: 35px;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
         }
 
         .hero-buttons .btn {
@@ -151,32 +114,97 @@
             text-transform: uppercase;
             font-size: 13px;
             letter-spacing: 1px;
-            border-radius: 0;
-            transition: 0.3s;
+            border-radius: 25px;
+            transition: all 0.3s ease;
         }
 
         .btn-primary {
-            background-color: #1a1a1a;
-            border-color: #1a1a1a;
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: var(--white);
         }
 
         .btn-primary:hover {
-            background-color: #35ac39;
-            /* Success green from auth.html */
-            border-color: #35ac39;
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(53, 172, 57, 0.3);
+        }
+
+        .btn-outline-dark {
+            border-color: var(--primary-dark);
+            color: var(--primary-dark);
+        }
+
+        .btn-outline-dark:hover {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            transform: translateY(-2px);
         }
 
         /* Property Listings */
         .single_property {
-            background: #fff;
-            border: 1px solid #f0f0f0;
+            background: var(--white);
+            border: 1px solid #e9ecef;
+            border-radius: 15px;
             margin-bottom: 30px;
-            transition: 0.3s;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
 
         .single_property:hover {
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
             transform: translateY(-5px);
+        }
+
+        .single_property img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .single_property:hover img {
+            transform: scale(1.05);
+        }
+
+        .single_property_content {
+            padding: 25px;
+        }
+
+        .single_property_content h4 {
+            font-size: 20px;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .single_property_content p {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .single_property_content .price-area {
+            border-top: 1px solid #e9ecef;
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-area .price {
+            font-weight: 700;
+            color: var(--accent-green);
+            font-size: 18px;
+        }
+
+        .price-area .location {
+            text-transform: uppercase;
+            color: var(--accent-green);
+            font-weight: 600;
+            font-size: 12px;
         }
 
         .section-title h2 {
@@ -184,17 +212,62 @@
             margin-bottom: 50px;
             position: relative;
             display: inline-block;
+            color: var(--primary-dark);
         }
 
         .section-title h2::after {
             content: "";
             width: 50px;
-            height: 2px;
-            background: #35ac39;
+            height: 3px;
+            background: var(--accent-green);
             position: absolute;
             bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
+        }
+
+        /* Footer */
+        .footer-area {
+            padding: 60px 0;
+            background: var(--light-bg);
+            border-top: 1px solid #e9ecef;
+            color: var(--text-light);
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preloader .status p {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-text-container {
+                padding: 40px 20px;
+            }
+
+            .single_property_content {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -292,13 +365,13 @@
                         const card = `
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="single_property wow fadeInUp">
-                            <img src="assets/img/property/1.jpg" class="img-fluid" alt="${p.title}" />
-                            <div class="single_property_content p-4">
-                                <h4 style="font-size:20px;">${p.title}</h4>
-                                <p style="font-size: 14px; color: #777;">${p.description || ''}</p>
-                                <div style="margin-top: 15px; border-top: 1px solid #f0f0f0; padding-top: 15px; display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-weight: 700; color: #1a1a1a;">$${Number(p.price).toLocaleString()}</span>
-                                    <small style="text-transform: uppercase; color: #35ac39; font-weight:600;">${p.area_name || ''}</small>
+                            <img src="assets/img/property/1.jpg" alt="${p.title}" />
+                            <div class="single_property_content">
+                                <h4>${p.title}</h4>
+                                <p>${p.description || 'No description available.'}</p>
+                                <div class="price-area">
+                                    <span class="price">$${Number(p.price).toLocaleString()}</span>
+                                    <small class="location">${p.area_name || 'N/A'}</small>
                                 </div>
                             </div>
                         </div>

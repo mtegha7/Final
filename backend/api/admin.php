@@ -41,6 +41,14 @@ try {
             $controller->getFraudLogs();
             break;
 
+        case 'list_agents':
+            $controller->listAgents();
+            break;
+
+        case 'verify_agent':
+            $controller->verifyAgent();
+            break;
+
         case 'stats':
             // Fetch admin dashboard statistics
             $controller->getStats();
@@ -52,6 +60,10 @@ try {
 
         case 'update_user':
             $controller->updateUser();
+            break;
+
+        case 'get_agent_profile':
+            $controller->getAgentProfile();
             break;
 
         default:

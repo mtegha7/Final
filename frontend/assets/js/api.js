@@ -55,7 +55,21 @@ const Iconics = {
 
     check() {
         return this.call("auth/check", "GET");
-    }
+    },
 
-    // ... keep your redirectByRole function as is ...
+    redirectByRole(role) {
+        switch (role) {
+            case 'admin':
+                window.location.href = 'admin/dashboard.html';
+                break;
+            case 'agent':
+                window.location.href = 'agent/dashboard.html';
+                break;
+            case 'client':
+                window.location.href = 'client/dashboard.html';
+                break;
+            default:
+                window.location.href = 'index.html';
+        }
+    }
 };

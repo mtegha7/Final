@@ -46,11 +46,35 @@ class Property
 
     public function getAll()
     {
-        $sql = "SELECT p.*, u.full_name as agent_name FROM properties p 
-                LEFT JOIN users u ON p.agent_id = u.id ORDER BY p.created_at DESC";
+        $sql = "SELECT p.*, u.full_name as agent_name FROM properties p LEFT JOIN users u ON p.agent_id = u.id ORDER BY p.created_at DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getById($id)
+    {
+        $sql = "SELECT p.*, u.full_name as agent_name FROM properties p LEFT JOIN users u ON p.agent_id = u.id WHERE p.id = ? LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function update($data)
+    {
+        $sql = "UPDATE properties SET title = ?, description = ?, price = ?, property_type = ?, area_name = ?, latitude = ?, longitude = ?, status = ? WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            $data['title'],
+            $data['description'],
+            $data['price'],
+            $data['property_type'],
+            $data['area_name'],
+            $data['latitude'],
+            $data['longitude'],
+            $data['status'],
+            $data['id']
+        ]);
     }
 
     public function updateStatus($id, $status)

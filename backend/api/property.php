@@ -15,6 +15,10 @@ try {
             $controller->getAllProperties();
             break;
 
+        case 'get':
+            $controller->getPropertyById();
+            break;
+
         case 'update':
             $controller->updateProperty();
             break;

@@ -2,15 +2,15 @@ async function protectPage(requiredRole = null) {
 
     const res = await Iconics.check();
 
-    if (!res.success) {
-        window.location.href = "/login.html";
+    if (res.status !== "success") {
+        window.location.href = "auth.html";
         return null;
     }
 
-    const user = res.user;
+    const user = res.data.user;
 
     if (requiredRole && user.role !== requiredRole) {
-        window.location.href = "/login.html";
+        window.location.href = "auth.html";
         return null;
     }
 

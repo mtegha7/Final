@@ -52,4 +52,11 @@ class User
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getAgentsWithProfile()
+    {
+        $stmt = $this->db->prepare("SELECT u.id AS user_id, u.full_name, u.email, u.created_at, u.role, ap.national_id_path, ap.selfie_path, ap.verification_status, ap.trust_score, ap.avg_rating, ap.total_reviews, CASE WHEN ap.verification_status = 'verified' THEN 1 ELSE 0 END AS is_verified FROM users u LEFT JOIN agent_profiles ap ON u.id = ap.user_id WHERE u.role = 'agent' ORDER BY u.created_at DESC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

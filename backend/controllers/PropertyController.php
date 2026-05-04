@@ -99,18 +99,55 @@ class PropertyController
     }
 
 
+    public function getPropertyById()
+    {
+        $input = json_decode(file_get_contents("php://input"), true);
+        $id = $input['id'] ?? null;
+
+        if (!$id) {
+            Response::error("Property ID is required", 400);
+            return;
+        }
+
+        try {
+            $property = $this->propertyModel->getById($id);
+            if ($property) {
+                Response::success($property);
+            } else {
+                Response::error("Property not found", 404);
+            }
+        } catch (Throwable $e) {
+            Response::error($e->getMessage(), 500);
+        }
+    }
+
     public function updateProperty()
     {
         $input = json_decode(file_get_contents("php://input"), true);
         $id = $input['id'] ?? null;
 
-        if (!$id) return Response::error("Missing ID");
+        if (!$id) {
+            return Response::error("Missing ID");
+        }
 
         try {
-            $db = Database::getInstance()->conn;
-            $stmt = $db->prepare("UPDATE properties SET title = ?, price = ? WHERE id = ?");
-            $stmt->execute([$input['title'], $input['price'], $id]);
-            Response::success([], "Property updated");
+            $success = $this->propertyModel->update([
+                'id' => $id,
+                'title' => $input['title'] ?? '',
+                'description' => $input['description'] ?? '',
+                'price' => $input['price'] ?? 0,
+                'property_type' => $input['property_type'] ?? '',
+                'area_name' => $input['area_name'] ?? '',
+                'latitude' => $input['latitude'] ?? null,
+                'longitude' => $input['longitude'] ?? null,
+                'status' => $input['status'] ?? 'pending'
+            ]);
+
+            if ($success) {
+                Response::success([], "Property updated");
+            } else {
+                Response::error("Property update failed");
+            }
         } catch (Throwable $e) {
             Response::error($e->getMessage());
         }

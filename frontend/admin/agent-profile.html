@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Profile — Iconics Admin</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-dark: #0f1923;
+            --accent-green: #35ac39;
+            --accent-red: #d9534f;
+            --text-gray: #777;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background: var(--primary-dark);
+            color: white;
+            padding-top: 20px;
+            position: fixed;
+            width: 240px;
+        }
+
+        .sidebar h2 {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 30px;
+            color: var(--accent-green);
+        }
+
+        .nav-link {
+            color: #adb5bd;
+            padding: 12px 25px;
+            transition: 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .main-content {
+            margin-left: 240px;
+            padding: 40px;
+        }
+
+        .profile-card,
+        .edit-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .meta-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .verification-image {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h2>Iconics Admin</h2>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="dashboard.html">Dashboard</a>
+            <a class="nav-link" href="listings.html">Listings</a>
+            <a class="nav-link" href="agents.html">Agents</a>
+            <hr style="background: rgba(255,255,255,0.1)">
+            <a class="nav-link text-danger" href="#" onclick="logout()">Logout</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 style="font-family: 'Playfair Display', serif;">Agent Profile</h1>
+                <p class="text-muted">Review agent data and edit details when needed.</p>
+            </div>
+            <button class="btn btn-outline-secondary" onclick="window.location.href='agents.html'">Back to
+                Agents</button>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="profile-card">
+                    <h5 class="mb-4">Profile Summary</h5>
+                    <p class="meta-label">Name</p>
+                    <h4 id="profile-name">--</h4>
+                    <p class="meta-label mt-3">Email</p>
+                    <p id="profile-email">--</p>
+                    <p class="meta-label mt-3">Agent Status</p>
+                    <p id="profile-status">--</p>
+                    <p class="meta-label mt-3">Trust Score</p>
+                    <p id="profile-trust">--</p>
+                    <p class="meta-label mt-3">Verification</p>
+                    <p id="profile-verification">--</p>
+                    <p class="meta-label mt-3">Confidence</p>
+                    <p id="profile-confidence">--</p>
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <div>
+                                <p class="meta-label">Live Selfie</p>
+                                <img id="profile-selfie" src="" class="verification-image" alt="Agent selfie">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                <p class="meta-label">ID Document</p>
+                                <img id="profile-id" src="" class="verification-image" alt="Agent ID">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="edit-card">
+                    <h5 class="mb-4">Edit Agent Details</h5>
+                    <form id="agentForm">
+                        <input type="hidden" id="agent-id">
+                        <div class="mb-3">
+                            <label class="form-label" for="agent-full-name">Full Name</label>
+                            <input type="text" id="agent-full-name" class="form-control" required
+                                placeholder="Enter full name">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="agent-email">Email Address</label>
+                            <input type="email" id="agent-email" class="form-control" required
+                                placeholder="Enter email address">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="agent-verification-status">Verification Status</label>
+                            <select id="agent-verification-status" class="form-select"
+                                title="Agent verification status">
+                                <option value="pending">Pending</option>
+                                <option value="verified">Verified</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="agent-trust-score">Trust Score</label>
+                            <input type="number" id="agent-trust-score" class="form-control" min="0" max="100"
+                                step="0.1" placeholder="Enter trust score">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="agent-password">New Password (optional)</label>
+                            <input type="password" id="agent-password" class="form-control"
+                                placeholder="Leave blank to keep current password" title="New password">
+                        </div>
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button type="button" class="btn btn-secondary"
+                                onclick="window.location.href='agents.html'">Cancel</button>
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function getQueryParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        async function loadAgentProfile() {
+            const userId = getQueryParam('user_id');
+            if (!userId) {
+                alert('Agent ID missing');
+                window.location.href = 'agents.html';
+                return;
+            }
+
+            try {
+                const res = await Iconics.call('admin/get_agent_profile', 'POST', { user_id: userId });
+                if (res.status !== 'success') {
+                    alert(res.message || 'Failed to load agent profile');
+                    window.location.href = 'agents.html';
+                    return;
+                }
+
+                const agent = res.data;
+                document.getElementById('agent-id').value = userId;
+                document.getElementById('agent-full-name').value = agent.full_name || '';
+                document.getElementById('agent-email').value = agent.email || '';
+                document.getElementById('agent-verification-status').value = agent.verification_status || 'pending';
+                document.getElementById('agent-trust-score').value = agent.trust_score || 0;
+
+                document.getElementById('profile-name').innerText = agent.full_name || '--';
+                document.getElementById('profile-email').innerText = agent.email || '--';
+                document.getElementById('profile-status').innerText = agent.role || 'agent';
+                document.getElementById('profile-trust').innerText = agent.trust_score !== null && agent.trust_score !== undefined ? agent.trust_score + '%' : '--';
+                document.getElementById('profile-verification').innerText = agent.verification_status || 'pending';
+                document.getElementById('profile-confidence').innerText = agent.verification_confidence !== null && agent.verification_confidence !== undefined ? agent.verification_confidence + '%' : '--';
+                document.getElementById('profile-selfie').src = agent.selfie_path ? '../uploads/selfies/' + agent.selfie_path : '../assets/img/no-image.png';
+                document.getElementById('profile-id').src = agent.national_id_path ? '../uploads/ids/' + agent.national_id_path : '../assets/img/no-image.png';
+            } catch (err) {
+                console.error(err);
+                alert('Unable to load profile');
+                window.location.href = 'agents.html';
+            }
+        }
+
+        document.getElementById('agentForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const userId = document.getElementById('agent-id').value;
+            const fullName = document.getElementById('agent-full-name').value;
+            const email = document.getElementById('agent-email').value;
+            const verificationStatus = document.getElementById('agent-verification-status').value;
+            const trustScore = document.getElementById('agent-trust-score').value;
+            const password = document.getElementById('agent-password').value;
+
+            try {
+                const userRes = await Iconics.call('admin/update_user', 'POST', {
+                    id: userId,
+                    full_name: fullName,
+                    email: email,
+                    role: 'agent',
+                    password: password
+                });
+
+                if (userRes.status !== 'success') {
+                    alert(userRes.message || 'Failed to update user details');
+                    return;
+                }
+
+                const verifyRes = await Iconics.call('admin/verify_agent', 'POST', {
+                    user_id: userId,
+                    status: verificationStatus === 'verified' ? 'approved' : (verificationStatus === 'rejected' ? 'denied' : 'pending'),
+                    trust_score: trustScore || 0
+                });
+
+                if (verifyRes.status !== 'success') {
+                    alert(verifyRes.message || 'Failed to update verification status');
+                    return;
+                }
+
+                alert('Agent updated successfully');
+                loadAgentProfile();
+            } catch (err) {
+                console.error(err);
+                alert('Unable to save changes');
+            }
+        });
+
+        async function logout() {
+            await Iconics.call('auth/logout', 'POST');
+            window.location.href = '../auth.html';
+        }
+
+        window.onload = async () => {
+            const auth = await Iconics.check();
+            if (auth.status !== 'success' || auth.data.user.role !== 'admin') {
+                window.location.href = '../auth.html';
+                return;
+            }
+            loadAgentProfile();
+        };
+    </script>
+</body>
+
+</html>

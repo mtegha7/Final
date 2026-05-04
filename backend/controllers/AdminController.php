@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/Property.php';
 require_once __DIR__ . '/../models/FraudLog.php';
+require_once __DIR__ . '/../models/AgentProfile.php';
 require_once __DIR__ . '/../core/Response.php';
 require_once __DIR__ . '/../config/database.php';
 
@@ -11,12 +12,14 @@ class AdminController
     private $userModel;
     private $propertyModel;
     private $fraudModel;
+    private $agentModel;
 
     public function __construct()
     {
         $this->userModel = new User();
         $this->propertyModel = new Property();
         $this->fraudModel = new FraudLog();
+        $this->agentModel = new AgentProfile();
     }
 
     public function getUsers()
@@ -32,6 +35,51 @@ class AdminController
     public function getFraudLogs()
     {
         Response::success($this->fraudModel->getAll());
+    }
+
+    public function listAgents()
+    {
+        Response::success($this->userModel->getAgentsWithProfile());
+    }
+
+    public function verifyAgent()
+    {
+        $input = json_decode(file_get_contents("php://input"), true);
+        $userId = $input['user_id'] ?? null;
+        $status = $input['status'] ?? null;
+        $trustScore = isset($input['trust_score']) ? $input['trust_score'] : null;
+
+        if (!$userId || !$status) {
+            Response::error("User ID and status are required");
+            return;
+        }
+
+        $status = strtolower($status);
+        $verificationStatus = null;
+
+        if ($status === 'approved') {
+            $verificationStatus = 'verified';
+        } elseif ($status === 'denied' || $status === 'rejected') {
+            $verificationStatus = 'rejected';
+        } elseif ($status === 'pending') {
+            $verificationStatus = 'pending';
+        } else {
+            Response::error("Invalid verification status");
+            return;
+        }
+
+        if ($trustScore === null || $trustScore === '') {
+            $trustScore = 0;
+        }
+
+        try {
+            $db = Database::getInstance()->conn;
+            $stmt = $db->prepare("INSERT INTO agent_profiles (user_id, verification_status, trust_score) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE verification_status = VALUES(verification_status), trust_score = VALUES(trust_score)");
+            $stmt->execute([$userId, $verificationStatus, $trustScore]);
+            Response::success([], "Agent verification updated");
+        } catch (Throwable $e) {
+            Response::error("Failed to update agent verification: " . $e->getMessage());
+        }
     }
 
     public function approveListing()
@@ -131,6 +179,24 @@ class AdminController
             Response::success([], "User updated successfully");
         } catch (Throwable $e) {
             Response::error("Update failed: " . $e->getMessage());
+        }
+    }
+
+    public function getAgentProfile()
+    {
+        $input = json_decode(file_get_contents("php://input"), true);
+        $userId = $input['user_id'] ?? null;
+
+        if (!$userId) {
+            Response::error("User ID is required");
+            return;
+        }
+
+        $profile = $this->agentModel->get($userId);
+        if ($profile) {
+            Response::success($profile);
+        } else {
+            Response::error("Agent profile not found");
         }
     }
 }

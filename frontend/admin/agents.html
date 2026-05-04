@@ -147,6 +147,17 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" title="Close"></button>
                 </div>
                 <div class="modal-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p><strong>Name:</strong> <span id="view-agent-name">Agent</span></p>
+                            <p><strong>Email:</strong> <span id="view-agent-email">N/A</span></p>
+                            <p><strong>Status:</strong> <span id="view-agent-status">pending</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Trust Score:</strong> <span id="view-agent-score">--</span>%</p>
+                            <p><strong>Verification Status:</strong> <span id="view-agent-verification">--</span></p>
+                        </div>
+                    </div>
                     <div class="row text-center">
                         <div class="col-md-6 mb-3">
                             <h6 class="text-muted">Live Selfie</h6>
@@ -196,7 +207,7 @@
                             <td>${a.email}</td>
                             <td><span class="badge ${a.is_verified ? 'bg-success' : 'bg-warning'}">${a.is_verified ? 'Verified' : 'Pending'}</span></td>
                             <td class="trust-score">${a.trust_score}%</td>
-                            <td class="text-end"><button class="btn btn-sm btn-outline-secondary">Profile</button></td>
+                            <td class="text-end"><button class="btn btn-sm btn-outline-secondary" onclick="window.location.href='agent-profile.html?user_id=${a.user_id}'">Profile</button></td>
                         </tr>
                     `).join('');
                 }
@@ -206,10 +217,19 @@
         let currentAgentId = null;
         function openVerifyModal(a) {
             currentAgentId = a.user_id;
-            document.getElementById('view-selfie').src = `../../uploads/verifications/${a.selfie_path}`;
-            document.getElementById('view-id-card').src = `../../uploads/verifications/${a.id_path}`;
-            document.getElementById('view-score').innerText = a.trust_score;
+            document.getElementById('view-agent-name').innerText = a.full_name || 'Agent';
+            document.getElementById('view-agent-email').innerText = a.email || 'N/A';
+            document.getElementById('view-agent-status').innerText = a.verification_status || 'not_submitted';
+            document.getElementById('view-agent-score').innerText = a.trust_score || 0;
+            document.getElementById('view-agent-verification').innerText = a.verification_status || 'not_submitted';
+            document.getElementById('view-selfie').src = a.selfie_path ? `../../uploads/selfies/${a.selfie_path}` : '';
+            document.getElementById('view-id-card').src = a.national_id_path ? `../../uploads/ids/${a.national_id_path}` : '';
+            document.getElementById('view-score').innerText = a.trust_score || 0;
             new bootstrap.Modal(document.getElementById('verifyModal')).show();
+        }
+
+        function viewAgentProfile(a) {
+            openVerifyModal(a);
         }
 
         document.getElementById('btn-approve').onclick = async () => {
