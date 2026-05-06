@@ -4,125 +4,459 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Property Listing — IREA FDIVS</title>
+    <title>Create Property Listing — IREA FDVIS</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         :root {
             --primary-dark: #0f1923;
             --accent-green: #35ac39;
-            --text-gray: #777;
+            --bg-page: #f4f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.09);
+            --radius-md: 8px;
+            --radius-lg: 14px;
+            --text-muted-color: #777;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            background: var(--bg-page);
+            color: #2c2c2a;
+            min-height: 100vh;
+            padding: 40px 20px;
         }
 
-        .listing-container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 40px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        /* ── Page shell ── */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted-color);
+            text-decoration: none;
+            margin-bottom: 24px;
+            transition: color 0.15s;
+        }
+
+        .back-link:hover {
+            color: var(--primary-dark);
+        }
+
+        .back-link i {
+            font-size: 15px;
+        }
+
+        /* ── Container layout ── */
+        .listing-wrap {
+            max-width: 860px;
+            margin: 0 auto;
         }
 
         .listing-header {
-            text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 28px;
+        }
+
+        .listing-header .eyebrow {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-green);
+            margin-bottom: 6px;
         }
 
         .listing-header h1 {
             font-family: 'Playfair Display', serif;
+            font-size: 28px;
             color: var(--primary-dark);
-            margin-bottom: 10px;
+            margin: 0 0 6px;
         }
 
         .listing-header p {
-            color: var(--text-gray);
-            font-size: 14px;
+            font-size: 13px;
+            color: var(--text-muted-color);
         }
 
-        .form-section {
-            margin-bottom: 30px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #eee;
+        /* ── Progress steps ── */
+        .steps-row {
+            display: flex;
+            gap: 0;
+            margin-bottom: 32px;
         }
 
-        .form-section:last-child {
-            border-bottom: none;
-        }
-
-        .form-section h4 {
-            color: var(--primary-dark);
-            margin-bottom: 20px;
+        .step {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: var(--card-bg);
+            border: 0.5px solid var(--border-light);
+            font-size: 12px;
             font-weight: 600;
-            font-size: 16px;
+            color: #bbb;
+        }
+
+        .step:first-child {
+            border-radius: var(--radius-md) 0 0 var(--radius-md);
+        }
+
+        .step:last-child {
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
+
+        .step .step-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #eee;
+            color: #bbb;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step.active {
+            color: var(--primary-dark);
+            background: var(--card-bg);
+            border-color: var(--accent-green);
+            border-width: 1px;
+        }
+
+        .step.active .step-num {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .step.done {
+            color: #3b6d11;
+        }
+
+        .step.done .step-num {
+            background: #d4edda;
+            color: #3b6d11;
+        }
+
+        /* ── Form card ── */
+        .form-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 0.5px solid var(--border-light);
+            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .form-card-header {
+            padding: 18px 26px;
+            border-bottom: 0.5px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-card-header .card-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .form-card-header .card-icon i {
+            font-size: 17px;
+        }
+
+        .form-card-header h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0;
+        }
+
+        .form-card-header p {
+            font-size: 11px;
+            color: var(--text-muted-color);
+            margin: 2px 0 0;
+        }
+
+        .form-card-body {
+            padding: 24px 26px;
+        }
+
+        /* ── Form fields ── */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
         }
 
         .form-group label {
-            font-weight: 600;
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
             color: var(--primary-dark);
-            margin-bottom: 8px;
-            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .required {
+            color: #dc3545;
         }
 
         .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-family: 'Montserrat', sans-serif;
             border: 1px solid #ddd;
-            padding: 10px 15px;
-            border-radius: 4px;
-            font-size: 14px;
+            border-radius: var(--radius-md);
+            color: #2c2c2a;
+            background: white;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none;
         }
 
         .form-control:focus {
             border-color: var(--accent-green);
-            box-shadow: 0 0 0 0.2rem rgba(53, 172, 57, 0.25);
+            box-shadow: 0 0 0 3px rgba(53, 172, 57, 0.12);
         }
 
         textarea.form-control {
-            min-height: 120px;
+            min-height: 110px;
             resize: vertical;
         }
 
-        .row-cols {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+        select.form-control {
+            cursor: pointer;
         }
 
-        .submit-btn {
+        .form-hint {
+            font-size: 11px;
+            color: var(--text-muted-color);
+            margin-top: 5px;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* ── GPS Button ── */
+        .gps-group {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .gps-group .form-group {
+            flex: 1;
+            margin: 0;
+        }
+
+        .btn-gps {
+            height: 40px;
+            padding: 0 16px;
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--primary-dark);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+
+        .btn-gps:hover {
+            background: #1c2e40;
+        }
+
+        .btn-gps i {
+            font-size: 15px;
+        }
+
+        .btn-gps.success {
+            background: var(--accent-green);
+        }
+
+        /* ── Image upload zone ── */
+        .upload-zone {
+            border: 2px dashed #d0d0cc;
+            border-radius: var(--radius-md);
+            padding: 28px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            position: relative;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--accent-green);
+            background: rgba(53, 172, 57, 0.03);
+        }
+
+        .upload-zone input[type=file] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .upload-zone i {
+            font-size: 32px;
+            color: #ccc;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .upload-zone .upload-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted-color);
+        }
+
+        .upload-zone .upload-sub {
+            font-size: 11px;
+            color: #bbb;
+            margin-top: 4px;
+        }
+
+        .upload-zone.has-file {
+            border-color: var(--accent-green);
+            border-style: solid;
+        }
+
+        .upload-zone.has-file i {
+            color: var(--accent-green);
+        }
+
+        .img-preview {
+            margin-top: 14px;
+        }
+
+        .img-preview img {
+            max-height: 160px;
+            border-radius: var(--radius-md);
+            border: 0.5px solid var(--border-light);
+        }
+
+        .img-name {
+            font-size: 11px;
+            color: var(--accent-green);
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        /* ── Hash note ── */
+        .hash-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #e6f1fb;
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            margin-top: 14px;
+        }
+
+        .hash-note i {
+            font-size: 16px;
+            color: #185fa5;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .hash-note p {
+            font-size: 11px;
+            color: #185fa5;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* ── Submit area ── */
+        .submit-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-submit {
+            flex: 1;
             background: var(--accent-green);
             color: white;
             border: none;
-            padding: 12px 40px;
+            padding: 14px 32px;
             font-size: 14px;
-            font-weight: 600;
-            border-radius: 4px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            border-radius: var(--radius-md);
             cursor: pointer;
-            width: 100%;
-            transition: 0.3s;
-            margin-top: 10px;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .submit-btn:hover {
+        .btn-submit:hover {
             background: #2d8f30;
-            color: white;
         }
 
-        .submit-btn:disabled {
+        .btn-submit:disabled {
             background: #ccc;
             cursor: not-allowed;
         }
 
+        .btn-submit i {
+            font-size: 17px;
+        }
+
+        .btn-cancel {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted-color);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-cancel:hover {
+            color: var(--primary-dark);
+        }
+
+        /* ── Status message ── */
         .status-message {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 4px;
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            font-size: 13px;
             display: none;
+            margin-top: 14px;
         }
 
         .status-message.success {
@@ -139,13 +473,18 @@
             display: block;
         }
 
-        .required {
-            color: #dc3545;
-        }
-
-        @media (max-width: 768px) {
-            .row-cols {
+        @media (max-width: 600px) {
+            .two-col {
                 grid-template-columns: 1fr;
+            }
+
+            .gps-group {
+                flex-direction: column;
+            }
+
+            .btn-gps {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -153,124 +492,277 @@
 
 <body>
 
-    <div class="listing-container">
+    <div class="listing-wrap">
+
+        <a href="listings.html" class="back-link"><i class="ti ti-arrow-left"></i> Back to listings</a>
+
         <div class="listing-header">
-            <h1>Create Property Listing</h1>
-            <p>List your property and reach thousands of potential buyers</p>
+            <div class="eyebrow">IREA FDVIS &nbsp;·&nbsp; Agent Portal</div>
+            <h1>Create property listing</h1>
+            <p>Complete all sections below. Your listing will be verified before going live.</p>
         </div>
 
-        <form id="listing-form">
-            <!-- Basic Information -->
-            <div class="form-section">
-                <h4>Basic Information</h4>
+        <!-- Progress Steps -->
+        <div class="steps-row">
+            <div class="step active">
+                <div class="step-num">1</div> Basic info
+            </div>
+            <div class="step">
+                <div class="step-num">2</div> Location
+            </div>
+            <div class="step">
+                <div class="step-num">3</div> Images
+            </div>
+            <div class="step">
+                <div class="step-num">4</div> Submit
+            </div>
+        </div>
 
-                <div class="form-group">
-                    <label for="title">Property Title <span class="required">*</span></label>
-                    <input type="text" class="form-control" id="title" name="title"
-                        placeholder="e.g., Spacious 3-Bedroom Apartment in Downtown" required>
+        <form id="listing-form" enctype="multipart/form-data">
+
+            <!-- Section 1: Basic Info -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="card-icon" style="background:#e6f1fb;"><i class="ti ti-file-description"
+                            style="color:#185fa5;"></i></div>
+                    <div>
+                        <h4>Basic information</h4>
+                        <p>Property title, description, type and price</p>
+                    </div>
                 </div>
+                <div class="form-card-body">
 
-                <div class="form-group">
-                    <label for="description">Description <span class="required">*</span></label>
-                    <textarea class="form-control" id="description" name="description"
-                        placeholder="Describe your property in detail..." required></textarea>
-                </div>
-
-                <div class="row-cols">
                     <div class="form-group">
-                        <label for="property_type">Property Type <span class="required">*</span></label>
-                        <select class="form-control" id="property_type" name="property_type" required>
-                            <option value="">Select Type</option>
-                            <option value="apartment">Apartment</option>
-                            <option value="house">House</option>
-                            <option value="condo">Condo</option>
-                            <option value="commercial">Commercial</option>
-                            <option value="land">Land</option>
-                            <option value="other">Other</option>
-                        </select>
+                        <label for="title">Property title <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="title" name="title"
+                            placeholder="e.g., Spacious 3-bedroom apartment in Namiwawa" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="price">Price (USD) <span class="required">*</span></label>
-                        <input type="number" class="form-control" id="price" name="price" placeholder="0.00" min="0"
-                            step="0.01" required>
+                        <label for="description">Description <span class="required">*</span></label>
+                        <textarea class="form-control" id="description" name="description"
+                            placeholder="Describe the property — rooms, amenities, nearby landmarks…"
+                            required></textarea>
                     </div>
+
+                    <div class="two-col">
+                        <div class="form-group">
+                            <label for="property_type">Property type <span class="required">*</span></label>
+                            <select class="form-control" id="property_type" name="property_type" required>
+                                <option value="">Select type</option>
+                                <option value="apartment">Apartment</option>
+                                <option value="house">House</option>
+                                <option value="condo">Condo</option>
+                                <option value="commercial">Commercial</option>
+                                <option value="land">Land</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Monthly rent (MWK) <span class="required">*</span></label>
+                            <input type="number" class="form-control" id="price" name="price" placeholder="e.g., 120000"
+                                min="0" step="1" required>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
-            <!-- Location Information -->
-            <div class="form-section">
-                <h4>Location Information</h4>
-
-                <div class="form-group">
-                    <label for="area_name">Area/Neighborhood <span class="required">*</span></label>
-                    <input type="text" class="form-control" id="area_name" name="area_name"
-                        placeholder="e.g., Downtown, Midtown, Brooklyn" required>
+            <!-- Section 2: Location -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="card-icon" style="background:#eaf3de;"><i class="ti ti-map-pin"
+                            style="color:#3b6d11;"></i></div>
+                    <div>
+                        <h4>Location &amp; GPS</h4>
+                        <p>Agent must be physically present at the property to pin location</p>
+                    </div>
                 </div>
-
-                <div class="row-cols">
-                    <div class="form-group">
-                        <label for="latitude">Latitude</label>
-                        <input type="number" class="form-control" id="latitude" name="latitude"
-                            placeholder="e.g., 40.7128" step="0.00001">
-                    </div>
+                <div class="form-card-body">
 
                     <div class="form-group">
-                        <label for="longitude">Longitude</label>
-                        <input type="number" class="form-control" id="longitude" name="longitude"
-                            placeholder="e.g., -74.0060" step="0.00001">
+                        <label for="area_name">Area / neighbourhood <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="area_name" name="area_name"
+                            placeholder="e.g., Namiwawa, Area 47, Sunnyside" required>
                     </div>
+
+                    <div class="two-col" style="margin-bottom: 12px;">
+                        <div class="form-group" style="margin:0;">
+                            <label for="latitude">Latitude</label>
+                            <input type="number" class="form-control" id="latitude" name="latitude"
+                                placeholder="e.g., -15.7861" step="0.000001">
+                        </div>
+                        <div class="form-group" style="margin:0;">
+                            <label for="longitude">Longitude</label>
+                            <input type="number" class="form-control" id="longitude" name="longitude"
+                                placeholder="e.g., 35.0058" step="0.000001">
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-gps" id="get-location">
+                        <i class="ti ti-current-location"></i> Detect my location
+                    </button>
+                    <p class="form-hint" style="margin-top:8px;">Use GPS detection to auto-fill coordinates. You must be
+                        at the property.</p>
+
+                </div>
+            </div>
+
+            <!-- Section 3: Images -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="card-icon" style="background:#fcebeb;"><i class="ti ti-photo"
+                            style="color:#a32d2d;"></i></div>
+                    <div>
+                        <h4>Property images</h4>
+                        <p>Upload clear, original photos — duplicates are detected automatically</p>
+                    </div>
+                </div>
+                <div class="form-card-body">
+
+                    <div class="form-group">
+                        <label for="property_image">Main property photo <span class="required">*</span></label>
+                        <div class="upload-zone" id="upload-zone">
+                            <input type="file" id="property_image" name="property_image" accept="image/*" required>
+                            <i class="ti ti-cloud-upload"></i>
+                            <div class="upload-label">Click to upload or drag &amp; drop</div>
+                            <div class="upload-sub">JPG, PNG, WEBP — max 10MB</div>
+                        </div>
+                        <div class="img-preview" id="img-preview"></div>
+                    </div>
+
+                    <div class="hash-note">
+                        <i class="ti ti-fingerprint"></i>
+                        <p>A perceptual hash (digital fingerprint) will be generated from this image. If the same photo
+                            has been used by another agent, this listing will be automatically flagged for review.</p>
+                    </div>
+
                 </div>
             </div>
 
             <!-- Submit -->
-            <button type="submit" class="submit-btn" id="submit-btn">Create Listing</button>
+            <div class="submit-area">
+                <a href="listings.html" class="btn-cancel">Cancel</a>
+                <button type="submit" class="btn-submit" id="submit-btn">
+                    <i class="ti ti-send"></i> Create listing
+                </button>
+            </div>
 
-            <!-- Status Message -->
             <div class="status-message" id="status-message"></div>
+
         </form>
     </div>
 
     <script src="../assets/js/api.js"></script>
     <script>
+        /* ── GPS detection ── */
+        document.getElementById('get-location').addEventListener('click', function () {
+            const btn = this;
+            if (navigator.geolocation) {
+                btn.innerHTML = '<i class="ti ti-loader"></i> Detecting…';
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        document.getElementById('latitude').value = position.coords.latitude.toFixed(6);
+                        document.getElementById('longitude').value = position.coords.longitude.toFixed(6);
+                        btn.innerHTML = '<i class="ti ti-circle-check"></i> Location captured';
+                        btn.classList.add('success');
+                    },
+                    (error) => {
+                        alert("Error getting location: " + error.message);
+                        btn.innerHTML = '<i class="ti ti-current-location"></i> Detect my location';
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        });
+
+        /* ── Image preview ── */
+        document.getElementById('property_image').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            const zone = document.getElementById('upload-zone');
+            const preview = document.getElementById('img-preview');
+            if (!file) return;
+            zone.classList.add('has-file');
+            zone.querySelector('i').className = 'ti ti-photo-check';
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                preview.innerHTML = `<img src="${ev.target.result}" alt="Preview"><div class="img-name"><i class="ti ti-check" style="font-size:12px;vertical-align:-1px;"></i> ${file.name}</div>`;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        /* ── Step highlighting ── */
+        function updateSteps() {
+            const steps = document.querySelectorAll('.step');
+            const hasBasic = document.getElementById('title').value && document.getElementById('price').value;
+            const hasLocation = document.getElementById('area_name').value;
+            const hasImage = document.getElementById('property_image').files.length > 0;
+            if (hasBasic) { steps[0].classList.add('done'); steps[0].classList.remove('active'); steps[1].classList.add('active'); }
+            if (hasLocation) { steps[1].classList.add('done'); steps[1].classList.remove('active'); steps[2].classList.add('active'); }
+            if (hasImage) { steps[2].classList.add('done'); steps[2].classList.remove('active'); steps[3].classList.add('active'); }
+        }
+        ['title', 'price', 'area_name'].forEach(id => document.getElementById(id).addEventListener('input', updateSteps));
+        document.getElementById('property_image').addEventListener('change', updateSteps);
+
+        /* ── Form submission ──
+           FIX: The original code passed FormData through Iconics.call() which
+           JSON.stringify()-ed it, destroying the file payload and sending an
+           empty object. Property creation requires multipart/form-data so the
+           PHP backend can read $_FILES and $_POST. We now use a raw fetch()
+           with FormData directly — same endpoint, same credentials flag. ── */
         document.getElementById('listing-form').addEventListener('submit', async function (e) {
             e.preventDefault();
-
             const submitBtn = document.getElementById('submit-btn');
             const statusMsg = document.getElementById('status-message');
 
             submitBtn.disabled = true;
-            submitBtn.innerText = 'Creating...';
+            submitBtn.innerHTML = '<i class="ti ti-loader"></i> Uploading &amp; analysing…';
 
             try {
                 const formData = new FormData(this);
 
-                // Create a regular object from FormData
-                const data = {};
-                formData.forEach((value, key) => {
-                    data[key] = value;
-                });
+                // FIX: raw fetch with FormData — do NOT set Content-Type header,
+                // the browser sets multipart/form-data + boundary automatically.
+                const res = await fetch(
+                    'http://localhost/Final/backend/api/property.php?action=create',
+                    {
+                        method: 'POST',
+                        body: formData,
+                        credentials: 'include'
+                    }
+                );
 
-                const res = await Iconics.call("properties", "POST", data, "?action=create");
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}`);
+                }
 
-                if (res.status === "success") {
+                const contentType = res.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await res.text();
+                    console.error('Non-JSON response:', text);
+                    throw new Error('Server returned an invalid response. Check PHP error logs.');
+                }
+
+                const result = await res.json();
+
+                if (result.status === 'success') {
                     statusMsg.className = 'status-message success';
-                    statusMsg.innerHTML = `<strong>✓ Success!</strong> Your property listing has been created and is pending admin review.`;
-                    submitBtn.innerText = 'Listing Created ✓';
-                    setTimeout(() => {
-                        window.location.href = 'listings.html';
-                    }, 2000);
+                    // FIX: hash lives in result.data.hash, not result.hash
+                    statusMsg.innerHTML = `<strong>✓ Listing created.</strong> Image hash: <code>${result.data?.hash || 'generated'}</code>. Redirecting to your listings…`;
+                    submitBtn.innerHTML = '<i class="ti ti-circle-check"></i> Listing created';
+                    setTimeout(() => { window.location.href = 'listings.html'; }, 2500);
                 } else {
                     statusMsg.className = 'status-message error';
-                    statusMsg.innerHTML = `<strong>✗ Error:</strong> ${res.message || 'Failed to create listing. Please try again.'}`;
+                    statusMsg.innerHTML = `<strong>✗ Error:</strong> ${result.message || 'Failed to create listing.'}`;
                     submitBtn.disabled = false;
-                    submitBtn.innerText = 'Create Listing';
+                    submitBtn.innerHTML = '<i class="ti ti-send"></i> Create listing';
                 }
             } catch (error) {
                 statusMsg.className = 'status-message error';
-                statusMsg.innerHTML = `<strong>✗ Error:</strong> ${error.message}`;
+                statusMsg.innerHTML = `<strong>✗ Connection error:</strong> ${error.message}`;
                 submitBtn.disabled = false;
-                submitBtn.innerText = 'Create Listing';
+                submitBtn.innerHTML = '<i class="ti ti-send"></i> Create listing';
             }
         });
     </script>

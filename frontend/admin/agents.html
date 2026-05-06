@@ -8,76 +8,362 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         :root {
             --primary-dark: #0f1923;
             --accent-green: #35ac39;
-            --accent-red: #d9534f;
-            --text-gray: #777;
+            --bg-page: #f4f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.07);
+            --radius-md: 8px;
+            --radius-lg: 14px;
+            --text-muted-color: #777;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
+            background: var(--bg-page);
+            color: #2c2c2a;
         }
 
+        /* ── Sidebar ── */
         .sidebar {
             height: 100vh;
             background: var(--primary-dark);
             color: white;
-            padding-top: 20px;
             position: fixed;
-            width: 240px;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
         }
 
-        .sidebar h2 {
+        .sidebar-brand {
+            padding: 22px 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .sidebar-brand h2 {
             font-family: 'Playfair Display', serif;
-            text-align: center;
-            font-size: 22px;
-            margin-bottom: 30px;
+            font-size: 19px;
             color: var(--accent-green);
+            margin: 0;
+        }
+
+        .sidebar-brand .sub {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.32);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .sidebar-admin-pill {
+            margin: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(53, 172, 57, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        .admin-pill-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-pill-role {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-section-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.25);
+            padding: 14px 22px 4px;
         }
 
         .nav-link {
             color: #adb5bd;
-            padding: 12px 25px;
-            transition: 0.3s;
+            padding: 11px 22px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-left: 3px solid transparent;
             text-decoration: none;
-            display: block;
+        }
+
+        .nav-link i {
+            font-size: 16px;
         }
 
         .nav-link:hover,
         .nav-link.active {
             color: white;
             background: rgba(255, 255, 255, 0.05);
-            border-left: 4px solid var(--accent-green);
+            border-left-color: var(--accent-green);
         }
 
+        .nav-link.danger {
+            color: #f87171 !important;
+        }
+
+        .nav-link.danger:hover {
+            border-left-color: #dc3545;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 14px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.25);
+            text-align: center;
+        }
+
+        /* ── Main ── */
         .main-content {
-            margin-left: 240px;
-            padding: 40px;
+            margin-left: 220px;
+            padding: 36px 40px;
         }
 
-        .dashboard-section {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .page-header .sub {
+            font-size: 13px;
+            color: var(--text-muted-color);
+            margin-top: 4px;
+        }
+
+        /* ── Section cards ── */
+        .section-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 0.5px solid var(--border-light);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .section-card-header {
+            padding: 16px 22px;
+            border-bottom: 0.5px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-card-header h5 {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .section-card-header .badge-count {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        /* ── Tables ── */
+        .table {
+            margin: 0;
+        }
+
+        .table thead th {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #999;
+            text-transform: uppercase;
+            border-bottom: 0.5px solid #eee;
+            padding: 12px 18px;
+            background: #fafaf9;
+        }
+
+        .table tbody td {
+            font-size: 13px;
+            vertical-align: middle;
+            padding: 14px 18px;
+            border-color: #f5f5f3;
+        }
+
+        .table tbody tr:hover {
+            background: #fafaf9;
+        }
+
+        .badge-status {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .status-verified {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-not_submitted {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-pending_review {
+            background: #dbeafe;
+            color: #1e40af;
         }
 
         .trust-score {
             font-weight: 700;
-            font-family: 'Courier New';
+            font-family: 'Courier New', monospace;
         }
 
-        .verification-image {
+        .action-group {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .btn-action {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: var(--radius-md);
+            border: 0.5px solid var(--border-light);
+            background: transparent;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-action i {
+            font-size: 13px;
+        }
+
+        .btn-action.view {
+            color: #185fa5;
+            border-color: #b5d4f4;
+        }
+
+        .btn-action.view:hover {
+            background: #e6f1fb;
+        }
+
+        .btn-action.approve {
+            color: #155724;
+            border-color: #b2dfb2;
+        }
+
+        .btn-action.approve:hover {
+            background: #d4edda;
+        }
+
+        .btn-action.deny {
+            color: #a32d2d;
+            border-color: #f7c1c1;
+        }
+
+        .btn-action.deny:hover {
+            background: #fcebeb;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 36px;
+            color: #ccc;
+            font-size: 13px;
+        }
+
+        .empty-state i {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 8px;
+            opacity: 0.4;
+        }
+
+        /* ── Modal overrides ── */
+        .modal-content {
+            border: none;
+            border-radius: var(--radius-lg);
+        }
+
+        .verification-img {
             width: 100%;
-            height: 250px;
+            height: 220px;
             object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #ddd;
+            border-radius: var(--radius-md);
+            border: 0.5px solid var(--border-light);
+        }
+
+        .conf-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 8px;
         }
     </style>
 </head>
@@ -85,96 +371,136 @@
 <body>
 
     <div class="sidebar">
-        <h2>Iconics Admin</h2>
-        <nav class="nav flex-column">
-            <a class="nav-link" href="dashboard.html">Dashboard</a>
-            <a class="nav-link" href="listings.html">Listings</a>
-            <a class="nav-link active" href="agents.html">Agents</a>
-            <hr style="background: rgba(255,255,255,0.1)">
-            <a class="nav-link text-danger" href="#" onclick="logout()">Logout</a>
+        <div class="sidebar-brand">
+            <h2>Iconics</h2>
+            <div class="sub">Admin Panel</div>
+        </div>
+        <div class="sidebar-admin-pill">
+            <div class="admin-avatar" id="sidebar-avatar">AD</div>
+            <div>
+                <div class="admin-pill-name" id="sidebar-name">Admin</div>
+                <div class="admin-pill-role">ADMINISTRATOR</div>
+            </div>
+        </div>
+        <nav class="nav flex-column" style="margin-top:4px;">
+            <div class="nav-section-label">Overview</div>
+            <a class="nav-link" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+            <a class="nav-link" href="listings.html"><i class="ti ti-building"></i> Listings</a>
+            <div class="nav-section-label">Users</div>
+            <a class="nav-link active" href="agents.html"><i class="ti ti-users"></i> Agents</a>
+            <hr style="border-color:rgba(255,255,255,0.08);margin:8px 22px;">
+            <a class="nav-link danger" href="#" onclick="logout()"><i class="ti ti-logout"></i> Logout</a>
         </nav>
+        <div class="sidebar-footer">IREA / FDVIS &nbsp;·&nbsp; Admin Panel</div>
     </div>
 
     <div class="main-content">
-        <div class="mb-5">
-            <h1 style="font-family: 'Playfair Display', serif;">Agent Management</h1>
-            <p class="text-muted">Review identity verifications and manage trust scores.</p>
+        <div class="page-header">
+            <h1>Agent Management</h1>
+            <div class="sub">Review identity verifications and manage trust scores.</div>
         </div>
 
-        <div class="dashboard-section">
-            <h5 class="mb-4 text-danger"><i class="ti-alert"></i> Pending Manual Verification (< 85% Score)</h5>
-                    <div class="table-responsive">
-                        <table class="table align-middle">
-                            <thead>
-                                <tr class="text-muted small">
-                                    <th>AGENT</th>
-                                    <th>DEEPFACE SCORE</th>
-                                    <th>SUBMITTED</th>
-                                    <th class="text-end">ACTION</th>
-                                </tr>
-                            </thead>
-                            <tbody id="verification-queue-body">
-                            </tbody>
-                        </table>
-                    </div>
-        </div>
-
-        <div class="dashboard-section">
-            <h5 class="mb-4" style="font-family: 'Playfair Display';">Agent Directory</h5>
+        <!-- Pending verification queue -->
+        <div class="section-card">
+            <div class="section-card-header">
+                <i class="ti ti-alert-circle" style="font-size:16px;color:#dc3545;"></i>
+                <h5>Pending Manual Verification</h5>
+                <span class="badge-count" id="queue-count">0</span>
+            </div>
             <div class="table-responsive">
-                <table class="table align-middle">
+                <table class="table">
                     <thead>
-                        <tr class="text-muted small">
-                            <th>NAME</th>
-                            <th>EMAIL</th>
-                            <th>STATUS</th>
-                            <th>TRUST SCORE</th>
-                            <th class="text-end">VIEW</th>
+                        <tr>
+                            <th>Agent</th>
+                            <th>Confidence Score</th>
+                            <th>Submitted</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="verification-queue-body">
+                        <tr>
+                            <td colspan="4" class="empty-state"><i class="ti ti-loader"></i>Loading…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Full agent directory -->
+        <div class="section-card">
+            <div class="section-card-header">
+                <i class="ti ti-users" style="font-size:16px;color:var(--accent-green);"></i>
+                <h5>Agent Directory</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Verification</th>
+                            <th>Trust Score</th>
+                            <th class="text-end">View</th>
                         </tr>
                     </thead>
                     <tbody id="agent-directory-body">
+                        <tr>
+                            <td colspan="5" class="empty-state"><i class="ti ti-loader"></i>Loading…</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <!-- Review modal -->
     <div class="modal fade" id="verifyModal" tabindex="-1">
         <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title">Identity Verification Check</h5>
+            <div class="modal-content shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title" style="font-family:'Playfair Display',serif;">Identity Verification Review
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" title="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <div class="row mb-4">
+                    <div class="row mb-3">
                         <div class="col-md-6">
-                            <p><strong>Name:</strong> <span id="view-agent-name">Agent</span></p>
-                            <p><strong>Email:</strong> <span id="view-agent-email">N/A</span></p>
-                            <p><strong>Status:</strong> <span id="view-agent-status">pending</span></p>
+                            <p style="font-size:13px;"><strong>Name:</strong> <span id="view-agent-name">—</span></p>
+                            <p style="font-size:13px;"><strong>Email:</strong> <span id="view-agent-email">—</span></p>
+                            <p style="font-size:13px;"><strong>Status:</strong> <span id="view-agent-status">—</span>
+                            </p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Trust Score:</strong> <span id="view-agent-score">--</span>%</p>
-                            <p><strong>Verification Status:</strong> <span id="view-agent-verification">--</span></p>
+                            <p style="font-size:13px;"><strong>Trust Score:</strong> <span
+                                    id="view-agent-score">—</span></p>
+                            <p style="font-size:13px;"><strong>Verification:</strong> <span
+                                    id="view-agent-verification">—</span></p>
                         </div>
                     </div>
                     <div class="row text-center">
                         <div class="col-md-6 mb-3">
-                            <h6 class="text-muted">Live Selfie</h6>
-                            <img id="view-selfie" src="" class="verification-image" alt="Live selfie for verification">
+                            <p
+                                style="font-size:11px;font-weight:700;text-transform:uppercase;color:#777;margin-bottom:8px;">
+                                Live Selfie</p>
+                            <img id="view-selfie" src="" class="verification-img" alt="Live selfie">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <h6 class="text-muted">Uploaded ID</h6>
-                            <img id="view-id-card" src="" class="verification-image" alt="Uploaded ID card">
+                            <p
+                                style="font-size:11px;font-weight:700;text-transform:uppercase;color:#777;margin-bottom:8px;">
+                                ID Document</p>
+                            <img id="view-id-card" src="" class="verification-img" alt="ID document">
                         </div>
                     </div>
-                    <div class="alert alert-warning mt-3 text-center">
-                        System Confidence Score: <strong id="view-score">--</strong>%
+                    <div class="text-center">
+                        <span class="conf-badge" id="conf-badge" style="background:#fff3cd;color:#856404;">Confidence:
+                            —%</span>
                     </div>
                 </div>
                 <div class="modal-footer border-0 justify-content-center pb-4">
-                    <button class="btn btn-outline-danger px-4" id="btn-deny">Deny Identity</button>
-                    <button class="btn btn-success px-4" id="btn-approve">Approve Agent</button>
+                    <button class="btn btn-outline-danger px-4" id="btn-deny"><i class="ti ti-x"
+                            style="vertical-align:-1px;"></i> Deny</button>
+                    <button class="btn btn-success px-4" id="btn-approve"><i class="ti ti-check"
+                            style="vertical-align:-1px;"></i> Approve Agent</button>
                 </div>
             </div>
         </div>
@@ -183,69 +509,102 @@
     <script src="../assets/js/api.js"></script>
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-        async function loadAgents() {
-            try {
-                const res = await Iconics.call("admin/list_agents", "GET");
-                if (res.status === "success") {
-                    // 1. Fill Queue (Score < 85 or Unverified)
-                    const queue = res.data.filter(a => a.is_verified == 0);
-                    document.getElementById('verification-queue-body').innerHTML = queue.map(a => `
-                        <tr>
-                            <td><strong>${a.full_name}</strong></td>
-                            <td class="trust-score text-danger">${a.trust_score}%</td>
-                            <td>${new Date(a.created_at).toLocaleDateString()}</td>
-                            <td class="text-end">
-                                <button class="btn btn-sm btn-dark" onclick='openVerifyModal(${JSON.stringify(a)})'>Review ID</button>
-                            </td>
-                        </tr>
-                    `).join('') || '<tr><td colspan="4" class="text-center py-4">No pending verifications.</td></tr>';
+        let currentAgentId = null;
 
-                    // 2. Fill Directory
-                    document.getElementById('agent-directory-body').innerHTML = res.data.map(a => `
-                        <tr>
-                            <td>${a.full_name}</td>
-                            <td>${a.email}</td>
-                            <td><span class="badge ${a.is_verified ? 'bg-success' : 'bg-warning'}">${a.is_verified ? 'Verified' : 'Pending'}</span></td>
-                            <td class="trust-score">${a.trust_score}%</td>
-                            <td class="text-end"><button class="btn btn-sm btn-outline-secondary" onclick="window.location.href='agent-profile.html?user_id=${a.user_id}'">Profile</button></td>
-                        </tr>
-                    `).join('');
-                }
-            } catch (err) { console.error(err); }
+        function verificationBadge(status) {
+            const s = (status || 'not_submitted').toLowerCase().replace(' ', '_');
+            const map = {
+                verified: 'status-verified',
+                pending: 'status-pending',
+                pending_review: 'status-pending_review',
+                not_submitted: 'status-not_submitted',
+                rejected: 'status-rejected',
+            };
+            return `<span class="badge-status ${map[s] || 'status-pending'}">${status || 'not submitted'}</span>`;
         }
 
-        let currentAgentId = null;
+        async function loadAgents() {
+            const res = await Iconics.call('admin/list_agents', 'GET');
+            if (res.status !== 'success') return;
+            const agents = res.data;
+
+            const queue = agents.filter(a => !a.is_verified);
+            document.getElementById('queue-count').textContent = queue.length;
+
+            document.getElementById('verification-queue-body').innerHTML = queue.length
+                ? queue.map(a => `
+                <tr>
+                    <td><strong>${a.full_name}</strong><br><span style="font-size:11px;color:#aaa;">${a.email}</span></td>
+                    <td class="trust-score ${a.trust_score < 45 ? 'text-danger' : 'text-warning'}">${a.trust_score ?? '—'}%</td>
+                    <td style="font-size:12px;color:#777;">${a.created_at ? new Date(a.created_at).toLocaleDateString() : '—'}</td>
+                    <td>
+                        <div class="action-group">
+                            <button class="btn-action view" onclick='openVerifyModal(${JSON.stringify(a)})'><i class="ti ti-id"></i> Review ID</button>
+                        </div>
+                    </td>
+                </tr>`).join('')
+                : '<tr><td colspan="4" class="empty-state"><i class="ti ti-circle-check"></i>No pending verifications</td></tr>';
+
+            document.getElementById('agent-directory-body').innerHTML = agents.length
+                ? agents.map(a => `
+                <tr>
+                    <td><strong>${a.full_name}</strong></td>
+                    <td style="font-size:13px;">${a.email}</td>
+                    <td>${verificationBadge(a.verification_status)}</td>
+                    <td class="trust-score">${a.trust_score ?? '—'}</td>
+                    <td>
+                        <div class="action-group">
+                            <button class="btn-action view" onclick="window.location.href='agent-profile.html?user_id=${a.user_id}'">
+                                <i class="ti ti-user"></i> Profile
+                            </button>
+                        </div>
+                    </td>
+                </tr>`).join('')
+                : '<tr><td colspan="5" class="empty-state"><i class="ti ti-users"></i>No agents registered yet</td></tr>';
+        }
+
         function openVerifyModal(a) {
             currentAgentId = a.user_id;
-            document.getElementById('view-agent-name').innerText = a.full_name || 'Agent';
-            document.getElementById('view-agent-email').innerText = a.email || 'N/A';
-            document.getElementById('view-agent-status').innerText = a.verification_status || 'not_submitted';
-            document.getElementById('view-agent-score').innerText = a.trust_score || 0;
-            document.getElementById('view-agent-verification').innerText = a.verification_status || 'not_submitted';
-            document.getElementById('view-selfie').src = a.selfie_path ? `../../uploads/selfies/${a.selfie_path}` : '';
+            document.getElementById('view-agent-name').textContent = a.full_name || '—';
+            document.getElementById('view-agent-email').textContent = a.email || '—';
+            document.getElementById('view-agent-status').textContent = a.verification_status || 'not_submitted';
+            document.getElementById('view-agent-score').textContent = (a.trust_score ?? '—') + '%';
+            document.getElementById('view-agent-verification').textContent = a.verification_status || '—';
+            document.getElementById('view-selfie').src = a.selfie_path ? `../../uploads/ids/${a.selfie_path}` : '';
             document.getElementById('view-id-card').src = a.national_id_path ? `../../uploads/ids/${a.national_id_path}` : '';
-            document.getElementById('view-score').innerText = a.trust_score || 0;
+            const score = parseFloat(a.trust_score) || 0;
+            const badge = document.getElementById('conf-badge');
+            badge.textContent = `Confidence: ${score}%`;
+            badge.style.cssText = score >= 80
+                ? 'background:#d4edda;color:#155724;display:inline-block;padding:6px 18px;border-radius:20px;font-size:13px;font-weight:700;margin-top:8px;'
+                : score >= 45
+                    ? 'background:#fff3cd;color:#856404;display:inline-block;padding:6px 18px;border-radius:20px;font-size:13px;font-weight:700;margin-top:8px;'
+                    : 'background:#f8d7da;color:#721c24;display:inline-block;padding:6px 18px;border-radius:20px;font-size:13px;font-weight:700;margin-top:8px;';
             new bootstrap.Modal(document.getElementById('verifyModal')).show();
         }
 
-        function viewAgentProfile(a) {
-            openVerifyModal(a);
-        }
-
         document.getElementById('btn-approve').onclick = async () => {
-            const res = await Iconics.call("admin/verify_agent", "POST", { user_id: currentAgentId, status: 'approved' });
-            if (res.status === "success") location.reload();
+            const res = await Iconics.call('admin/verify_agent', 'POST', { user_id: currentAgentId, status: 'approved' });
+            if (res.status === 'success') { bootstrap.Modal.getInstance(document.getElementById('verifyModal')).hide(); loadAgents(); }
         };
-
         document.getElementById('btn-deny').onclick = async () => {
-            if (confirm("Deny this agent? They will need to re-upload.")) {
-                const res = await Iconics.call("admin/verify_agent", "POST", { user_id: currentAgentId, status: 'denied' });
-                if (res.status === "success") location.reload();
+            if (confirm('Deny this agent? They will need to re-submit their documents.')) {
+                const res = await Iconics.call('admin/verify_agent', 'POST', { user_id: currentAgentId, status: 'denied' });
+                if (res.status === 'success') { bootstrap.Modal.getInstance(document.getElementById('verifyModal')).hide(); loadAgents(); }
             }
         };
 
-        window.onload = loadAgents;
-        async function logout() { await Iconics.call("auth/logout", "POST"); window.location.href = "../auth.html"; }
+        async function logout() { await Iconics.call('auth/logout', 'POST'); window.location.href = '../auth.html'; }
+
+        window.onload = async () => {
+            const auth = await Iconics.check();
+            if (auth.status !== 'success' || auth.data.user.role !== 'admin') { window.location.href = '../auth.html'; return; }
+            const name = auth.data.user.name || 'Admin';
+            const parts = name.trim().split(' ');
+            document.getElementById('sidebar-avatar').textContent = (parts.length >= 2 ? parts[0][0] + parts[parts.length - 1][0] : parts[0][0]).toUpperCase();
+            document.getElementById('sidebar-name').textContent = name;
+            loadAgents();
+        };
     </script>
 </body>
 

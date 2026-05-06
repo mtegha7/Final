@@ -18,13 +18,19 @@ const Iconics = {
             const options = {
                 method,
                 credentials: "include", // Essential for PHP Session cookies
-                headers: {
-                    "Content-Type": "application/json"
-                }
             };
 
             if (data && method !== "GET") {
-                options.body = JSON.stringify(data);
+                if (data instanceof FormData) {
+                    // Do NOT set Content-Type — browser sets multipart/form-data with boundary automatically
+                    options.body = data;
+                } else {
+                    options.headers = { "Content-Type": "application/json" };
+                    options.body = JSON.stringify(data);
+                }
+            } else {
+                // No body — still need to declare headers for JSON responses
+                options.headers = { "Content-Type": "application/json" };
             }
 
             const res = await fetch(url, options);

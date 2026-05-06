@@ -8,133 +8,453 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         :root {
             --primary-dark: #0f1923;
             --accent-green: #35ac39;
-            --accent-red: #d9534f;
-            --text-gray: #777;
+            --bg-page: #f4f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.07);
+            --radius-md: 8px;
+            --radius-lg: 14px;
+            --text-muted-color: #777;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            background: var(--bg-page);
+            color: #2c2c2a;
         }
 
         .sidebar {
             height: 100vh;
             background: var(--primary-dark);
             color: white;
-            padding-top: 20px;
             position: fixed;
-            width: 240px;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
         }
 
-        .sidebar h2 {
+        .sidebar-brand {
+            padding: 22px 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .sidebar-brand h2 {
             font-family: 'Playfair Display', serif;
-            text-align: center;
-            font-size: 22px;
-            margin-bottom: 30px;
+            font-size: 19px;
             color: var(--accent-green);
+            margin: 0;
+        }
+
+        .sidebar-brand .sub {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.32);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .sidebar-admin-pill {
+            margin: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(53, 172, 57, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        .admin-pill-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-pill-role {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-section-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.25);
+            padding: 14px 22px 4px;
         }
 
         .nav-link {
             color: #adb5bd;
-            padding: 12px 25px;
-            transition: 0.3s;
+            padding: 11px 22px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-left: 3px solid transparent;
             text-decoration: none;
-            display: block;
+        }
+
+        .nav-link i {
+            font-size: 16px;
         }
 
         .nav-link:hover,
         .nav-link.active {
             color: white;
             background: rgba(255, 255, 255, 0.05);
-            border-left: 4px solid var(--accent-green);
+            border-left-color: var(--accent-green);
+        }
+
+        .nav-link.danger {
+            color: #f87171 !important;
+        }
+
+        .nav-link.danger:hover {
+            border-left-color: #dc3545;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 14px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.25);
+            text-align: center;
         }
 
         .main-content {
-            margin-left: 240px;
-            padding: 40px;
+            margin-left: 220px;
+            padding: 36px 40px;
         }
 
-        .profile-card,
-        .edit-card {
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            gap: 16px;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .page-header .sub {
+            font-size: 13px;
+            color: var(--text-muted-color);
+            margin-top: 4px;
+        }
+
+        .btn-back {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted-color);
+            border: 0.5px solid #ddd;
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
+            border-radius: var(--radius-md);
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: 0.15s;
+            flex-shrink: 0;
+        }
+
+        .btn-back:hover {
+            color: var(--primary-dark);
+            border-color: #bbb;
+        }
+
+        /* ── Cards ── */
+        .info-card,
+        .form-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 0.5px solid var(--border-light);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .card-header-bar {
+            padding: 16px 22px;
+            border-bottom: 0.5px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header-bar h5 {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .card-body-pad {
+            padding: 22px;
+        }
+
+        /* ── Meta fields ── */
+        .meta-row {
+            margin-bottom: 14px;
         }
 
         .meta-label {
-            color: #6b7280;
-            font-size: 0.9rem;
+            font-size: 10px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.08em;
+            color: #aaa;
+            margin-bottom: 3px;
         }
 
-        .verification-image {
+        .meta-value {
+            font-size: 14px;
+            color: #1a1a18;
+            font-weight: 500;
+        }
+
+        .badge-status {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .status-verified {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-pending_review {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-not_submitted {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* ── Verification images ── */
+        .img-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .img-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #aaa;
+            margin-bottom: 6px;
+        }
+
+        .verification-img {
             width: 100%;
-            height: 240px;
+            height: 200px;
             object-fit: cover;
-            border-radius: 12px;
+            border-radius: var(--radius-md);
+            border: 0.5px solid var(--border-light);
+        }
+
+        /* ── Form ── */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #1a1a18;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 9px 13px;
+            font-size: 13px;
+            font-family: 'Montserrat', sans-serif;
             border: 1px solid #ddd;
+            border-radius: var(--radius-md);
+            color: #2c2c2a;
+            background: white;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px rgba(53, 172, 57, 0.1);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .btn-save:hover {
+            background: #2d8f30;
+        }
+
+        .btn-cancel-link {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted-color);
+            text-decoration: none;
+            padding: 10px 16px;
+        }
+
+        .btn-cancel-link:hover {
+            color: var(--primary-dark);
         }
     </style>
 </head>
 
 <body>
+
     <div class="sidebar">
-        <h2>Iconics Admin</h2>
-        <nav class="nav flex-column">
-            <a class="nav-link" href="dashboard.html">Dashboard</a>
-            <a class="nav-link" href="listings.html">Listings</a>
-            <a class="nav-link" href="agents.html">Agents</a>
-            <hr style="background: rgba(255,255,255,0.1)">
-            <a class="nav-link text-danger" href="#" onclick="logout()">Logout</a>
+        <div class="sidebar-brand">
+            <h2>Iconics</h2>
+            <div class="sub">Admin Panel</div>
+        </div>
+        <div class="sidebar-admin-pill">
+            <div class="admin-avatar" id="sidebar-avatar">AD</div>
+            <div>
+                <div class="admin-pill-name" id="sidebar-name">Admin</div>
+                <div class="admin-pill-role">ADMINISTRATOR</div>
+            </div>
+        </div>
+        <nav class="nav flex-column" style="margin-top:4px;">
+            <div class="nav-section-label">Overview</div>
+            <a class="nav-link" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+            <a class="nav-link" href="listings.html"><i class="ti ti-building"></i> Listings</a>
+            <div class="nav-section-label">Users</div>
+            <a class="nav-link active" href="agents.html"><i class="ti ti-users"></i> Agents</a>
+            <hr style="border-color:rgba(255,255,255,0.08);margin:8px 22px;">
+            <a class="nav-link danger" href="#" onclick="logout()"><i class="ti ti-logout"></i> Logout</a>
         </nav>
+        <div class="sidebar-footer">IREA / FDVIS &nbsp;·&nbsp; Admin Panel</div>
     </div>
 
     <div class="main-content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="page-header">
             <div>
-                <h1 style="font-family: 'Playfair Display', serif;">Agent Profile</h1>
-                <p class="text-muted">Review agent data and edit details when needed.</p>
+                <h1>Agent Profile</h1>
+                <div class="sub">Review agent data and update details when needed.</div>
             </div>
-            <button class="btn btn-outline-secondary" onclick="window.location.href='agents.html'">Back to
-                Agents</button>
+            <a href="agents.html" class="btn-back"><i class="ti ti-arrow-left"></i> Back to Agents</a>
         </div>
 
         <div class="row">
             <div class="col-lg-5">
-                <div class="profile-card">
-                    <h5 class="mb-4">Profile Summary</h5>
-                    <p class="meta-label">Name</p>
-                    <h4 id="profile-name">--</h4>
-                    <p class="meta-label mt-3">Email</p>
-                    <p id="profile-email">--</p>
-                    <p class="meta-label mt-3">Agent Status</p>
-                    <p id="profile-status">--</p>
-                    <p class="meta-label mt-3">Trust Score</p>
-                    <p id="profile-trust">--</p>
-                    <p class="meta-label mt-3">Verification</p>
-                    <p id="profile-verification">--</p>
-                    <p class="meta-label mt-3">Confidence</p>
-                    <p id="profile-confidence">--</p>
-                    <div class="row mt-4">
-                        <div class="col-6">
-                            <div>
-                                <p class="meta-label">Live Selfie</p>
-                                <img id="profile-selfie" src="" class="verification-image" alt="Agent selfie">
-                            </div>
+                <div class="info-card">
+                    <div class="card-header-bar"><i class="ti ti-user"
+                            style="font-size:16px;color:var(--accent-green);"></i>
+                        <h5>Profile Summary</h5>
+                    </div>
+                    <div class="card-body-pad">
+                        <div class="meta-row">
+                            <div class="meta-label">Name</div>
+                            <div class="meta-value" id="profile-name">—</div>
                         </div>
-                        <div class="col-6">
+                        <div class="meta-row">
+                            <div class="meta-label">Email</div>
+                            <div class="meta-value" id="profile-email">—</div>
+                        </div>
+                        <div class="meta-row">
+                            <div class="meta-label">Role</div>
+                            <div class="meta-value" id="profile-status">—</div>
+                        </div>
+                        <div class="meta-row">
+                            <div class="meta-label">Trust Score</div>
+                            <div class="meta-value" id="profile-trust">—</div>
+                        </div>
+                        <div class="meta-row">
+                            <div class="meta-label">Verification Status</div>
+                            <div id="profile-verification">—</div>
+                        </div>
+                        <div class="meta-row">
+                            <div class="meta-label">AI Confidence</div>
+                            <div class="meta-value" id="profile-confidence">—</div>
+                        </div>
+                        <div class="img-grid">
                             <div>
-                                <p class="meta-label">ID Document</p>
-                                <img id="profile-id" src="" class="verification-image" alt="Agent ID">
+                                <div class="img-label">Live Selfie</div><img id="profile-selfie" src=""
+                                    class="verification-img" alt="Agent selfie">
+                            </div>
+                            <div>
+                                <div class="img-label">ID Document</div><img id="profile-id" src=""
+                                    class="verification-img" alt="Agent ID">
                             </div>
                         </div>
                     </div>
@@ -142,45 +462,49 @@
             </div>
 
             <div class="col-lg-7">
-                <div class="edit-card">
-                    <h5 class="mb-4">Edit Agent Details</h5>
-                    <form id="agentForm">
-                        <input type="hidden" id="agent-id">
-                        <div class="mb-3">
-                            <label class="form-label" for="agent-full-name">Full Name</label>
-                            <input type="text" id="agent-full-name" class="form-control" required
-                                placeholder="Enter full name">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="agent-email">Email Address</label>
-                            <input type="email" id="agent-email" class="form-control" required
-                                placeholder="Enter email address">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="agent-verification-status">Verification Status</label>
-                            <select id="agent-verification-status" class="form-select"
-                                title="Agent verification status">
-                                <option value="pending">Pending</option>
-                                <option value="verified">Verified</option>
-                                <option value="rejected">Rejected</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="agent-trust-score">Trust Score</label>
-                            <input type="number" id="agent-trust-score" class="form-control" min="0" max="100"
-                                step="0.1" placeholder="Enter trust score">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="agent-password">New Password (optional)</label>
-                            <input type="password" id="agent-password" class="form-control"
-                                placeholder="Leave blank to keep current password" title="New password">
-                        </div>
-                        <div class="d-flex gap-2 justify-content-end">
-                            <button type="button" class="btn btn-secondary"
-                                onclick="window.location.href='agents.html'">Cancel</button>
-                            <button type="submit" class="btn btn-success">Save Changes</button>
-                        </div>
-                    </form>
+                <div class="form-card">
+                    <div class="card-header-bar"><i class="ti ti-edit" style="font-size:16px;color:#185fa5;"></i>
+                        <h5>Edit Agent Details</h5>
+                    </div>
+                    <div class="card-body-pad">
+                        <form id="agentForm">
+                            <input type="hidden" id="agent-id">
+                            <div class="form-group">
+                                <label for="agent-full-name">Full Name</label>
+                                <input type="text" id="agent-full-name" class="form-control"
+                                    placeholder="Enter full name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="agent-email">Email Address</label>
+                                <input type="email" id="agent-email" class="form-control"
+                                    placeholder="Enter email address" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="agent-verification-status">Verification Status</label>
+                                <select id="agent-verification-status" class="form-control" title="Verification status">
+                                    <option value="pending">Pending</option>
+                                    <option value="verified">Verified</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="agent-trust-score">Trust Score</label>
+                                <input type="number" id="agent-trust-score" class="form-control" min="0" max="100"
+                                    step="0.1" placeholder="0 – 100">
+                            </div>
+                            <div class="form-group">
+                                <label for="agent-password">New Password <span
+                                        style="color:#aaa;font-weight:400;">(optional)</span></label>
+                                <input type="password" id="agent-password" class="form-control"
+                                    placeholder="Leave blank to keep current" title="New password">
+                            </div>
+                            <div class="d-flex align-items-center gap-3 justify-content-end mt-3">
+                                <a href="agents.html" class="btn-cancel-link">Cancel</a>
+                                <button type="submit" class="btn-save"><i class="ti ti-device-floppy"></i> Save
+                                    Changes</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -189,102 +513,66 @@
     <script src="../assets/js/api.js"></script>
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-        function getQueryParam(name) {
-            const params = new URLSearchParams(window.location.search);
-            return params.get(name);
+        function getQueryParam(n) { return new URLSearchParams(window.location.search).get(n); }
+
+        function verificationBadge(status) {
+            const s = (status || 'not_submitted').toLowerCase().replace(' ', '_');
+            const map = { verified: 'status-verified', pending: 'status-pending', pending_review: 'status-pending_review', not_submitted: 'status-not_submitted', rejected: 'status-rejected' };
+            return `<span class="badge-status ${map[s] || 'status-pending'}">${status || 'not submitted'}</span>`;
         }
 
         async function loadAgentProfile() {
             const userId = getQueryParam('user_id');
-            if (!userId) {
-                alert('Agent ID missing');
-                window.location.href = 'agents.html';
-                return;
-            }
-
-            try {
-                const res = await Iconics.call('admin/get_agent_profile', 'POST', { user_id: userId });
-                if (res.status !== 'success') {
-                    alert(res.message || 'Failed to load agent profile');
-                    window.location.href = 'agents.html';
-                    return;
-                }
-
-                const agent = res.data;
-                document.getElementById('agent-id').value = userId;
-                document.getElementById('agent-full-name').value = agent.full_name || '';
-                document.getElementById('agent-email').value = agent.email || '';
-                document.getElementById('agent-verification-status').value = agent.verification_status || 'pending';
-                document.getElementById('agent-trust-score').value = agent.trust_score || 0;
-
-                document.getElementById('profile-name').innerText = agent.full_name || '--';
-                document.getElementById('profile-email').innerText = agent.email || '--';
-                document.getElementById('profile-status').innerText = agent.role || 'agent';
-                document.getElementById('profile-trust').innerText = agent.trust_score !== null && agent.trust_score !== undefined ? agent.trust_score + '%' : '--';
-                document.getElementById('profile-verification').innerText = agent.verification_status || 'pending';
-                document.getElementById('profile-confidence').innerText = agent.verification_confidence !== null && agent.verification_confidence !== undefined ? agent.verification_confidence + '%' : '--';
-                document.getElementById('profile-selfie').src = agent.selfie_path ? '../uploads/selfies/' + agent.selfie_path : '../assets/img/no-image.png';
-                document.getElementById('profile-id').src = agent.national_id_path ? '../uploads/ids/' + agent.national_id_path : '../assets/img/no-image.png';
-            } catch (err) {
-                console.error(err);
-                alert('Unable to load profile');
-                window.location.href = 'agents.html';
-            }
+            if (!userId) { alert('Agent ID missing'); window.location.href = 'agents.html'; return; }
+            const res = await Iconics.call('admin/get_agent_profile', 'POST', { user_id: userId });
+            if (res.status !== 'success') { alert(res.message || 'Failed to load agent profile'); window.location.href = 'agents.html'; return; }
+            const a = res.data;
+            document.getElementById('agent-id').value = userId;
+            document.getElementById('agent-full-name').value = a.full_name || '';
+            document.getElementById('agent-email').value = a.email || '';
+            document.getElementById('agent-verification-status').value = a.verification_status || 'pending';
+            document.getElementById('agent-trust-score').value = a.trust_score || 0;
+            document.getElementById('profile-name').textContent = a.full_name || '—';
+            document.getElementById('profile-email').textContent = a.email || '—';
+            document.getElementById('profile-status').textContent = a.role || 'agent';
+            document.getElementById('profile-trust').textContent = a.trust_score != null ? a.trust_score + '%' : '—';
+            document.getElementById('profile-verification').innerHTML = verificationBadge(a.verification_status);
+            document.getElementById('profile-confidence').textContent = a.verification_confidence != null ? a.verification_confidence + '%' : '—';
+            document.getElementById('profile-selfie').src = a.selfie_path ? '../uploads/ids/' + a.selfie_path : '../assets/img/no-image.png';
+            document.getElementById('profile-id').src = a.national_id_path ? '../uploads/ids/' + a.national_id_path : '../assets/img/no-image.png';
         }
 
-        document.getElementById('agentForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
+        document.getElementById('agentForm').addEventListener('submit', async e => {
+            e.preventDefault();
             const userId = document.getElementById('agent-id').value;
-            const fullName = document.getElementById('agent-full-name').value;
-            const email = document.getElementById('agent-email').value;
-            const verificationStatus = document.getElementById('agent-verification-status').value;
-            const trustScore = document.getElementById('agent-trust-score').value;
-            const password = document.getElementById('agent-password').value;
-
-            try {
-                const userRes = await Iconics.call('admin/update_user', 'POST', {
-                    id: userId,
-                    full_name: fullName,
-                    email: email,
-                    role: 'agent',
-                    password: password
-                });
-
-                if (userRes.status !== 'success') {
-                    alert(userRes.message || 'Failed to update user details');
-                    return;
-                }
-
-                const verifyRes = await Iconics.call('admin/verify_agent', 'POST', {
-                    user_id: userId,
-                    status: verificationStatus === 'verified' ? 'approved' : (verificationStatus === 'rejected' ? 'denied' : 'pending'),
-                    trust_score: trustScore || 0
-                });
-
-                if (verifyRes.status !== 'success') {
-                    alert(verifyRes.message || 'Failed to update verification status');
-                    return;
-                }
-
-                alert('Agent updated successfully');
-                loadAgentProfile();
-            } catch (err) {
-                console.error(err);
-                alert('Unable to save changes');
-            }
+            const userRes = await Iconics.call('admin/update_user', 'POST', {
+                id: userId,
+                full_name: document.getElementById('agent-full-name').value,
+                email: document.getElementById('agent-email').value,
+                role: 'agent',
+                password: document.getElementById('agent-password').value
+            });
+            if (userRes.status !== 'success') { alert(userRes.message || 'Failed to update user'); return; }
+            const vs = document.getElementById('agent-verification-status').value;
+            const verifyRes = await Iconics.call('admin/verify_agent', 'POST', {
+                user_id: userId,
+                status: vs === 'verified' ? 'approved' : vs === 'rejected' ? 'denied' : 'pending',
+                trust_score: document.getElementById('agent-trust-score').value || 0
+            });
+            if (verifyRes.status !== 'success') { alert(verifyRes.message || 'Failed to update verification'); return; }
+            alert('Agent updated successfully');
+            loadAgentProfile();
         });
 
-        async function logout() {
-            await Iconics.call('auth/logout', 'POST');
-            window.location.href = '../auth.html';
-        }
+        async function logout() { await Iconics.call('auth/logout', 'POST'); window.location.href = '../auth.html'; }
 
         window.onload = async () => {
             const auth = await Iconics.check();
-            if (auth.status !== 'success' || auth.data.user.role !== 'admin') {
-                window.location.href = '../auth.html';
-                return;
-            }
+            if (auth.status !== 'success' || auth.data.user.role !== 'admin') { window.location.href = '../auth.html'; return; }
+            const name = auth.data.user.name || 'Admin';
+            const parts = name.trim().split(' ');
+            document.getElementById('sidebar-avatar').textContent = (parts.length >= 2 ? parts[0][0] + parts[parts.length - 1][0] : parts[0][0]).toUpperCase();
+            document.getElementById('sidebar-name').textContent = name;
             loadAgentProfile();
         };
     </script>

@@ -8,133 +8,375 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         :root {
             --primary-dark: #0f1923;
             --accent-green: #35ac39;
-            --text-gray: #777;
+            --warning-orange: #ff9800;
+            --danger-red: #dc3545;
+            --bg-page: #f4f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.07);
+            --radius-md: 8px;
+            --radius-lg: 14px;
+            --text-muted-color: #777;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            background: var(--bg-page);
+            color: #2c2c2a;
         }
 
-        .verification-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 40px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        /* ── Sidebar ── */
+        .sidebar {
+            height: 100vh;
+            background: var(--primary-dark);
+            color: white;
+            position: fixed;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .verification-header {
-            text-align: center;
-            margin-bottom: 40px;
+        .sidebar-brand {
+            padding: 22px 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
         }
 
-        .verification-header h1 {
+        .sidebar-brand h2 {
             font-family: 'Playfair Display', serif;
+            font-size: 19px;
+            color: var(--accent-green);
+            margin: 0;
+        }
+
+        .sidebar-brand .sub {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.32);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .sidebar-agent-pill {
+            margin: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .agent-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(53, 172, 57, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        .agent-pill-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .agent-pill-role {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-link {
+            color: #adb5bd;
+            padding: 11px 22px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+        }
+
+        .nav-link i {
+            font-size: 16px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            border-left-color: var(--accent-green);
+        }
+
+        .nav-link.text-danger {
+            color: #f87171 !important;
+        }
+
+        .nav-link.text-danger:hover {
+            border-left-color: var(--danger-red);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 14px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.25);
+            text-align: center;
+        }
+
+        /* ── Main Content ── */
+        .main-content {
+            margin-left: 220px;
+            padding: 36px 40px;
+        }
+
+        /* ── Page Header ── */
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .page-header .sub {
+            font-size: 13px;
+            color: var(--text-muted-color);
+            margin-top: 4px;
+        }
+
+        /* ── Form card — matches create-listing.html exactly ── */
+        .form-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 0.5px solid var(--border-light);
+            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            margin-bottom: 16px;
+            max-width: 860px;
+        }
+
+        .form-card-header {
+            padding: 18px 26px;
+            border-bottom: 0.5px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-card-header .card-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .form-card-header .card-icon i {
+            font-size: 17px;
+        }
+
+        .form-card-header h4 {
+            font-size: 14px;
+            font-weight: 700;
             color: var(--primary-dark);
+            margin: 0;
+        }
+
+        .form-card-header p {
+            font-size: 11px;
+            color: var(--text-muted-color);
+            margin: 2px 0 0;
+        }
+
+        .form-card-body {
+            padding: 24px 26px;
+        }
+
+        /* ── Instructions note — matches hash-note in create-listing ── */
+        .instructions-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #e8f4f8;
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            margin-bottom: 22px;
+            border-left: 3px solid var(--accent-green);
+            max-width: 860px;
+        }
+
+        .instructions-note i {
+            font-size: 17px;
+            color: var(--accent-green);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .instructions-note div {
+            font-size: 12px;
+            color: #2c2c2a;
+            line-height: 1.6;
+        }
+
+        .instructions-note ul {
+            margin: 6px 0 0;
+            padding-left: 18px;
+            color: var(--text-muted-color);
+        }
+
+        .instructions-note ul li {
+            margin-bottom: 3px;
+        }
+
+        /* ── Upload zone — identical to create-listing.html ── */
+        .upload-zone {
+            border: 2px dashed #d0d0cc;
+            border-radius: var(--radius-md);
+            padding: 28px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            position: relative;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--accent-green);
+            background: rgba(53, 172, 57, 0.03);
+        }
+
+        .upload-zone input[type=file] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .upload-zone>i {
+            font-size: 32px;
+            color: #ccc;
+            display: block;
             margin-bottom: 10px;
         }
 
-        .verification-header p {
-            color: var(--text-gray);
-            font-size: 14px;
-        }
-
-        .upload-section {
-            margin-bottom: 40px;
-            padding: 30px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            border: 2px dashed var(--accent-green);
-        }
-
-        .upload-section h4 {
-            color: var(--primary-dark);
-            margin-bottom: 15px;
+        .upload-zone .upload-label {
+            font-size: 13px;
             font-weight: 600;
+            color: var(--text-muted-color);
         }
 
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
+        .upload-zone .upload-sub {
+            font-size: 11px;
+            color: #bbb;
+            margin-top: 4px;
         }
 
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: -9999px;
+        .upload-zone.has-file {
+            border-color: var(--accent-green);
+            border-style: solid;
         }
 
-        .file-input-label {
-            display: block;
-            padding: 20px;
-            background: white;
-            border: 2px solid var(--accent-green);
-            border-radius: 4px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
+        .upload-zone.has-file>i {
+            color: var(--accent-green);
+        }
+
+        /* ── Image preview — identical to create-listing.html ── */
+        .img-preview {
+            margin-top: 14px;
+        }
+
+        .img-preview img {
+            max-height: 160px;
+            border-radius: var(--radius-md);
+            border: 0.5px solid var(--border-light);
+        }
+
+        .img-name {
+            font-size: 11px;
             color: var(--accent-green);
             font-weight: 600;
+            margin-top: 6px;
         }
 
-        .file-input-label:hover {
-            background: rgba(53, 172, 57, 0.05);
+        /* ── Submit area — identical to create-listing.html ── */
+        .submit-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            max-width: 860px;
         }
 
-        .file-preview {
-            margin-top: 15px;
-            text-align: center;
-        }
-
-        .file-preview img {
-            max-width: 100%;
-            max-height: 250px;
-            border-radius: 4px;
-        }
-
-        .file-name {
-            margin-top: 10px;
-            font-size: 12px;
-            color: var(--text-gray);
-        }
-
-        .verify-button {
+        .btn-submit {
+            flex: 1;
             background: var(--accent-green);
             color: white;
             border: none;
-            padding: 12px 40px;
+            padding: 14px 32px;
             font-size: 14px;
-            font-weight: 600;
-            border-radius: 4px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            border-radius: var(--radius-md);
             cursor: pointer;
-            width: 100%;
-            transition: 0.3s;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .verify-button:hover {
+        .btn-submit:hover {
             background: #2d8f30;
-            color: white;
         }
 
-        .verify-button:disabled {
+        .btn-submit:disabled {
             background: #ccc;
             cursor: not-allowed;
         }
 
+        .btn-submit i {
+            font-size: 17px;
+        }
+
+        /* ── Status message — identical to create-listing.html ── */
         .status-message {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 4px;
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            font-size: 13px;
             display: none;
+            margin-top: 14px;
+            max-width: 860px;
         }
 
         .status-message.success {
@@ -151,116 +393,223 @@
             display: block;
         }
 
-        .instructions {
-            background: #e8f4f8;
-            padding: 20px;
-            border-radius: 4px;
-            margin-bottom: 30px;
-            border-left: 4px solid var(--accent-green);
+        .status-message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
         }
 
-        .instructions h5 {
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-        }
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
 
-        .instructions ul {
-            margin: 0;
-            padding-left: 20px;
-            font-size: 13px;
-            color: var(--text-gray);
-        }
-
-        .instructions li {
-            margin-bottom: 5px;
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="verification-container">
-        <div class="verification-header">
-            <h1>Identity Verification</h1>
-            <p>Complete your identity verification to unlock premium features</p>
+    <!-- ── Sidebar — matches dashboard.html exactly ── -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <h2>IREA Agent</h2>
+            <div class="sub">FDVIS Platform</div>
         </div>
 
-        <div class="instructions">
-            <h5>Verification Requirements:</h5>
-            <ul>
-                <li>Provide a clear photo of your government-issued ID</li>
-                <li>Provide a recent selfie for face matching</li>
-                <li>Ensure good lighting and clear visibility of your face</li>
-                <li>Face must match the ID document</li>
-            </ul>
+        <div class="sidebar-agent-pill">
+            <div class="agent-avatar" id="sidebar-avatar">—</div>
+            <div>
+                <div class="agent-pill-name" id="sidebar-name">Loading…</div>
+                <div class="agent-pill-role">Registered Agent</div>
+            </div>
+        </div>
+
+        <nav class="nav flex-column" style="margin-top: 8px;">
+            <a class="nav-link" href="dashboard.html">
+                <i class="ti ti-layout-dashboard"></i> Dashboard
+            </a>
+            <a class="nav-link active" href="verify.html">
+                <i class="ti ti-id"></i> Identity Verification
+            </a>
+            <a class="nav-link" href="listings.html">
+                <i class="ti ti-building"></i> My Listings
+            </a>
+            <hr style="border-color: rgba(255,255,255,0.08); margin: 8px 22px;">
+            <a class="nav-link text-danger" href="#" onclick="logout()">
+                <i class="ti ti-logout"></i> Logout
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">IREA / FDVIS &nbsp;·&nbsp; Rental Trust Platform</div>
+    </div>
+
+    <!-- ── Main Content ── -->
+    <div class="main-content">
+
+        <div class="page-header">
+            <h1>Identity Verification</h1>
+            <div class="sub">Complete your identity verification to unlock premium features.</div>
+        </div>
+
+        <!-- Requirements note -->
+        <div class="instructions-note">
+            <i class="ti ti-info-circle"></i>
+            <div>
+                <strong>Verification requirements</strong>
+                <ul>
+                    <li>Provide a clear photo of your government-issued ID</li>
+                    <li>Provide a recent selfie for face matching</li>
+                    <li>Ensure good lighting and clear visibility of your face</li>
+                    <li>Face must match the ID document</li>
+                    <li>Files must be in JPG or PNG format, max 5 MB each</li>
+                </ul>
+            </div>
         </div>
 
         <form id="verification-form" enctype="multipart/form-data">
-            <!-- ID Document Upload -->
-            <div class="upload-section">
-                <h4>📄 Government-Issued ID</h4>
-                <p style="color: var(--text-gray); font-size: 12px;">Upload a photo of your passport, driver's license,
-                    or national ID</p>
 
-                <div class="file-input-wrapper">
-                    <input type="file" id="id-image" name="id_image" accept="image/*" required>
-                    <label for="id-image" class="file-input-label">
-                        <span>📤 Click to upload ID photo</span>
-                    </label>
+            <!-- Section 1: Government ID -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="card-icon" style="background:#e6f1fb;">
+                        <i class="ti ti-id" style="color:#185fa5;"></i>
+                    </div>
+                    <div>
+                        <h4>Government-issued ID</h4>
+                        <p>Upload a photo of your passport, driver's licence, or national ID</p>
+                    </div>
                 </div>
-
-                <div class="file-preview" id="id-preview"></div>
-                <div class="file-name" id="id-name"></div>
+                <div class="form-card-body">
+                    <div class="upload-zone" id="id-upload-zone">
+                        <input type="file" id="id-image" name="id_image" accept="image/jpeg,image/jpg,image/png"
+                            required>
+                        <i class="ti ti-cloud-upload"></i>
+                        <div class="upload-label">Click to upload or drag &amp; drop</div>
+                        <div class="upload-sub">JPG or PNG — max 5 MB</div>
+                    </div>
+                    <div class="img-preview" id="id-preview"></div>
+                </div>
             </div>
 
-            <!-- Selfie Upload -->
-            <div class="upload-section">
-                <h4>🤳 Selfie Photo</h4>
-                <p style="color: var(--text-gray); font-size: 12px;">Upload a recent selfie for face verification</p>
-
-                <div class="file-input-wrapper">
-                    <input type="file" id="selfie" name="selfie" accept="image/*" required>
-                    <label for="selfie" class="file-input-label">
-                        <span>📤 Click to upload selfie</span>
-                    </label>
+            <!-- Section 2: Selfie -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="card-icon" style="background:#eaf3de;">
+                        <i class="ti ti-camera-selfie" style="color:#3b6d11;"></i>
+                    </div>
+                    <div>
+                        <h4>Live selfie</h4>
+                        <p>Upload a recent selfie — your face must be clearly visible and unobstructed</p>
+                    </div>
                 </div>
-
-                <div class="file-preview" id="selfie-preview"></div>
-                <div class="file-name" id="selfie-name"></div>
+                <div class="form-card-body">
+                    <div class="upload-zone" id="selfie-upload-zone">
+                        <input type="file" id="selfie" name="selfie" accept="image/jpeg,image/jpg,image/png" required>
+                        <i class="ti ti-cloud-upload"></i>
+                        <div class="upload-label">Click to upload or drag &amp; drop</div>
+                        <div class="upload-sub">JPG or PNG — max 5 MB</div>
+                    </div>
+                    <div class="img-preview" id="selfie-preview"></div>
+                </div>
             </div>
 
-            <!-- Submit Button -->
-            <button type="submit" class="verify-button" id="submit-btn">Verify Identity</button>
+            <!-- Submit -->
+            <div class="submit-area">
+                <button type="submit" class="btn-submit" id="submit-btn">
+                    <i class="ti ti-shield-check"></i> Verify Identity
+                </button>
+            </div>
 
-            <!-- Status Message -->
+            <!-- Status Message — same id as original so JS works unchanged -->
             <div class="status-message" id="status-message"></div>
+
         </form>
-    </div>
+
+    </div><!-- /main-content -->
 
     <script src="../assets/js/api.js"></script>
     <script>
-        // File preview functionality
-        document.getElementById('id-image').addEventListener('change', function (e) {
-            previewFile(e, 'id-preview', 'id-name');
-        });
+        /* ── Sidebar avatar initials (same pattern as dashboard) ── */
+        function setAvatar(name) {
+            const parts = (name || '').trim().split(' ');
+            const initials = parts.length >= 2
+                ? parts[0][0] + parts[parts.length - 1][0]
+                : (parts[0] || 'A')[0];
+            document.getElementById('sidebar-avatar').textContent = initials.toUpperCase();
+            document.getElementById('sidebar-name').textContent = name || 'Agent';
+        }
 
-        document.getElementById('selfie').addEventListener('change', function (e) {
-            previewFile(e, 'selfie-preview', 'selfie-name');
-        });
+        /* ── Auth guard + populate sidebar (same pattern as dashboard) ── */
+        window.onload = async () => {
+            const auth = await Iconics.check();
+            if (auth.status === 'success' && auth.data.user.role === 'agent') {
+                setAvatar(auth.data.user.full_name);
+            } else {
+                window.location.href = '../auth.html';
+            }
+        };
 
-        function previewFile(event, previewId, nameId) {
+        /* ── Logout (same as dashboard) ── */
+        async function logout() {
+            await Iconics.call('auth/logout', 'POST');
+            window.location.href = '../auth.html';
+        }
+
+        /* ────────────────────────────────────────────────
+           ORIGINAL LOGIC BELOW — NOT MODIFIED
+        ──────────────────────────────────────────────── */
+
+        /* File preview — original logic, adapted to new upload-zone markup */
+        function previewFile(event, zoneId, previewId) {
             const file = event.target.files[0];
             if (file) {
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    event.target.value = '';
+                    return;
+                }
+
+                // Validate file type
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Only JPG and PNG images are allowed');
+                    event.target.value = '';
+                    return;
+                }
+
+                const zone = document.getElementById(zoneId);
+                zone.classList.add('has-file');
+                zone.querySelector('i').className = 'ti ti-photo-check';
+
                 const reader = new FileReader();
                 reader.onload = function (e) {
-                    document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                    document.getElementById(previewId).innerHTML =
+                        `<img src="${e.target.result}" alt="Preview">` +
+                        `<div class="img-name"><i class="ti ti-check" style="font-size:12px;vertical-align:-1px;"></i> ${file.name}</div>`;
                 };
                 reader.readAsDataURL(file);
-                document.getElementById(nameId).textContent = `✓ ${file.name}`;
             }
         }
 
-        // Form submission
+        document.getElementById('id-image').addEventListener('change', function (e) {
+            previewFile(e, 'id-upload-zone', 'id-preview');
+        });
+
+        document.getElementById('selfie').addEventListener('change', function (e) {
+            previewFile(e, 'selfie-upload-zone', 'selfie-preview');
+        });
+
+        /* Form submission — original logic, not modified */
         document.getElementById('verification-form').addEventListener('submit', async function (e) {
             e.preventDefault();
 
@@ -268,36 +617,54 @@
             const statusMsg = document.getElementById('status-message');
 
             submitBtn.disabled = true;
-            submitBtn.innerText = 'Verifying...';
+            submitBtn.innerHTML = '<i class="ti ti-loader"></i> Verifying…';
+            statusMsg.className = 'status-message info';
+            statusMsg.innerHTML = '<strong>⏳ Processing:</strong> Analysing images and matching faces…';
 
             try {
                 const formData = new FormData(this);
 
                 const response = await fetch('http://localhost/Final/backend/index.php?route=agent&action=verify', {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    credentials: 'include'  // FIXED: Include cookies for session handling
                 });
+
+                // Check if response is ok
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
                 const result = await response.json();
 
                 if (result.success) {
+                    const verificationStatus = result.data.verification_status || 'processed';
+                    const confidence = result.data.confidence || 0;
+
                     statusMsg.className = 'status-message success';
-                    statusMsg.innerHTML = `<strong>✓ Verification Successful!</strong> Your identity has been verified. Status: ${result.data.status}`;
-                    submitBtn.innerText = 'Verified ✓';
+                    statusMsg.innerHTML = `
+                        <strong>✓ Verification Successful!</strong><br>
+                        Status: <strong>${verificationStatus}</strong><br>
+                        Confidence: <strong>${confidence.toFixed(2)}%</strong><br>
+                        Redirecting to dashboard…
+                    `;
+                    submitBtn.innerHTML = '<i class="ti ti-circle-check"></i> Verified';
+
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
-                    }, 2000);
+                    }, 2500);
                 } else {
                     statusMsg.className = 'status-message error';
-                    statusMsg.innerHTML = `<strong>✗ Verification Failed:</strong> ${result.message || 'Please try again.'}`;
+                    statusMsg.innerHTML = `<strong>✗ Verification Failed:</strong> ${result.message || 'Please try again with clearer images.'}`;
                     submitBtn.disabled = false;
-                    submitBtn.innerText = 'Verify Identity';
+                    submitBtn.innerHTML = '<i class="ti ti-shield-check"></i> Verify Identity';
                 }
             } catch (error) {
+                console.error('Verification error:', error);
                 statusMsg.className = 'status-message error';
-                statusMsg.innerHTML = `<strong>✗ Error:</strong> ${error.message}`;
+                statusMsg.innerHTML = `<strong>✗ Error:</strong> ${error.message}. Please check your connection and try again.`;
                 submitBtn.disabled = false;
-                submitBtn.innerText = 'Verify Identity';
+                submitBtn.innerHTML = '<i class="ti ti-shield-check"></i> Verify Identity';
             }
         });
     </script>

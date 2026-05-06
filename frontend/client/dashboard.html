@@ -4,250 +4,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Dashboard — IREA FDIVS</title>
+    <title>Client Dashboard — Iconics</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <style>
         :root {
             --primary-dark: #0f1923;
             --accent-green: #35ac39;
-            --text-gray: #777;
+            --bg-grid: rgba(15, 25, 35, 0.03);
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: #f4f5f7;
+            background-image: linear-gradient(var(--bg-grid) 1px, transparent 1px), linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
 
-        .sidebar {
-            height: 100vh;
+        .property-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .property-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .price-badge {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
             background: var(--primary-dark);
             color: white;
-            padding-top: 20px;
-            position: fixed;
-            width: 240px;
-        }
-
-        .sidebar h2 {
-            font-family: 'Playfair Display', serif;
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 30px;
-        }
-
-        .sidebar a {
-            color: #ccc;
-            padding: 15px 25px;
-            display: block;
-            text-decoration: none;
-            transition: 0.3s;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .sidebar a:hover,
-        .sidebar a.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--accent-green);
-        }
-
-        .main-content {
-            margin-left: 240px;
-            padding: 40px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid var(--accent-green);
-        }
-
-        .stat-card h3 {
-            margin: 0;
-            color: var(--accent-green);
-            font-size: 28px;
-            font-weight: 700;
-        }
-
-        .stat-card small {
-            color: var(--text-gray);
-        }
-
-        .table-container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-top: 30px;
-        }
-
-        .btn-action {
             padding: 5px 12px;
-            font-size: 12px;
+            border-radius: 4px;
             font-weight: 600;
-            text-transform: uppercase;
-            border-radius: 0;
+        }
+
+        .save-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d9534f;
+            cursor: pointer;
+        }
+
+        /* Payment Modal Styling */
+        .payment-box {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            background: #fafafa;
         }
     </style>
 </head>
 
 <body>
-
-    <div class="sidebar">
-        <h2>IR<span>EA</span></h2>
-        <a href="#" class="active">Dashboard</a>
-        <a href="#" onclick="loadContent('search')">Search Properties</a>
-        <a href="#" onclick="loadContent('favorites')">Favorite Properties</a>
-        <a href="#" onclick="loadContent('profile')">My Profile</a>
-        <hr style="border-color: rgba(255,255,255,0.1)">
-        <a href="#" onclick="logout()">Logout</a>
-    </div>
-
-    <div class="main-content">
-        <header class="d-flex justify-content-between align-items-center mb-5">
-            <h1 style="font-family: 'Playfair Display';">Client Dashboard</h1>
-            <div id="client-name" class="font-weight-bold">Guest User</div>
-        </header>
-
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <small class="text-uppercase text-muted">Favorite Properties</small>
-                    <h3 id="stat-favorites">--</h3>
+            <nav class="col-md-2 d-none d-md-block sidebar bg-dark text-white vh-100 position-fixed">
+                <div class="p-4 text-center">
+                    <h2 class="mb-4" style="font-family:'Playfair Display'">Iconics</h2>
+                    <div id="client-name" class="small mb-4">Welcome, User</div>
+                    <hr>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link text-white"><i
+                                    class="ti ti-smart-home"></i> Explore</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link text-white"><i class="ti ti-heart"></i>
+                                Saved</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link text-white"><i
+                                    class="ti ti-calendar-event"></i> My Bookings</a></li>
+                    </ul>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <small class="text-uppercase text-muted">Total Properties</small>
-                    <h3 id="stat-properties">--</h3>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <small class="text-uppercase text-muted">New Listings</small>
-                    <h3 id="stat-new">--</h3>
-                </div>
-            </div>
-        </div>
+            </nav>
 
-        <div class="table-container">
-            <div class="d-flex justify-content-between mb-3">
-                <h4 id="table-title">Recent Properties</h4>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead class="thead-light">
-                        <tr id="table-headers">
-                            <th>Property ID</th>
-                            <th>Title</th>
-                            <th>Location</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="data-table-body">
-                        <tr>
-                            <td colspan="6" class="text-center">Loading properties...</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <main class="col-md-10 offset-md-2 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 style="font-family:'Playfair Display'">Available Properties</h3>
+                    <button class="btn btn-outline-danger btn-sm" onclick="logout()">Logout</button>
+                </div>
+
+                <div class="row" id="property-grid">
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal fade" id="paymentModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Book Viewing</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="ti ti-credit-card text-success" style="font-size: 3rem;"></i>
+                    <h4 class="my-3">Viewing Fee: MWK 10,000</h4>
+                    <p class="text-muted">A viewing fee is required to confirm your appointment with the verified agent.
+                    </p>
+
+                    <div class="payment-box mb-3">
+                        <label class="form-label text-start d-block small fw-bold">SIMULATED PAYMENT GATEWAY</label>
+                        <input type="text" class="form-control mb-2" placeholder="Card / Mobile Money Number">
+                        <div class="row g-2">
+                            <div class="col-6"><input type="text" class="form-control" placeholder="MM/YY"></div>
+                            <div class="col-6"><input type="text" class="form-control" placeholder="CVV"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="btn-process-payment">Pay & Book Now</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="../assets/js/api.js"></script>
+    <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Global function definitions
-        async function initDashboard() {
-            loadProperties();
-            loadStats();
-        }
-
-        async function loadStats() {
-            try {
-                // Placeholder stats - in a real app you would fetch these from an API
-                document.getElementById('stat-favorites').innerText = "0";
-                document.getElementById('stat-properties').innerText = "--";
-                document.getElementById('stat-new').innerText = "--";
-            } catch (err) {
-                console.error("Failed to load stats:", err);
+        // Use the Iconics core utility for API calls
+        const Iconics = {
+            call: async (route, method = 'GET', data = null) => {
+                const options = { method, headers: { 'Content-Type': 'application/json' } };
+                if (data) options.body = JSON.stringify(data);
+                const res = await fetch(`../../api/index.php?route=${route}`, options);
+                return res.json();
+            },
+            check: async () => {
+                const res = await fetch('../../api/index.php?route=auth&action=check');
+                return res.json();
             }
-        }
+        };
 
         async function loadProperties() {
-            const tableBody = document.getElementById('data-table-body');
-            tableBody.innerHTML = "<tr><td colspan='6' class='text-center'>Fetching properties...</td></tr>";
+            const res = await Iconics.call('properties', 'GET');
+            const grid = document.getElementById('property-grid');
+            grid.innerHTML = '';
 
-            try {
-                const res = await Iconics.call("properties", "GET");
-                if (res.status === "success") {
-                    tableBody.innerHTML = "";
-                    res.data.forEach(item => {
-                        const row = `
-                            <tr>
-                                <td>#${item.id}</td>
-                                <td>${item.title}</td>
-                                <td>${item.area_name || 'N/A'}</td>
-                                <td>$${Number(item.price).toLocaleString()}</td>
-                                <td><span class="badge badge-success">Approved</span></td>
-                                <td>
-                                    <button onclick="viewProperty(${item.id})" class="btn btn-sm btn-primary btn-action">View</button>
-                                </td>
-                            </tr>
-                        `;
-                        tableBody.innerHTML += row;
-                    });
-                }
-            } catch (err) {
-                tableBody.innerHTML = "<tr><td colspan='6' class='text-center text-danger'>Failed to load properties.</td></tr>";
+            if (res.status === 'success') {
+                res.data.forEach(p => {
+                    grid.innerHTML += `
+                        <div class="col-md-4 mb-4">
+                            <div class="property-card shadow-sm">
+                                <div class="property-image" style="background-image: url('../../uploads/properties/${p.image || 'default.jpg'}')">
+                                    <div class="price-badge">MWK ${parseFloat(p.price).toLocaleString()}</div>
+                                    <button class="save-btn" onclick="saveProperty(${p.id})"><i class="ti ti-heart"></i></button>
+                                </div>
+                                <div class="p-3">
+                                    <h6 class="fw-bold mb-1">${p.title}</h6>
+                                    <p class="small text-muted mb-3"><i class="ti ti-map-pin"></i> ${p.area_name}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-light text-dark border">${p.property_type}</span>
+                                        <button class="btn btn-primary btn-sm" onclick="initiateBooking(${p.id})">Book Viewing</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
             }
         }
 
-        async function loadContent(section) {
-            // Load different client sections
-            switch (section) {
-                case 'search':
-                    document.getElementById('table-title').innerText = 'Search Properties';
-                    loadProperties();
-                    break;
-                case 'favorites':
-                    document.getElementById('table-title').innerText = 'Favorite Properties';
-                    alert('Favorites feature coming soon');
-                    break;
-                case 'profile':
-                    alert('Profile management coming soon');
-                    break;
-                default:
-                    loadProperties();
-            }
+        let selectedPropertyId = null;
+        function initiateBooking(id) {
+            selectedPropertyId = id;
+            const modal = new bootstrap.Modal(document.getElementById('paymentModal'));
+            modal.show();
         }
 
-        function viewProperty(id) {
-            window.location.href = '../property-details.html?id=' + id;
+        document.getElementById('btn-process-payment').onclick = async () => {
+            const btn = document.getElementById('btn-process-payment');
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
+            btn.disabled = true;
+
+            // Simulate Gateway Delay
+            setTimeout(async () => {
+                // In a real scenario, this would call a booking/payment API
+                alert('Payment Successful! Your viewing for Property #' + selectedPropertyId + ' has been scheduled.');
+                bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
+                btn.innerHTML = 'Pay & Book Now';
+                btn.disabled = false;
+            }, 2000);
+        };
+
+        function saveProperty(id) {
+            alert('Property #' + id + ' added to your favorites.');
         }
 
         async function logout() {
-            await Iconics.call("auth/logout", "POST");
-            window.location.href = "../auth.html";
+            await Iconics.call('auth', 'GET', { action: 'logout' });
+            window.location.href = '../auth.html';
         }
 
-        // Check authentication on load
         window.onload = async () => {
             const auth = await Iconics.check();
-            if (!auth.success) {
-                window.location.href = "../auth.html";
-            } else {
-                // Set user name from session/response
-                document.getElementById('client-name').innerText = "Welcome, " + (auth.data.user.name || "User");
-                initDashboard();
+            if (auth.status !== 'success') {
+                window.location.href = '../auth.html';
+                return;
             }
+            document.getElementById('client-name').innerText = "Welcome, " + auth.data.user.full_name;
+            loadProperties();
         };
     </script>
 </body>

@@ -4,249 +4,819 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agent Dashboard — IREA FDIVS</title>
+    <title>Agent Dashboard — IREA FDVIS</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         :root {
             --primary-dark: #0f1923;
             --accent-green: #35ac39;
             --warning-orange: #ff9800;
-            --danger-red: #ff4b2b;
-            --light-bg: #f8f9fa;
+            --danger-red: #dc3545;
+            --bg-page: #f4f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.07);
+            --radius-md: 8px;
+            --radius-lg: 14px;
+            --text-muted-color: #777;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--light-bg);
-            color: #333;
+            background: var(--bg-page);
+            color: #2c2c2a;
         }
 
-        /* Sidebar Styling */
+        /* ── Sidebar ── */
         .sidebar {
             height: 100vh;
             background: var(--primary-dark);
             color: white;
-            padding-top: 20px;
             position: fixed;
-            width: 240px;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .sidebar h2 {
+        .sidebar-brand {
+            padding: 22px 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .sidebar-brand h2 {
             font-family: 'Playfair Display', serif;
-            text-align: center;
-            font-size: 1.5rem;
-            margin-bottom: 30px;
+            font-size: 19px;
+            color: var(--accent-green);
+            margin: 0;
+        }
+
+        .sidebar-brand .sub {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.32);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .sidebar-agent-pill {
+            margin: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .agent-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(53, 172, 57, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        .agent-pill-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .agent-pill-role {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
         }
 
         .nav-link {
             color: #adb5bd;
-            padding: 12px 25px;
-            transition: 0.3s;
+            padding: 11px 22px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+        }
+
+        .nav-link i {
+            font-size: 16px;
         }
 
         .nav-link:hover,
         .nav-link.active {
             color: white;
             background: rgba(255, 255, 255, 0.05);
-            border-left: 4px solid var(--accent-green);
+            border-left-color: var(--accent-green);
         }
 
-        /* Main Content Area */
+        .nav-link.text-danger {
+            color: #f87171 !important;
+        }
+
+        .nav-link.text-danger:hover {
+            border-left-color: var(--danger-red);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 14px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.25);
+            text-align: center;
+        }
+
+        /* ── Main Content ── */
         .main-content {
-            margin-left: 240px;
-            padding: 40px;
+            margin-left: 220px;
+            padding: 36px 40px;
         }
 
+        /* ── Page Header ── */
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .page-header .sub {
+            font-size: 13px;
+            color: var(--text-muted-color);
+            margin-top: 4px;
+        }
+
+        /* ── Trust Score Widget ── */
+        .trust-widget {
+            background: var(--primary-dark);
+            border-radius: var(--radius-lg);
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            min-width: 240px;
+        }
+
+        .trust-ring-wrap {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            flex-shrink: 0;
+        }
+
+        .trust-ring-wrap svg {
+            transform: rotate(-90deg);
+            width: 64px;
+            height: 64px;
+        }
+
+        .trust-ring-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 5;
+        }
+
+        .trust-ring-fill {
+            fill: none;
+            stroke: var(--accent-green);
+            stroke-width: 5;
+            stroke-linecap: round;
+            stroke-dasharray: 163;
+            stroke-dashoffset: 163;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .trust-ring-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .trust-info {
+            flex: 1;
+        }
+
+        .trust-info .label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 4px;
+        }
+
+        .trust-info .score-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .trust-info .status-pill {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .status-verified {
+            background: rgba(53, 172, 57, 0.2);
+            color: var(--accent-green);
+        }
+
+        .status-pending {
+            background: rgba(255, 152, 0, 0.2);
+            color: var(--warning-orange);
+        }
+
+        .status-flagged {
+            background: rgba(220, 53, 69, 0.2);
+            color: #f87171;
+        }
+
+        /* ── Section Label ── */
+        .section-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+        }
+
+        /* ── Stat Cards ── */
         .stat-card {
-            background: white;
-            border: none;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px 22px;
+            border: 0.5px solid var(--border-light);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
             transition: transform 0.2s;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
         }
 
-        .stat-val {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary-dark);
-        }
-
-        .stat-label {
-            color: #777;
-            font-size: 0.9rem;
+        .stat-card .label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted-color);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        /* Trust Score Badge */
-        .trust-gauge {
+        .stat-card .label i {
+            font-size: 14px;
+        }
+
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a18;
+            line-height: 1;
+        }
+
+        .stat-card .trend {
+            font-size: 11px;
+            margin-top: 5px;
+            color: #bbb;
+        }
+
+        /* ── Trust Pillars (compact, agent view) ── */
+        .pillars-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .pillar-mini {
+            background: var(--card-bg);
+            border: 0.5px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pillar-mini-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .pillar-mini-icon i {
+            font-size: 17px;
+        }
+
+        .pillar-mini-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 2px;
+        }
+
+        .pillar-mini-status {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        /* ── Listings Table Card ── */
+        .table-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 0.5px solid var(--border-light);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .table-card-header {
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 0.5px solid var(--border-light);
+        }
+
+        .table-card-header h5 {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .btn-add {
+            font-size: 12px;
+            font-weight: 600;
             background: var(--primary-dark);
             color: white;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .score-circle {
-            width: 80px;
-            height: 80px;
-            border: 4px solid var(--accent-green);
-            border-radius: 50%;
-            line-height: 72px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 10px auto;
-        }
-
-        /* Table & Badge Styling */
-        .card {
-            border-radius: 15px;
             border: none;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius-md);
+            padding: 7px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-add:hover {
+            background: #1c2e40;
+        }
+
+        .table {
+            margin: 0;
+        }
+
+        .table thead th {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #999;
+            text-transform: uppercase;
+            border-bottom: 0.5px solid #eee;
+            padding: 12px 16px;
+            background: #fafaf9;
+        }
+
+        .table tbody td {
+            font-size: 13px;
+            vertical-align: middle;
+            padding: 13px 16px;
+            border-color: #f5f5f3;
+        }
+
+        .table tbody tr:hover {
+            background: #fafaf9;
+        }
+
+        .prop-title {
+            font-weight: 600;
+            color: #1a1a18;
+            margin-bottom: 2px;
+        }
+
+        .prop-id {
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+            color: #bbb;
         }
 
         .badge-verified {
             background: #d4edda;
             color: #155724;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 10px;
         }
 
         .badge-pending {
             background: #fff3cd;
             color: #856404;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 10px;
         }
 
         .badge-risk {
             background: #f8d7da;
             color: #721c24;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 10px;
+        }
+
+        .price-cell {
+            font-weight: 600;
+            color: #1a1a18;
+        }
+
+        .date-cell {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 36px;
+            color: #ccc;
+            font-size: 13px;
+        }
+
+        .empty-state i {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 10px;
+            opacity: 0.4;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .pillars-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .trust-widget {
+                min-width: unset;
+                width: 100%;
+            }
         }
     </style>
 </head>
 
 <body>
 
+    <!-- ── Sidebar ── -->
     <div class="sidebar">
-        <h2>IREA Agent</h2>
-        <nav class="nav flex-column">
-            <a class="nav-link active" href="dashboard.html">Dashboard</a>
-            <a class="nav-link" href="verify.html">Identify Verification</a>
-            <a class="nav-link" href="my_listings.html">My Listings</a>
-            <a class="nav-link text-danger mt-5" href="#" onclick="logout()">Logout</a>
+        <div class="sidebar-brand">
+            <h2>IREA Agent</h2>
+            <div class="sub">FDVIS Platform</div>
+        </div>
+
+        <div class="sidebar-agent-pill">
+            <div class="agent-avatar" id="sidebar-avatar">—</div>
+            <div>
+                <div class="agent-pill-name" id="sidebar-name">Loading…</div>
+                <div class="agent-pill-role">Registered Agent</div>
+            </div>
+        </div>
+
+        <nav class="nav flex-column" style="margin-top: 8px;">
+            <a class="nav-link active" href="dashboard.html">
+                <i class="ti ti-layout-dashboard"></i> Dashboard
+            </a>
+            <a class="nav-link" href="verify.html">
+                <i class="ti ti-id"></i> Identity Verification
+            </a>
+            <a class="nav-link" href="listings.html">
+                <i class="ti ti-building"></i> My Listings
+            </a>
+            <hr style="border-color: rgba(255,255,255,0.08); margin: 8px 22px;">
+            <a class="nav-link text-danger" href="#" onclick="logout()">
+                <i class="ti ti-logout"></i> Logout
+            </a>
         </nav>
+
+        <div class="sidebar-footer">IREA / FDVIS &nbsp;·&nbsp; Rental Trust Platform</div>
     </div>
 
+    <!-- ── Main Content ── -->
     <div class="main-content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <!-- Page Header -->
+        <div class="page-header">
             <div>
-                <h1 id="agent-name" style="font-family: 'Playfair Display', serif;">Welcome Back</h1>
-                <p class="text-muted">Monitor your listing performance and trust status.</p>
+                <h1 id="agent-name">Welcome Back</h1>
+                <div class="sub">Monitor your listing performance and trust status.</div>
             </div>
-            <div class="trust-gauge">
-                <div class="stat-label" style="color: #adb5bd;">Current Trust Score</div>
-                <div class="score-circle" id="trust-score">--</div>
-                <small id="verification-status">Status: Checking...</small>
-            </div>
-        </div>
-
-        <div class="row mb-5">
-            <div class="col-md-4">
-                <div class="stat-card text-center">
-                    <div class="stat-label">Total Listings</div>
-                    <div class="stat-val" id="total-listings">0</div>
+            <div class="trust-widget">
+                <div class="trust-ring-wrap">
+                    <svg viewBox="0 0 64 64">
+                        <circle class="trust-ring-bg" cx="32" cy="32" r="26" />
+                        <circle class="trust-ring-fill" id="trust-ring" cx="32" cy="32" r="26" />
+                    </svg>
+                    <div class="trust-ring-label" id="trust-score-ring">—</div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card text-center">
-                    <div class="stat-label">Live & Approved</div>
-                    <div class="stat-val text-success" id="approved-listings">0</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card text-center">
-                    <div class="stat-label">Flagged for Review</div>
-                    <div class="stat-val text-danger" id="flagged-listings">0</div>
+                <div class="trust-info">
+                    <div class="label">Trust score</div>
+                    <div class="score-text" id="trust-score">—</div>
+                    <span class="status-pill status-pending" id="verification-status">Checking…</span>
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold">Recent Listings</h5>
-                <button class="btn btn-dark btn-sm" onclick="location.href='add_listing.html'">+ Add New</button>
+        <!-- Stats Row -->
+        <div class="section-label">Your listings overview</div>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="stat-card text-center">
+                    <div class="label justify-content-center">
+                        <i class="ti ti-building" style="color:#185fa5;"></i> Total listings
+                    </div>
+                    <div class="value" id="total-listings">—</div>
+                    <div class="trend">All properties submitted</div>
+                </div>
             </div>
-            <div class="card-body p-0">
-                <table class="table table-hover mb-0">
-                    <thead class="table-light">
+            <div class="col-md-4">
+                <div class="stat-card text-center">
+                    <div class="label justify-content-center">
+                        <i class="ti ti-circle-check" style="color:#3b6d11;"></i> Live &amp; approved
+                    </div>
+                    <div class="value text-success" id="approved-listings">—</div>
+                    <div class="trend">Visible to renters</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card text-center">
+                    <div class="label justify-content-center">
+                        <i class="ti ti-alert-triangle" style="color:#a32d2d;"></i> Flagged for review
+                    </div>
+                    <div class="value text-danger" id="flagged-listings">—</div>
+                    <div class="trend">Requires your attention</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trust Pillars (agent compliance view) -->
+        <div class="section-label">Your trust compliance</div>
+        <div class="pillars-row mb-4">
+
+            <div class="pillar-mini">
+                <div class="pillar-mini-icon" style="background:#e6f1fb;">
+                    <i class="ti ti-id" style="color:#185fa5;"></i>
+                </div>
+                <div>
+                    <div class="pillar-mini-name">Identity</div>
+                    <span class="pillar-mini-status" id="pill-identity"
+                        style="background:#d4edda;color:#155724;">—</span>
+                </div>
+            </div>
+
+            <div class="pillar-mini">
+                <div class="pillar-mini-icon" style="background:#eaf3de;">
+                    <i class="ti ti-map-pin" style="color:#3b6d11;"></i>
+                </div>
+                <div>
+                    <div class="pillar-mini-name">GPS pinned</div>
+                    <span class="pillar-mini-status" id="pill-gps" style="background:#fff3cd;color:#856404;">—</span>
+                </div>
+            </div>
+
+            <div class="pillar-mini">
+                <div class="pillar-mini-icon" style="background:#faeeda;">
+                    <i class="ti ti-chart-line" style="color:#854f0b;"></i>
+                </div>
+                <div>
+                    <div class="pillar-mini-name">Pricing</div>
+                    <span class="pillar-mini-status" id="pill-price" style="background:#d4edda;color:#155724;">—</span>
+                </div>
+            </div>
+
+            <div class="pillar-mini">
+                <div class="pillar-mini-icon" style="background:#fcebeb;">
+                    <i class="ti ti-fingerprint" style="color:#a32d2d;"></i>
+                </div>
+                <div>
+                    <div class="pillar-mini-name">Images</div>
+                    <span class="pillar-mini-status" id="pill-images" style="background:#d4edda;color:#155724;">—</span>
+                </div>
+            </div>
+
+            <div class="pillar-mini">
+                <div class="pillar-mini-icon" style="background:#eaf3de;">
+                    <i class="ti ti-credit-card" style="color:#3b6d11;"></i>
+                </div>
+                <div>
+                    <div class="pillar-mini-name">Payments</div>
+                    <span class="pillar-mini-status" id="pill-payments"
+                        style="background:#d4edda;color:#155724;">—</span>
+                </div>
+            </div>
+
+            <div class="pillar-mini">
+                <div class="pillar-mini-icon" style="background:#eeedfe;">
+                    <i class="ti ti-shield-check" style="color:#534ab7;"></i>
+                </div>
+                <div>
+                    <div class="pillar-mini-name">Fraud clear</div>
+                    <span class="pillar-mini-status" id="pill-fraud" style="background:#d4edda;color:#155724;">—</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Listings Table -->
+        <div class="table-card">
+            <div class="table-card-header">
+                <h5>Recent listings</h5>
+                <button class="btn-add" onclick="location.href='create-listing.html'">
+                    <i class="ti ti-plus" style="font-size:14px;"></i> Add new
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
                         <tr>
                             <th>Property</th>
                             <th>Location</th>
                             <th>Price</th>
                             <th>Status</th>
-                            <th>Date Posted</th>
+                            <th>Date posted</th>
                         </tr>
                     </thead>
                     <tbody id="listings-table">
+                        <tr>
+                            <td colspan="5" class="empty-state"><i class="ti ti-building"></i>Loading listings…</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
+
+    </div><!-- /main-content -->
 
     <script src="../assets/js/api.js"></script>
     <script>
+        /* ── Trust ring animation ── */
+        function setTrustRing(score) {
+            const max = 163;
+            const pct = Math.min(parseFloat(score) / 100, 1);
+            document.getElementById('trust-ring').style.strokeDashoffset = max - (pct * max);
+        }
+
+        /* ── Pillar pill helper ── */
+        function setPillarPill(id, text, type) {
+            const el = document.getElementById('pill-' + id);
+            if (!el) return;
+            el.textContent = text;
+            if (type === 'ok') { el.style.background = '#d4edda'; el.style.color = '#155724'; }
+            if (type === 'warn') { el.style.background = '#fff3cd'; el.style.color = '#856404'; }
+            if (type === 'risk') { el.style.background = '#f8d7da'; el.style.color = '#721c24'; }
+        }
+
+        /* ── Sidebar avatar initials ── */
+        function setAvatar(name) {
+            const parts = (name || '').trim().split(' ');
+            const initials = parts.length >= 2
+                ? parts[0][0] + parts[parts.length - 1][0]
+                : (parts[0] || 'A')[0];
+            document.getElementById('sidebar-avatar').textContent = initials.toUpperCase();
+            document.getElementById('sidebar-name').textContent = name || 'Agent';
+        }
+
+        /* ── Main init (your original API call, preserved) ── */
         async function initDashboard() {
             const res = await Iconics.call("agent/dashboard", "GET");
 
             if (res.status === "success") {
                 const { user, profile, listings, stats } = res.data;
 
-                // Update Profile Info
+                /* Profile */
                 document.getElementById('agent-name').innerText = `Welcome, ${user.full_name}`;
                 document.getElementById('trust-score').innerText = profile.trust_score || '0.0';
+                document.getElementById('trust-score-ring').innerText = profile.trust_score || '0';
+                setAvatar(user.full_name);
+                setTrustRing(profile.trust_score || 0);
 
+                /* Verification status pill */
                 const statusEl = document.getElementById('verification-status');
-                statusEl.innerText = `Status: ${profile.verification_status.toUpperCase()}`;
-                statusEl.className = profile.is_verified == 1 ? 'text-success' : 'text-warning';
+                const isVerified = profile.is_verified == 1;
+                const statusText = (profile.verification_status || 'pending').toUpperCase();
+                statusEl.textContent = statusText;
+                statusEl.className = 'status-pill ' + (isVerified ? 'status-verified' : 'status-pending');
 
-                // Update Stats
+                /* Stats */
                 document.getElementById('total-listings').innerText = stats.total_listings;
                 document.getElementById('approved-listings').innerText = stats.approved_listings;
                 document.getElementById('flagged-listings').innerText = stats.flagged_listings;
 
-                // Render Table
+                /* Trust pillar compliance — derive from profile if available */
+                setPillarPill('identity', isVerified ? 'Verified' : 'Pending', isVerified ? 'ok' : 'warn');
+                setPillarPill('gps', profile.gps_verified ? 'Pinned' : 'Required', profile.gps_verified ? 'ok' : 'warn');
+                setPillarPill('price', stats.flagged_listings > 0 ? 'Flagged' : 'Clear', stats.flagged_listings > 0 ? 'risk' : 'ok');
+                setPillarPill('images', profile.images_ok ? 'Unique' : 'Check', profile.images_ok ? 'ok' : 'warn');
+                setPillarPill('payments', profile.payments_ok ? 'Active' : 'Pending', profile.payments_ok ? 'ok' : 'warn');
+                setPillarPill('fraud', stats.flagged_listings === 0 ? 'Clear' : 'Review', stats.flagged_listings === 0 ? 'ok' : 'risk');
+
+                /* Listings table */
                 const tbody = document.getElementById('listings-table');
-                if (listings.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">No listings found. Start by adding one!</td></tr>`;
+                if (!listings || listings.length === 0) {
+                    tbody.innerHTML = `
+            <tr>
+              <td colspan="5" class="empty-state">
+                <i class="ti ti-building"></i>
+                No listings yet. Start by adding one!
+              </td>
+            </tr>`;
                 } else {
+                    const badgeClass = s => s === 'approved' ? 'badge-verified' : s === 'flagged' ? 'badge-risk' : 'badge-pending';
                     tbody.innerHTML = listings.map(p => `
-                        <tr>
-                            <td class="fw-semibold">${p.title}</td>
-                            <td>${p.area_name}</td>
-                            <td>K ${Number(p.price).toLocaleString()}</td>
-                            <td>
-                                <span class="badge ${p.status === 'approved' ? 'badge-verified' : 'badge-pending'}">
-                                    ${p.status}
-                                </span>
-                            </td>
-                            <td class="text-muted small">${new Date(p.created_at).toLocaleDateString()}</td>
-                        </tr>
-                    `).join('');
+            <tr>
+              <td>
+                <div class="prop-title">${p.title}</div>
+                <div class="prop-id">#${p.property_id || p.id || '—'}</div>
+              </td>
+              <td>${p.area_name}</td>
+              <td class="price-cell">K ${Number(p.price).toLocaleString()}</td>
+              <td><span class="${badgeClass(p.status)}">${p.status}</span></td>
+              <td class="date-cell">${new Date(p.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+            </tr>
+          `).join('');
                 }
             }
         }
 
+        /* ── Logout (your original) ── */
         async function logout() {
             await Iconics.call("auth/logout", "POST");
             window.location.href = "../auth.html";
         }
 
+        /* ── Auth check (your original) ── */
         window.onload = async () => {
             const auth = await Iconics.check();
             if (auth.status === "success" && auth.data.user.role === 'agent') {

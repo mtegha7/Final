@@ -1,6 +1,10 @@
 <?php
 
 require_once __DIR__ . '/../controllers/AuthController.php';
+// FIX: the default switch branch calls Response::error() but Response was
+// never loaded in this file. Any unknown action would produce a fatal
+// "Class 'Response' not found" error instead of a clean 404 JSON response.
+require_once __DIR__ . '/../core/Response.php';
 
 $controller = new AuthController();
 

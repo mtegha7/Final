@@ -2,6 +2,10 @@
 
 require_once __DIR__ . '/../controllers/AgentController.php';
 require_once __DIR__ . '/../core/Response.php';
+// FIX: Session::start() is called below but the Session class was never loaded
+// in this file. Without this require the script throws a fatal "Class not found"
+// error before any agent action can execute.
+require_once __DIR__ . '/../core/Session.php';
 
 $controller = new AgentController();
 $action = $_GET['action'] ?? '';

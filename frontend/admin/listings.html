@@ -8,67 +8,364 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         :root {
             --primary-dark: #0f1923;
             --accent-green: #35ac39;
-            --text-gray: #777;
+            --bg-page: #f4f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.07);
+            --radius-md: 8px;
+            --radius-lg: 14px;
+            --text-muted-color: #777;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            background: var(--bg-page);
+            color: #2c2c2a;
         }
 
+        /* ── Sidebar ── */
         .sidebar {
             height: 100vh;
             background: var(--primary-dark);
             color: white;
-            padding-top: 20px;
             position: fixed;
-            width: 240px;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
         }
 
-        .sidebar h2 {
+        .sidebar-brand {
+            padding: 22px 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .sidebar-brand h2 {
             font-family: 'Playfair Display', serif;
-            text-align: center;
-            font-size: 22px;
-            margin-bottom: 30px;
+            font-size: 19px;
             color: var(--accent-green);
+            margin: 0;
+        }
+
+        .sidebar-brand .sub {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.32);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .sidebar-admin-pill {
+            margin: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(53, 172, 57, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        .admin-pill-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-pill-role {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-section-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.25);
+            padding: 14px 22px 4px;
         }
 
         .nav-link {
             color: #adb5bd;
-            padding: 12px 25px;
-            transition: 0.3s;
+            padding: 11px 22px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+        }
+
+        .nav-link i {
+            font-size: 16px;
         }
 
         .nav-link:hover,
         .nav-link.active {
             color: white;
             background: rgba(255, 255, 255, 0.05);
-            border-left: 4px solid var(--accent-green);
+            border-left-color: var(--accent-green);
         }
 
+        .nav-link.danger {
+            color: #f87171 !important;
+        }
+
+        .nav-link.danger:hover {
+            border-left-color: #dc3545;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 14px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.25);
+            text-align: center;
+        }
+
+        /* ── Main ── */
         .main-content {
-            margin-left: 240px;
-            padding: 40px;
+            margin-left: 220px;
+            padding: 36px 40px;
         }
 
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .page-header .sub {
+            font-size: 13px;
+            color: var(--text-muted-color);
+            margin-top: 4px;
+        }
+
+        .btn-refresh {
+            font-size: 13px;
+            font-weight: 600;
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 10px 22px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .btn-refresh:hover {
+            background: #2d8f30;
+        }
+
+        .btn-refresh i {
+            font-size: 15px;
+        }
+
+        /* ── Table card ── */
         .table-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 0.5px solid var(--border-light);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .table-card-header {
+            padding: 16px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 0.5px solid var(--border-light);
+        }
+
+        .table-card-header h5 {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .table {
+            margin: 0;
+        }
+
+        .table thead th {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #999;
+            text-transform: uppercase;
+            border-bottom: 0.5px solid #eee;
+            padding: 12px 18px;
+            background: #fafaf9;
+        }
+
+        .table tbody td {
+            font-size: 13px;
+            vertical-align: middle;
+            padding: 14px 18px;
+            border-color: #f5f5f3;
+        }
+
+        .table tbody tr:hover {
+            background: #fafaf9;
+        }
+
+        .prop-title {
+            font-weight: 600;
+            color: #1a1a18;
+            margin-bottom: 2px;
+        }
+
+        .prop-area {
+            font-size: 11px;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .prop-area i {
+            font-size: 12px;
+        }
+
+        .badge-status {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-blocked {
+            background: #e2e8f0;
+            color: #475569;
         }
 
         .status-select {
-            font-size: 13px;
+            font-size: 12px;
             border-radius: 20px;
-            padding: 2px 10px;
-            border: 1px solid #ddd;
+            padding: 3px 10px;
+            border: 0.5px solid #ddd;
+            font-family: 'Montserrat', sans-serif;
+            background: white;
+            cursor: pointer;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .btn-action {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: var(--radius-md);
+            border: 0.5px solid var(--border-light);
+            background: transparent;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-action i {
+            font-size: 13px;
+        }
+
+        .btn-action.edit {
+            color: #185fa5;
+            border-color: #b5d4f4;
+        }
+
+        .btn-action.edit:hover {
+            background: #e6f1fb;
+        }
+
+        .btn-action.del {
+            color: #a32d2d;
+            border-color: #f7c1c1;
+        }
+
+        .btn-action.del:hover {
+            background: #fcebeb;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px;
+            color: #ccc;
+        }
+
+        .empty-state i {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 10px;
+            opacity: 0.4;
         }
     </style>
 </head>
@@ -76,39 +373,62 @@
 <body>
 
     <div class="sidebar">
-        <h2>Iconics Admin</h2>
-        <nav class="nav flex-column">
-            <a class="nav-link" href="dashboard.html">Dashboard</a>
-            <a class="nav-link active" href="listings.html">Listings</a>
-            <a class="nav-link" href="agents.html">Agents</a>
-            <hr style="background: rgba(255,255,255,0.1)">
-            <a class="nav-link text-danger" href="#" onclick="logout()">Logout</a>
+        <div class="sidebar-brand">
+            <h2>Iconics</h2>
+            <div class="sub">Admin Panel</div>
+        </div>
+        <div class="sidebar-admin-pill">
+            <div class="admin-avatar" id="sidebar-avatar">AD</div>
+            <div>
+                <div class="admin-pill-name" id="sidebar-name">Admin</div>
+                <div class="admin-pill-role">ADMINISTRATOR</div>
+            </div>
+        </div>
+        <nav class="nav flex-column" style="margin-top:4px;">
+            <div class="nav-section-label">Overview</div>
+            <a class="nav-link" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+            <a class="nav-link active" href="listings.html"><i class="ti ti-building"></i> Listings</a>
+            <div class="nav-section-label">Users</div>
+            <a class="nav-link" href="agents.html"><i class="ti ti-users"></i> Agents</a>
+            <hr style="border-color:rgba(255,255,255,0.08);margin:8px 22px;">
+            <a class="nav-link danger" href="#" onclick="logout()"><i class="ti ti-logout"></i> Logout</a>
         </nav>
+        <div class="sidebar-footer">IREA / FDVIS &nbsp;·&nbsp; Admin Panel</div>
     </div>
 
     <div class="main-content">
-        <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="page-header">
             <div>
-                <h1 style="font-family: 'Playfair Display', serif;">Property Management</h1>
-                <p class="text-muted">Review listings and manage platform status.</p>
+                <h1>Property Management</h1>
+                <div class="sub">Review listings and manage platform status.</div>
             </div>
-            <button class="btn btn-success" onclick="loadListings()">Refresh Data</button>
+            <button class="btn-refresh" onclick="loadListings()"><i class="ti ti-refresh"></i> Refresh</button>
         </div>
 
         <div class="table-card">
-            <table class="table align-middle">
-                <thead>
-                    <tr class="text-muted" style="font-size: 12px; text-transform: uppercase;">
-                        <th>Property</th>
-                        <th>Agent</th>
-                        <th>Price</th>
-                        <th>Status Control</th>
-                        <th class="text-end">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="listings-table-body">
-                </tbody>
-            </table>
+            <div class="table-card-header">
+                <h5>All listings</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Agent</th>
+                            <th>Price</th>
+                            <th>Status control</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listings-table-body">
+                        <tr>
+                            <td colspan="5" class="empty-state"><i class="ti ti-loader"></i>
+                                <p>Loading…</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -116,61 +436,68 @@
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
         async function loadListings() {
-            const res = await Iconics.call("property/list_all", "GET");
-            if (res.status === "success") {
-                const tbody = document.getElementById('listings-table-body');
+            const res = await Iconics.call('property/list_all', 'GET');
+            const tbody = document.getElementById('listings-table-body');
+            if (res.status === 'success' && res.data.length) {
                 tbody.innerHTML = res.data.map(p => `
-                    <tr>
-                        <td>
-                            <strong>${p.title}</strong><br>
-                            <small class="text-muted">${p.area_name || 'Global'}</small>
-                        </td>
-                        <td>${p.agent_name || 'Admin'}</td>
-                        <td>$${Number(p.price).toLocaleString()}</td>
-                        <td>
-                            <select class="status-select" onchange="updateStatus(${p.id}, this.value)">
-                                <option value="pending" ${p.status === 'pending' ? 'selected' : ''}>Pending</option>
-                                <option value="approved" ${p.status === 'approved' ? 'selected' : ''}>Approved</option>
-                                <option value="rejected" ${p.status === 'rejected' ? 'selected' : ''}>Rejected</option>
-                            </select>
-                        </td>
-                        <td class="text-end">
-                            <button class="btn btn-sm btn-outline-primary" onclick="window.location.href='view-listings.html?property_id=${p.id}'">Manage</button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteListing(${p.id})">Delete</button>
-                        </td>
-                    </tr>
-                `).join('');
+                <tr>
+                    <td>
+                        <div class="prop-title">${p.title}</div>
+                        <div class="prop-area"><i class="ti ti-map-pin"></i>${p.area_name || '—'}</div>
+                    </td>
+                    <td style="font-size:13px;">${p.agent_name || '—'}</td>
+                    <td style="font-weight:600;">K ${Number(p.price).toLocaleString()}</td>
+                    <td>
+                        <select class="status-select" onchange="updateStatus(${p.id}, this.value)">
+                            <option value="pending"  ${p.status === 'pending' ? 'selected' : ''}>Pending</option>
+                            <option value="approved" ${p.status === 'approved' ? 'selected' : ''}>Approved</option>
+                            <option value="rejected" ${p.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="action-group">
+                            <button class="btn-action edit" onclick="window.location.href='view-listings.html?property_id=${p.id}'">
+                                <i class="ti ti-edit"></i> Manage
+                            </button>
+                            <button class="btn-action del" onclick="deleteListing(${p.id})">
+                                <i class="ti ti-trash"></i> Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>`).join('');
+            } else {
+                tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="ti ti-building"></i><p>No listings found.</p></td></tr>';
             }
         }
 
         async function updateStatus(id, newStatus) {
-            const res = await Iconics.call("property/update_status", "POST", { id, status: newStatus });
-            if (res.status !== "success") {
-                alert("Status update failed.");
-            } else {
-                loadListings(); // Refresh the list
-            }
+            const res = await Iconics.call('property/update_status', 'POST', { id, status: newStatus });
+            if (res.status !== 'success') alert('Status update failed.');
+            else loadListings();
         }
 
         async function deleteListing(id) {
-            if (confirm("Permanently delete this?")) {
-                const res = await Iconics.call("property/delete", "POST", { id });
-                if (res.status === "success") loadListings();
+            if (confirm('Permanently delete this listing?')) {
+                const res = await Iconics.call('property/delete', 'POST', { id });
+                if (res.status === 'success') loadListings();
             }
         }
 
         async function logout() {
-            await Iconics.call("auth/logout", "POST");
-            window.location.href = "../auth.html";
+            await Iconics.call('auth/logout', 'POST');
+            window.location.href = '../auth.html';
         }
 
         window.onload = async () => {
             const auth = await Iconics.check();
-            if (auth.status === "success" && auth.data.user.role === 'admin') {
-                loadListings();
-            } else {
-                window.location.href = "../auth.html";
+            if (auth.status !== 'success' || auth.data.user.role !== 'admin') {
+                window.location.href = '../auth.html'; return;
             }
+            const name = auth.data.user.name || 'Admin';
+            const parts = name.trim().split(' ');
+            document.getElementById('sidebar-avatar').textContent = (parts.length >= 2 ? parts[0][0] + parts[parts.length - 1][0] : parts[0][0]).toUpperCase();
+            document.getElementById('sidebar-name').textContent = name;
+            loadListings();
         };
     </script>
 </body>

@@ -4,89 +4,509 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard — Iconics Admin</title>
+    <title>Dashboard — Iconics Admin</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         :root {
             --primary-dark: #0f1923;
             --accent-green: #35ac39;
-            --accent-red: #dc3545;
-            --text-gray: #777;
+            --bg-page: #f4f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.07);
+            --radius-md: 8px;
+            --radius-lg: 14px;
+            --text-muted-color: #777;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            background: var(--bg-page);
+            color: #2c2c2a;
         }
 
+        /* ── Sidebar ── */
         .sidebar {
             height: 100vh;
             background: var(--primary-dark);
             color: white;
-            padding-top: 20px;
             position: fixed;
-            width: 240px;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
         }
 
-        .sidebar h2 {
+        .sidebar-brand {
+            padding: 22px 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .sidebar-brand h2 {
             font-family: 'Playfair Display', serif;
-            text-align: center;
-            font-size: 22px;
-            margin-bottom: 30px;
+            font-size: 19px;
             color: var(--accent-green);
+            margin: 0;
+        }
+
+        .sidebar-brand .sub {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.32);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .sidebar-admin-pill {
+            margin: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(53, 172, 57, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        .admin-pill-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-pill-role {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-section-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.25);
+            padding: 14px 22px 4px;
         }
 
         .nav-link {
             color: #adb5bd;
-            padding: 12px 25px;
-            transition: 0.3s;
+            padding: 11px 22px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+        }
+
+        .nav-link i {
+            font-size: 16px;
         }
 
         .nav-link:hover,
         .nav-link.active {
             color: white;
             background: rgba(255, 255, 255, 0.05);
-            border-left: 4px solid var(--accent-green);
+            border-left-color: var(--accent-green);
         }
 
+        .nav-link.danger {
+            color: #f87171 !important;
+        }
+
+        .nav-link.danger:hover {
+            border-left-color: #dc3545;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 14px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.25);
+            text-align: center;
+        }
+
+        /* ── Main ── */
         .main-content {
-            margin-left: 240px;
-            padding: 40px;
+            margin-left: 220px;
+            padding: 36px 40px;
         }
 
-        .dashboard-section {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            gap: 16px;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .page-header .sub {
+            font-size: 13px;
+            color: var(--text-muted-color);
+            margin-top: 4px;
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: #eafbea;
+            border: 0.5px solid #b2dfb2;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #2d6a30;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        /* ── Stat cards ── */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
         }
 
         .stat-card {
-            border: none;
-            border-radius: 15px;
+            background: var(--card-bg);
+            border: 0.5px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
             padding: 20px;
-            background: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
 
-        .mono {
-            font-family: 'Courier New', Courier, monospace;
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .stat-icon i {
+            font-size: 20px;
+        }
+
+        .stat-num {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1a1a18;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted-color);
+            margin-top: 3px;
+        }
+
+        .stat-card.danger .stat-icon {
+            background: #fef2f2;
+        }
+
+        .stat-card.danger .stat-icon i {
+            color: #dc3545;
+        }
+
+        .stat-card.warning .stat-icon {
+            background: #fffbeb;
+        }
+
+        .stat-card.warning .stat-icon i {
+            color: #d97706;
+        }
+
+        .stat-card.blue .stat-icon {
+            background: #eff6ff;
+        }
+
+        .stat-card.blue .stat-icon i {
+            color: #2563eb;
+        }
+
+        .stat-card.green .stat-icon {
+            background: #f0fdf4;
+        }
+
+        .stat-card.green .stat-icon i {
+            color: var(--accent-green);
+        }
+
+        /* ── Two-col grid ── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* ── Cards ── */
+        .card {
+            background: var(--card-bg);
+            border: 0.5px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 0.5px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .btn-sm-link {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent-green);
+            text-decoration: none;
+            padding: 4px 12px;
+            border-radius: var(--radius-md);
+            border: 0.5px solid #b2dfb2;
+            transition: background 0.15s;
+        }
+
+        .btn-sm-link:hover {
+            background: #f0fdf4;
+            color: var(--accent-green);
+        }
+
+        .card-body {
+            padding: 0;
+        }
+
+        /* ── Fraud alert items ── */
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 20px;
+            border-bottom: 0.5px solid #f5f5f3;
+        }
+
+        .alert-item:last-child {
+            border-bottom: none;
+        }
+
+        .alert-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+
+        .alert-icon.price {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+        .alert-icon.gps {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .alert-icon.image {
+            background: #fef2f2;
+            color: #dc3545;
+        }
+
+        .alert-icon.default {
+            background: #f4f5f7;
+            color: #777;
+        }
+
+        .alert-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .alert-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a18;
+        }
+
+        .alert-meta {
+            font-size: 11px;
+            color: var(--text-muted-color);
+            margin-top: 2px;
+        }
+
+        .badge-type {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .badge-price {
+            background: #fffbeb;
+            color: #92400e;
+        }
+
+        .badge-gps {
+            background: #eff6ff;
+            color: #1e3a8a;
+        }
+
+        .badge-image {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .badge-default {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        /* ── Audit log rows ── */
+        .log-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 20px;
+            border-bottom: 0.5px solid #f5f5f3;
+            font-size: 12px;
+        }
+
+        .log-row:last-child {
+            border-bottom: none;
+        }
+
+        .log-time {
+            color: #bbb;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        .log-actor {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .log-actor.admin {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .log-actor.agent {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .log-actor.client {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .log-actor.system {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .log-event {
+            color: #2c2c2a;
+            flex: 1;
+        }
+
+        /* ── Empty state ── */
+        .empty-state {
+            padding: 36px 20px;
+            text-align: center;
+            color: #ccc;
             font-size: 13px;
         }
 
-        .badge-red {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-
-        .badge-blue {
-            background-color: #cce5ff;
-            color: #004085;
+        .empty-state i {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 8px;
+            opacity: 0.4;
         }
     </style>
 </head>
@@ -94,138 +514,228 @@
 <body>
 
     <div class="sidebar">
-        <h2>Iconics Admin</h2>
-        <nav class="nav flex-column">
-            <a class="nav-link active" href="dashboard.html">Dashboard</a>
-            <a class="nav-link" href="listings.html">Listings</a>
-            <a class="nav-link" href="agents.html">Agents</a>
-            <hr style="background: rgba(255,255,255,0.1)">
-            <a class="nav-link text-danger" href="#" onclick="logout()">Logout</a>
+        <div class="sidebar-brand">
+            <h2>Iconics</h2>
+            <div class="sub">Admin Panel</div>
+        </div>
+
+        <div class="sidebar-admin-pill">
+            <div class="admin-avatar" id="sidebar-avatar">AD</div>
+            <div>
+                <div class="admin-pill-name" id="sidebar-name">Admin</div>
+                <div class="admin-pill-role">ADMINISTRATOR</div>
+            </div>
+        </div>
+
+        <nav class="nav flex-column" style="margin-top:4px;">
+            <div class="nav-section-label">Overview</div>
+            <a class="nav-link active" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+            <a class="nav-link" href="listings.html"><i class="ti ti-building"></i> Listings</a>
+            <div class="nav-section-label">Users</div>
+            <a class="nav-link" href="agents.html"><i class="ti ti-users"></i> Agents</a>
+            <hr style="border-color:rgba(255,255,255,0.08);margin:8px 22px;">
+            <a class="nav-link danger" href="#" onclick="logout()"><i class="ti ti-logout"></i> Logout</a>
         </nav>
+
+        <div class="sidebar-footer">IREA / FDVIS &nbsp;·&nbsp; Admin Panel</div>
     </div>
 
     <div class="main-content">
-        <header class="mb-5">
-            <h1 style="font-family: 'Playfair Display';">System Overview</h1>
-            <p class="text-muted" id="admin-welcome">Welcome, Administrator</p>
-        </header>
+        <div class="page-header">
+            <div>
+                <h1>Overview Dashboard</h1>
+                <div class="sub">Fraud Detection &amp; Identity Verification</div>
+            </div>
+            <div class="status-pill"><span class="status-dot"></span> All systems operational</div>
+        </div>
 
-        <div class="row mb-5">
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <h6 class="text-muted small text-uppercase">Pending Review</h6>
-                    <h2 id="pending-count">--</h2>
+        <!-- Stat cards -->
+        <div class="stat-grid" id="stat-grid">
+            <!-- filled by JS -->
+            <div class="stat-card blue">
+                <div class="stat-icon"><i class="ti ti-building"></i></div>
+                <div>
+                    <div class="stat-num">—</div>
+                    <div class="stat-label">Active Listings</div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <h6 class="text-muted small text-uppercase">Fraud Flags</h6>
-                    <h2 id="flagged-count" class="text-danger">--</h2>
+            <div class="stat-card danger">
+                <div class="stat-icon"><i class="ti ti-alert-triangle"></i></div>
+                <div>
+                    <div class="stat-num">—</div>
+                    <div class="stat-label">Flagged</div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <h6 class="text-muted small text-uppercase">Verified Agents</h6>
-                    <h2 id="agent-count" class="text-success">--</h2>
+            <div class="stat-card green">
+                <div class="stat-icon"><i class="ti ti-users"></i></div>
+                <div>
+                    <div class="stat-num">—</div>
+                    <div class="stat-label">Agents</div>
+                </div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-icon"><i class="ti ti-clock"></i></div>
+                <div>
+                    <div class="stat-num">—</div>
+                    <div class="stat-label">Pending</div>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-lg-5">
-                <div class="dashboard-section">
-                    <h5 class="mb-4" style="font-family: 'Playfair Display';">Security Alerts</h5>
-                    <div id="fraud-alerts-container">
-                    </div>
+        <div class="two-col">
+            <!-- Fraud alerts -->
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="ti ti-shield-exclamation"
+                            style="font-size:16px;vertical-align:-2px;margin-right:6px;color:#dc3545;"></i>Fraud Alerts
+                    </h3>
+                    <a href="listings.html" class="btn-sm-link">View listings</a>
+                </div>
+                <div class="card-body" id="alert-feed">
+                    <div class="empty-state"><i class="ti ti-loader"></i>Loading…</div>
                 </div>
             </div>
 
-            <div class="col-lg-7">
-                <div class="dashboard-section">
-                    <h5 class="mb-4" style="font-family: 'Playfair Display';">System Audit Log</h5>
-                    <div class="table-responsive">
-                        <table class="table table-sm align-middle">
-                            <thead>
-                                <tr class="text-muted small">
-                                    <th>TIME</th>
-                                    <th>USER</th>
-                                    <th>EVENT</th>
-                                    <th>IP</th>
-                                </tr>
-                            </thead>
-                            <tbody id="audit-log-body">
-                            </tbody>
-                        </table>
-                    </div>
+            <!-- Audit log -->
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="ti ti-clipboard-list"
+                            style="font-size:16px;vertical-align:-2px;margin-right:6px;color:#2563eb;"></i>Recent Audit
+                        Log</h3>
+                </div>
+                <div class="card-body" id="audit-feed">
+                    <div class="empty-state"><i class="ti ti-loader"></i>Loading…</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="../assets/js/api.js"></script>
+    <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-        async function initDashboard() {
-            try {
-                // 1. Load Stats
-                const stats = await Iconics.call("admin/stats", "GET");
-                if (stats.status === "success") {
-                    document.getElementById('pending-count').innerText = stats.data.pending;
-                    document.getElementById('flagged-count').innerText = stats.data.flagged;
-                    document.getElementById('agent-count').innerText = stats.data.agents;
-                }
+        /* ── Helpers ── */
+        function fmtTime(ts) {
+            if (!ts) return '';
+            return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        function fmtDate(ts) {
+            if (!ts) return '';
+            return new Date(ts).toLocaleDateString([], { day: 'numeric', month: 'short' });
+        }
 
-                // 2. Load Fraud Alerts
-                const fraud = await Iconics.call("admin/fraud_logs", "GET");
-                if (fraud.status === "success") {
-                    const container = document.getElementById('fraud-alerts-container');
-                    container.innerHTML = fraud.data.map(log => `
-                        <div class="alert alert-light border-start border-danger border-4 mb-2 py-2">
-                            <div class="d-flex justify-content-between">
-                                <strong>${log.fraud_type}</strong>
-                                <span class="badge badge-red small">FLAGGED</span>
-                            </div>
-                            <small class="text-muted d-block">${log.reason}</small>
-                            <small class="mono text-muted">ID: #${log.property_id}</small>
-                        </div>
-                    `).join('');
-                }
-
-                // 3. Load Audit Log (Logic from audit_log.php)
-                const audit = await Iconics.call("admin/audit_logs", "GET");
-                if (audit.status === "success") {
-                    const tbody = document.getElementById('audit-log-body');
-                    tbody.innerHTML = audit.data.map(log => `
-                        <tr>
-                            <td class="mono small">${new Date(log.logged_at).toLocaleTimeString()}</td>
-                            <td>
-                                <strong>${log.full_name || 'System'}</strong><br>
-                                <span class="badge ${log.user_role === 'admin' ? 'badge-red' : 'badge-blue'} py-0" style="font-size:9px;">
-                                    ${log.user_role.toUpperCase()}
-                                </span>
-                            </td>
-                            <td class="mono small">${log.event_type}</td>
-                            <td class="mono small text-muted">${log.ip_address || '—'}</td>
-                        </tr>
-                    `).join('');
-                }
-            } catch (err) {
-                console.error("Dashboard Load Error:", err);
+        /*
+         * FIX — Fraud alerts: AdminController::getFraudLogs() returns rows from
+         * the fraud_logs table which has: id, property_id, agent_id, type, message,
+         * created_at. The original template referenced a.property_title, a.agent_name,
+         * a.risk_score and a.alert_type — none of which exist — producing "undefined"
+         * everywhere. We now use the actual fields: type, message, created_at.
+         */
+        function renderAlerts(logs) {
+            const feed = document.getElementById('alert-feed');
+            if (!logs || !logs.length) {
+                feed.innerHTML = '<div class="empty-state"><i class="ti ti-circle-check"></i>No fraud flags — system is clean</div>';
+                return;
             }
+
+            const iconMap = {
+                price: { cls: 'price', icon: 'ti-coin', badge: 'badge-price', label: 'Price' },
+                gps: { cls: 'gps', icon: 'ti-map-pin', badge: 'badge-gps', label: 'GPS' },
+                image: { cls: 'image', icon: 'ti-photo', badge: 'badge-image', label: 'Image' },
+            };
+
+            feed.innerHTML = logs.map(a => {
+                const t = (a.type || '').toLowerCase();
+                const meta = iconMap[t] || { cls: 'default', icon: 'ti-alert-circle', badge: 'badge-default', label: a.type || 'Flag' };
+                return `
+                <div class="alert-item">
+                    <div class="alert-icon ${meta.cls}"><i class="ti ${meta.icon}"></i></div>
+                    <div class="alert-content">
+                        <div class="alert-title">Property #${a.property_id ?? '—'}</div>
+                        <div class="alert-meta">${a.message || 'No details'} &nbsp;·&nbsp; ${fmtDate(a.created_at)}</div>
+                    </div>
+                    <span class="badge-type ${meta.badge}">${meta.label}</span>
+                </div>`;
+            }).join('');
+        }
+
+        /*
+         * FIX — Audit log: AdminController::getAuditLogs() returns l.description
+         * but the audit_logs schema column is `action`, not `description`. The
+         * original template also referenced l.user_role as a raw string for the
+         * coloured badge but never styled it. Both fixed below: we read `action`
+         * (falling back to `description` for backward compat), and style the role
+         * badge with the correct CSS class.
+         */
+        function renderAuditLog(logs) {
+            const feed = document.getElementById('audit-feed');
+            if (!logs || !logs.length) {
+                feed.innerHTML = '<div class="empty-state"><i class="ti ti-clipboard"></i>No recent activity</div>';
+                return;
+            }
+
+            feed.innerHTML = logs.map(l => {
+                const role = (l.user_role || 'system').toLowerCase();
+                const event = l.action || l.description || 'System event';
+                const actor = (l.full_name || role).split(' ')[0]; // first name or role
+                return `
+                <div class="log-row">
+                    <span class="log-time">${fmtTime(l.logged_at)}</span>
+                    <span class="log-actor ${role}">${role.toUpperCase()}</span>
+                    <span class="log-event"><strong>${actor}</strong> — ${event}</span>
+                </div>`;
+            }).join('');
+        }
+
+        async function loadDashboard() {
+            /* ── Stats ── */
+            const statsRes = await Iconics.call('admin/stats', 'GET');
+            if (statsRes.status === 'success') {
+                const s = statsRes.data;
+                document.getElementById('stat-grid').innerHTML = `
+                <div class="stat-card blue">
+                    <div class="stat-icon"><i class="ti ti-building"></i></div>
+                    <div><div class="stat-num">${s.agents ?? 0}</div><div class="stat-label">Agents</div></div>
+                </div>
+                <div class="stat-card danger">
+                    <div class="stat-icon"><i class="ti ti-alert-triangle"></i></div>
+                    <div><div class="stat-num">${s.flagged ?? 0}</div><div class="stat-label">Flagged</div></div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-icon"><i class="ti ti-clock"></i></div>
+                    <div><div class="stat-num">${s.pending ?? 0}</div><div class="stat-label">Pending</div></div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-icon"><i class="ti ti-circle-check"></i></div>
+                    <div><div class="stat-num">—</div><div class="stat-label">Approved</div></div>
+                </div>`;
+            }
+
+            /* ── Fraud logs ── */
+            const fraudRes = await Iconics.call('admin/fraud_logs', 'GET');
+            renderAlerts(fraudRes.status === 'success' ? fraudRes.data.slice(0, 6) : []);
+
+            /* ── Audit log ── */
+            const auditRes = await Iconics.call('admin/audit_logs', 'GET');
+            renderAuditLog(auditRes.status === 'success' ? auditRes.data : []);
         }
 
         async function logout() {
-            await Iconics.call("auth/logout", "POST");
-            window.location.href = "../auth.html";
+            await Iconics.call('auth/logout', 'POST');
+            window.location.href = '../auth.html';
         }
 
         window.onload = async () => {
             const auth = await Iconics.check();
-            if (auth.status === "success" && auth.data.user.role === 'admin') {
-                document.getElementById('admin-welcome').innerText = "Welcome, " + auth.data.user.name;
-                initDashboard();
-            } else {
-                window.location.href = "../auth.html";
+            if (auth.status !== 'success' || auth.data.user.role !== 'admin') {
+                window.location.href = '../auth.html';
+                return;
             }
+            const name = auth.data.user.name || 'Admin';
+            const parts = name.trim().split(' ');
+            const initials = parts.length >= 2 ? parts[0][0] + parts[parts.length - 1][0] : parts[0][0];
+            document.getElementById('sidebar-avatar').textContent = initials.toUpperCase();
+            document.getElementById('sidebar-name').textContent = name;
+            loadDashboard();
         };
     </script>
 </body>

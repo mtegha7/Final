@@ -36,6 +36,16 @@ class AgentController
             return;
         }
 
+        // Validate file types
+        $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+        if (
+            !in_array($_FILES['id_image']['type'], $allowedTypes) ||
+            !in_array($_FILES['selfie']['type'], $allowedTypes)
+        ) {
+            Response::error("Only JPG and PNG images are allowed.");
+            return;
+        }
+
         // Define the upload directory (Ensure this matches where Python looks)
         $uploadDir = __DIR__ . '/../../uploads/ids/';
         if (!file_exists($uploadDir)) {
@@ -56,9 +66,8 @@ class AgentController
         ) {
 
             try {
-                // Call the Service which handles the PythonBridge logic
-                // This returns [status, confidence, verification_status]
-                $result = $this->faceService->verify($userId, $idName, $selfieName);
+                // FIXED: Pass absolute paths to the service
+                $result = $this->faceService->verify($userId, $idPath, $selfiePath);
 
                 if ($result['status'] === 'success') {
                     Response::success($result, "Verification processed. Status: " . $result['verification_status']);
