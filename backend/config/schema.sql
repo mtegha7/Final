@@ -170,3 +170,20 @@ INSERT INTO blantyre_zones (area_name, latitude, longitude) VALUES
 ('Mpemba',          -15.9000, 34.9500),
 ('Chirimba',        -15.8400, 35.0600),
 ('Chileka',         -15.6800, 34.9700);
+
+
+
+USE iconics_db;
+
+CREATE TABLE IF NOT EXISTS payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    property_id INT NOT NULL,
+    client_id INT NOT NULL,
+    amount DECIMAL(12,2) NOT NULL,
+    transaction_reference VARCHAR(100) UNIQUE,
+    payment_method ENUM('mpamba', 'airtel_money', 'card') DEFAULT 'mpamba',
+    status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (property_id) REFERENCES properties(id),
+    FOREIGN KEY (client_id) REFERENCES users(id)
+);

@@ -228,6 +228,56 @@
             loadProperties();
         };
     </script>
+
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content payment-card">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Secure Payment</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="payment-form">
+                        <div class="mb-4">
+                            <label class="form-label text-muted small">CARDHOLDER NAME</label>
+                            <input type="text" class="form-control custom-input" placeholder="e.g. John Doe" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label text-muted small">CARD NUMBER</label>
+                            <div class="input-group">
+                                <span class="input-group-text custom-input border-end-0"><i
+                                        class="ti ti-credit-card"></i></span>
+                                <input type="text" class="form-control custom-input border-start-0"
+                                    placeholder="0000 0000 0000 0000" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-7 mb-4">
+                                <label class="form-label text-muted small">EXPIRATION DATE</label>
+                                <input type="text" class="form-control custom-input" placeholder="MM / YY" required>
+                            </div>
+                            <div class="col-md-5 mb-4">
+                                <label class="form-label text-muted small">CVV</label>
+                                <input type="password" class="form-control custom-input" placeholder="***" maxlength="3"
+                                    required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold mt-2">
+                            Confirm Payment
+                        </button>
+
+                        <div class="text-center mt-3">
+                            <span class="text-muted small"><i class="ti ti-lock"></i> Encrypted & Secure</span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
