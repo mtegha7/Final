@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User — Iconics Admin</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary-dark: #0f1923;
+            --accent-green: #35ac39;
+            --bg-page: #f4f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.07);
+            --radius-md: 8px;
+            --radius-lg: 14px;
+            --text-muted-color: #777;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg-page);
+            color: #2c2c2a;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            height: 100vh;
+            background: var(--primary-dark);
+            color: white;
+            position: fixed;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            padding: 22px 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .sidebar-brand h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 19px;
+            color: var(--accent-green);
+            margin: 0;
+        }
+
+        .sidebar-brand .sub {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.32);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .sidebar-admin-pill {
+            margin: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(53, 172, 57, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        .admin-pill-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-pill-role {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-section-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.25);
+            padding: 14px 22px 4px;
+        }
+
+        .nav-link {
+            color: #adb5bd;
+            padding: 11px 22px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+        }
+
+        .nav-link i {
+            font-size: 16px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            border-left-color: var(--accent-green);
+        }
+
+        .nav-link.danger {
+            color: #f87171 !important;
+        }
+
+        .nav-link.danger:hover {
+            border-left-color: #dc3545;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 14px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.25);
+            text-align: center;
+        }
+
+        /* Main */
+        .main-content {
+            margin-left: 220px;
+            padding: 36px 40px;
+        }
+
+        .page-header {
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted-color);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.15s;
+        }
+
+        .back-btn:hover {
+            color: var(--accent-green);
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .page-header .sub {
+            font-size: 13px;
+            color: var(--text-muted-color);
+            margin-top: 4px;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 0.5px solid var(--border-light);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            max-width: 640px;
+        }
+
+        .form-card-header {
+            padding: 22px 28px 18px;
+            border-bottom: 0.5px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-card-header i {
+            font-size: 20px;
+            color: var(--accent-green);
+        }
+
+        .form-card-header h5 {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .form-card-body {
+            padding: 28px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #444;
+            display: block;
+        }
+
+        .form-label .req {
+            color: #dc3545;
+            margin-left: 2px;
+        }
+
+        .form-label .opt {
+            color: #aaa;
+            font-weight: 400;
+            margin-left: 4px;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            border: 1px solid #e5e7eb;
+            font-size: 13px;
+            width: 100%;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            font-family: 'Montserrat', sans-serif;
+            background: white;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px rgba(53, 172, 57, 0.1);
+        }
+
+        .form-control.is-invalid,
+        .form-select.is-invalid {
+            border-color: #dc3545;
+        }
+
+        .invalid-feedback {
+            font-size: 11px;
+            color: #dc3545;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-control.is-invalid~.invalid-feedback,
+        .form-select.is-invalid~.invalid-feedback {
+            display: block;
+        }
+
+        .form-hint {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .mb-field {
+            margin-bottom: 20px;
+        }
+
+        .section-divider {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #bbb;
+            margin: 24px 0 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+
+        .role-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .role-card {
+            border: 1.5px solid #e5e7eb;
+            border-radius: var(--radius-md);
+            padding: 14px 12px;
+            cursor: pointer;
+            transition: 0.15s;
+            text-align: center;
+        }
+
+        .role-card:hover {
+            border-color: var(--accent-green);
+            background: #f6fef6;
+        }
+
+        .role-card.selected {
+            border-color: var(--accent-green);
+            background: #edfaee;
+        }
+
+        .role-card input[type="radio"] {
+            display: none;
+        }
+
+        .role-card-icon {
+            font-size: 22px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .role-card-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .role-card-desc {
+            font-size: 10px;
+            color: #888;
+            margin-top: 3px;
+        }
+
+        .password-toggle-wrap {
+            position: relative;
+        }
+
+        .password-toggle-wrap .form-control {
+            padding-right: 42px;
+        }
+
+        .toggle-pw {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #aaa;
+            font-size: 16px;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .toggle-pw:hover {
+            color: #555;
+        }
+
+        .strength-bar {
+            height: 3px;
+            border-radius: 3px;
+            margin-top: 8px;
+            background: #eee;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s, background 0.3s;
+            width: 0;
+        }
+
+        .strength-label {
+            font-size: 10px;
+            margin-top: 4px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            padding-top: 8px;
+            border-top: 0.5px solid #f0f0ee;
+            margin-top: 8px;
+        }
+
+        .btn-submit {
+            background: var(--accent-green);
+            border: none;
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 13px 28px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-submit:hover {
+            background: #2e9732;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            border: 1px solid #ddd;
+            color: #555;
+            border-radius: var(--radius-md);
+            padding: 13px 22px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-cancel:hover {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .alert-box {
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            margin-bottom: 22px;
+            display: none;
+            max-width: 640px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 24px 18px;
+            }
+
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+
+            .role-cards {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .role-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <h2>Iconics</h2>
+            <div class="sub">Admin Panel</div>
+        </div>
+
+        <div class="sidebar-admin-pill">
+            <div class="admin-avatar" id="sidebar-avatar">AD</div>
+            <div>
+                <div class="admin-pill-name" id="sidebar-name">Admin</div>
+                <div class="admin-pill-role">ADMINISTRATOR</div>
+            </div>
+        </div>
+
+        <nav class="nav flex-column" style="margin-top:4px;">
+            <div class="nav-section-label">Overview</div>
+            <a class="nav-link" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+            <a class="nav-link" href="listings.html"><i class="ti ti-building"></i> Listings</a>
+
+            <div class="nav-section-label">Users</div>
+            <a class="nav-link" href="agents.html"><i class="ti ti-users"></i> Agents</a>
+            <a class="nav-link active" href="users.html"><i class="ti ti-user-circle"></i> Users</a>
+
+            <hr style="border-color:rgba(255,255,255,0.08);margin:8px 22px;">
+            <a class="nav-link danger" href="#" onclick="logout()"><i class="ti ti-logout"></i> Logout</a>
+        </nav>
+
+        <div class="sidebar-footer">IREA / FDVIS · Admin Panel</div>
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-header">
+            <a class="back-btn" href="users.html">
+                <i class="ti ti-arrow-left"></i> Back to Users
+            </a>
+        </div>
+
+        <div style="margin-bottom:24px;">
+            <h1 style="font-family:'Playfair Display',serif;font-size:26px;color:#1a1a18;margin:0;">Create New User</h1>
+            <div style="font-size:13px;color:var(--text-muted-color);margin-top:4px;">
+                Add a new user account to the Iconics platform.
+            </div>
+        </div>
+
+        <div id="alertBox" class="alert-box"></div>
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <i class="ti ti-user-plus"></i>
+                <h5>User Details</h5>
+            </div>
+
+            <div class="form-card-body">
+                <form id="createUserForm" novalidate>
+
+                    <!-- Basic Info -->
+                    <div class="field-row">
+                        <div class="mb-field">
+                            <label class="form-label" for="fullName">
+                                Full Name <span class="req">*</span>
+                            </label>
+                            <input type="text" id="fullName" name="full_name" class="form-control"
+                                placeholder="e.g. Chisomo Banda" autocomplete="off" required>
+                            <div class="invalid-feedback">Full name is required.</div>
+                        </div>
+
+                        <div class="mb-field">
+                            <label class="form-label" for="email">
+                                Email Address <span class="req">*</span>
+                            </label>
+                            <input type="email" id="email" name="email" class="form-control"
+                                placeholder="e.g. chisomo@email.com" autocomplete="off" required>
+                            <div class="invalid-feedback">A valid email address is required.</div>
+                        </div>
+                    </div>
+
+                    <!-- Role — matches schema ENUM: admin | agent | client -->
+                    <div class="section-divider">Role</div>
+
+                    <div class="mb-field">
+                        <div class="role-cards" id="roleCards">
+                            <label class="role-card" id="card-admin">
+                                <input type="radio" name="role" value="admin">
+                                <span class="role-card-icon">🛡️</span>
+                                <div class="role-card-label">Admin</div>
+                                <div class="role-card-desc">Full platform access</div>
+                            </label>
+
+                            <label class="role-card" id="card-agent">
+                                <input type="radio" name="role" value="agent">
+                                <span class="role-card-icon">🏠</span>
+                                <div class="role-card-label">Agent</div>
+                                <div class="role-card-desc">Lists & manages properties</div>
+                            </label>
+
+                            <label class="role-card" id="card-client">
+                                <input type="radio" name="role" value="client">
+                                <span class="role-card-icon">👤</span>
+                                <div class="role-card-label">Client</div>
+                                <div class="role-card-desc">Browses & enquires</div>
+                            </label>
+                        </div>
+                        <div id="roleError" style="font-size:11px;color:#dc3545;margin-top:6px;display:none;">
+                            Please select a role.
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="section-divider">Password</div>
+
+                    <div class="field-row">
+                        <div class="mb-field">
+                            <label class="form-label" for="password">
+                                Password <span class="req">*</span>
+                            </label>
+                            <div class="password-toggle-wrap">
+                                <input type="password" id="password" name="password" class="form-control"
+                                    placeholder="Min. 6 characters" minlength="6" required>
+                                <button type="button" class="toggle-pw" onclick="togglePw('password', this)"
+                                    title="Show/hide">
+                                    <i class="ti ti-eye"></i>
+                                </button>
+                            </div>
+                            <!-- Password strength indicator -->
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                            <div class="strength-label" id="strengthLabel" style="color:#bbb;">—</div>
+                            <div class="invalid-feedback">Password must be at least 6 characters.</div>
+                        </div>
+
+                        <div class="mb-field">
+                            <label class="form-label" for="confirmPassword">
+                                Confirm Password <span class="req">*</span>
+                            </label>
+                            <div class="password-toggle-wrap">
+                                <input type="password" id="confirmPassword" class="form-control"
+                                    placeholder="Repeat password" required>
+                                <button type="button" class="toggle-pw" onclick="togglePw('confirmPassword', this)"
+                                    title="Show/hide">
+                                    <i class="ti ti-eye"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback" id="confirmError">Passwords do not match.</div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="form-actions">
+                        <a class="btn-cancel" href="users.html">Cancel</a>
+                        <button type="submit" class="btn-submit" id="submitBtn">
+                            <i class="ti ti-user-plus"></i>
+                            <span id="submitBtnText">Create User</span>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const auth = await Iconics.check();
+                if (auth.status !== 'success' || auth.data.user.role !== 'admin') {
+                    window.location.href = '../auth.html';
+                    return;
+                }
+                const name = auth.data.user.name || 'Admin';
+                const parts = name.trim().split(' ');
+                document.getElementById('sidebar-avatar').textContent =
+                    (parts.length >= 2 ? parts[0][0] + parts[parts.length - 1][0] : parts[0][0]).toUpperCase();
+                document.getElementById('sidebar-name').textContent = name;
+            } catch (e) {
+                console.warn('Auth check skipped:', e.message);
+            }
+
+            // Role card selection highlight
+            document.querySelectorAll('.role-card input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+                    radio.closest('.role-card').classList.add('selected');
+                    document.getElementById('roleError').style.display = 'none';
+                });
+            });
+
+            // Password strength
+            document.getElementById('password').addEventListener('input', updateStrength);
+
+            // Form submit
+            document.getElementById('createUserForm').addEventListener('submit', handleSubmit);
+        });
+
+        function togglePw(fieldId, btn) {
+            const input = document.getElementById(fieldId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'ti ti-eye-off';
+            } else {
+                input.type = 'password';
+                icon.className = 'ti ti-eye';
+            }
+        }
+
+        function updateStrength() {
+            const pw = document.getElementById('password').value;
+            const fill = document.getElementById('strengthFill');
+            const lbl = document.getElementById('strengthLabel');
+
+            let score = 0;
+            if (pw.length >= 6) score++;
+            if (pw.length >= 10) score++;
+            if (/[A-Z]/.test(pw)) score++;
+            if (/[0-9]/.test(pw)) score++;
+            if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+            const levels = [
+                { pct: '0%', color: '#eee', label: '—', labelColor: '#bbb' },
+                { pct: '25%', color: '#ef4444', label: 'Weak', labelColor: '#ef4444' },
+                { pct: '50%', color: '#f97316', label: 'Fair', labelColor: '#f97316' },
+                { pct: '75%', color: '#eab308', label: 'Good', labelColor: '#eab308' },
+                { pct: '90%', color: '#22c55e', label: 'Strong', labelColor: '#22c55e' },
+                { pct: '100%', color: '#16a34a', label: 'Very strong', labelColor: '#16a34a' },
+            ];
+            const lvl = levels[score] || levels[0];
+            fill.style.width = lvl.pct;
+            fill.style.background = lvl.color;
+            lbl.textContent = pw.length ? lvl.label : '—';
+            lbl.style.color = lvl.labelColor;
+        }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const role = document.querySelector('input[name="role"]:checked')?.value;
+
+            let valid = true;
+
+            // Full name
+            const nameInput = document.getElementById('fullName');
+            if (!fullName) { nameInput.classList.add('is-invalid'); valid = false; }
+            else { nameInput.classList.remove('is-invalid'); }
+
+            // Email
+            const emailInput = document.getElementById('email');
+            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            if (!email || !emailOk) { emailInput.classList.add('is-invalid'); valid = false; }
+            else { emailInput.classList.remove('is-invalid'); }
+
+            // Role
+            if (!role) {
+                document.getElementById('roleError').style.display = 'block';
+                valid = false;
+            } else {
+                document.getElementById('roleError').style.display = 'none';
+            }
+
+            // Password
+            const pwInput = document.getElementById('password');
+            if (!password || password.length < 6) {
+                pwInput.classList.add('is-invalid');
+                valid = false;
+            } else {
+                pwInput.classList.remove('is-invalid');
+            }
+
+            // Confirm password
+            const cpInput = document.getElementById('confirmPassword');
+            if (!confirmPassword || confirmPassword !== password) {
+                cpInput.classList.add('is-invalid');
+                document.getElementById('confirmError').textContent =
+                    !confirmPassword ? 'Please confirm the password.' : 'Passwords do not match.';
+                valid = false;
+            } else {
+                cpInput.classList.remove('is-invalid');
+            }
+
+            if (!valid) return;
+
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitBtnText');
+            submitBtn.disabled = true;
+            submitText.textContent = 'Creating…';
+
+            try {
+                // Calls auth.php register endpoint (same as the existing openCreateUserModal flow)
+                const response = await fetch('/api/auth.php?action=register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ full_name: fullName, email, password, role })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    showAlert('User created successfully! Redirecting…', 'success');
+                    setTimeout(() => { window.location.href = 'users.html'; }, 1800);
+                } else {
+                    showAlert(data.message || 'Failed to create user', 'error');
+                }
+            } catch (err) {
+                showAlert('Could not reach the server: ' + err.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitText.textContent = 'Create User';
+            }
+        }
+
+        function showAlert(message, type) {
+            const box = document.getElementById('alertBox');
+            box.className = `alert-box alert-${type}`;
+            box.style.display = 'block';
+            box.textContent = message;
+            if (type === 'error') setTimeout(() => { box.style.display = 'none'; }, 5000);
+        }
+
+        async function logout() {
+            await Iconics.call('auth/logout', 'POST');
+            window.location.href = '../auth.html';
+        }
+    </script>
+</body>
+
+</html>

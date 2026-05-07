@@ -8,18 +8,57 @@ class PythonBridge
     {
         $scriptPath = dirname(__DIR__, 2) . '/python/' . $scriptName;
 
+        if (!file_exists($scriptPath)) {
+            return [
+                "error" => "Python script not found: {$scriptPath}"
+            ];
+        }
+
         $escapedArgs = array_map('escapeshellarg', $args);
 
-        $command = self::$pythonPath . " " .
+        $command =
+            self::$pythonPath . " " .
             escapeshellarg($scriptPath) . " " .
-            implode(" ", $escapedArgs) . " 2>&1";
+            implode(" ", $escapedArgs);
 
-        $output = shell_exec($command);
+        $output = [];
+        $exitCode = 0;
 
-        //remove python warning and log noise
-        $lines = explode("\n", trim($output));
-        $jsonLine = trim(end($lines));
+        exec($command . " 2>&1", $output, $exitCode);
 
-        return json_decode($jsonLine, true);
+        $rawOutput = implode("\n", $output);
+
+        // Log everything for debugging
+        file_put_contents(
+            __DIR__ . '/python_debug.log',
+            "\n====================\n" .
+                "COMMAND:\n{$command}\n\n" .
+                "EXIT CODE:\n{$exitCode}\n\n" .
+                "OUTPUT:\n{$rawOutput}\n",
+            FILE_APPEND
+        );
+
+        // Find JSON in output
+        preg_match('/\{.*\}/s', $rawOutput, $matches);
+
+        if (!$matches) {
+            return [
+                "error" => "No valid JSON returned from Python",
+                "raw_output" => $rawOutput,
+                "exit_code" => $exitCode
+            ];
+        }
+
+        $decoded = json_decode($matches[0], true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return [
+                "error" => "Invalid JSON from Python",
+                "json_error" => json_last_error_msg(),
+                "raw_output" => $rawOutput
+            ];
+        }
+
+        return $decoded;
     }
 }

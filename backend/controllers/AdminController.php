@@ -182,6 +182,49 @@ class AdminController
         }
     }
 
+    public function deleteUser()
+    {
+        $input = json_decode(file_get_contents("php://input"), true);
+        $id = $input['id'] ?? null;
+
+        if (!$id) {
+            Response::error("User ID is required");
+            return;
+        }
+
+        try {
+            $db = Database::getInstance()->conn;
+
+            // Start transaction
+            $db->beginTransaction();
+
+            // Delete related records first (cascade delete)
+            // Delete agent profile if exists
+            $stmt = $db->prepare("DELETE FROM agent_profiles WHERE user_id = ?");
+            $stmt->execute([$id]);
+
+            // You may want to handle properties, reviews, etc. here
+            // For example:
+            // $stmt = $db->prepare("DELETE FROM properties WHERE user_id = ?");
+            // $stmt->execute([$id]);
+
+            // Finally delete the user
+            $stmt = $db->prepare("DELETE FROM users WHERE id = ?");
+            $stmt->execute([$id]);
+
+            // Commit transaction
+            $db->commit();
+
+            Response::success([], "User deleted successfully");
+        } catch (Throwable $e) {
+            // Rollback on error
+            if ($db->inTransaction()) {
+                $db->rollBack();
+            }
+            Response::error("Delete failed: " . $e->getMessage());
+        }
+    }
+
     public function getAgentProfile()
     {
         $input = json_decode(file_get_contents("php://input"), true);

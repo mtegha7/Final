@@ -4,47 +4,53 @@ import os
 from deepface import DeepFace
 
 try:
+
     if len(sys.argv) < 3:
         raise Exception("Usage: face_verify.py <id_path> <selfie_path>")
 
     id_image = sys.argv[1]
     selfie_image = sys.argv[2]
 
-    # Verify files exist
     if not os.path.exists(id_image):
         raise Exception(f"ID image not found: {id_image}")
-    
+
     if not os.path.exists(selfie_image):
         raise Exception(f"Selfie image not found: {selfie_image}")
 
-    # model_name="VGG-Face" is the industry standard for this type of verification
     result = DeepFace.verify(
-        id_image, 
-        selfie_image, 
-        enforce_detection=True, 
-        model_name="VGG-Face",
-        detector_backend="opencv"  # More reliable than default
+        img1_path=id_image,
+        img2_path=selfie_image,
+        model_name="Facenet512",
+        detector_backend="retinaface",
+        enforce_detection=False
     )
 
-    # DeepFace 'distance' (0 to 1). We convert to 0-100 confidence.
-    confidence = round((1 - result["distance"]) * 100, 2)
+    distance = float(result["distance"])
 
-    # Business logic for auto-verification threshold
-    status = "verified" if confidence >= 75 else "manual_review"
+    confidence = max(
+        0,
+        min(
+            100,
+            round((1 - distance) * 100, 2)
+        )
+    )
 
     response = {
-        "status": status,
-        "verified": result["verified"],
+        "status": "success",
+        "verified": bool(result["verified"]),
         "confidence": confidence,
-        "distance": result["distance"]
+        "distance": distance
     }
 
     print(json.dumps(response))
 
 except Exception as e:
+
     error_response = {
         "status": "error",
         "error": str(e)
     }
+
     print(json.dumps(error_response))
+
     sys.exit(1)

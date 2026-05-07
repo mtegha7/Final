@@ -62,6 +62,10 @@ try {
             $controller->updateUser();
             break;
 
+        case 'delete_user':
+            $controller->deleteUser();
+            break;
+
         case 'get_agent_profile':
             $controller->getAgentProfile();
             break;

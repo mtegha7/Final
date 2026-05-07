@@ -5,11 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Identity Verification — IREA FDIVS</title>
+
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+
     <style>
         *,
         *::before,
@@ -39,6 +43,7 @@
         }
 
         /* ── Sidebar ── */
+
         .sidebar {
             height: 100vh;
             background: var(--primary-dark);
@@ -149,12 +154,14 @@
         }
 
         /* ── Main Content ── */
+
         .main-content {
             margin-left: 220px;
             padding: 36px 40px;
         }
 
         /* ── Page Header ── */
+
         .page-header {
             margin-bottom: 28px;
         }
@@ -172,7 +179,8 @@
             margin-top: 4px;
         }
 
-        /* ── Form card — matches create-listing.html exactly ── */
+        /* ── Form card ── */
+
         .form-card {
             background: var(--card-bg);
             border-radius: var(--radius-lg);
@@ -222,7 +230,8 @@
             padding: 24px 26px;
         }
 
-        /* ── Instructions note — matches hash-note in create-listing ── */
+        /* ── Instructions ── */
+
         .instructions-note {
             display: flex;
             align-items: flex-start;
@@ -258,7 +267,8 @@
             margin-bottom: 3px;
         }
 
-        /* ── Upload zone — identical to create-listing.html ── */
+        /* ── Upload Zone ── */
+
         .upload-zone {
             border: 2px dashed #d0d0cc;
             border-radius: var(--radius-md);
@@ -312,15 +322,19 @@
             color: var(--accent-green);
         }
 
-        /* ── Image preview — identical to create-listing.html ── */
+        /* ── Preview ── */
+
         .img-preview {
             margin-top: 14px;
         }
 
         .img-preview img {
-            max-height: 160px;
+            max-height: 220px;
             border-radius: var(--radius-md);
             border: 0.5px solid var(--border-light);
+            width: 100%;
+            max-width: 420px;
+            object-fit: cover;
         }
 
         .img-name {
@@ -330,7 +344,8 @@
             margin-top: 6px;
         }
 
-        /* ── Submit area — identical to create-listing.html ── */
+        /* ── Submit ── */
+
         .submit-area {
             display: flex;
             align-items: center;
@@ -365,11 +380,8 @@
             cursor: not-allowed;
         }
 
-        .btn-submit i {
-            font-size: 17px;
-        }
+        /* ── Status ── */
 
-        /* ── Status message — identical to create-listing.html ── */
         .status-message {
             border-radius: var(--radius-md);
             padding: 14px 18px;
@@ -400,8 +412,15 @@
             display: block;
         }
 
-        /* ── Responsive ── */
+        video {
+            width: 100%;
+            max-width: 420px;
+            border-radius: 12px;
+            background: #000;
+        }
+
         @media (max-width: 768px) {
+
             .sidebar {
                 width: 100%;
                 height: auto;
@@ -418,8 +437,10 @@
 
 <body>
 
-    <!-- ── Sidebar — matches dashboard.html exactly ── -->
+    <!-- Sidebar -->
+
     <div class="sidebar">
+
         <div class="sidebar-brand">
             <h2>IREA Agent</h2>
             <div class="sub">FDVIS Platform</div>
@@ -427,6 +448,7 @@
 
         <div class="sidebar-agent-pill">
             <div class="agent-avatar" id="sidebar-avatar">—</div>
+
             <div>
                 <div class="agent-pill-name" id="sidebar-name">Loading…</div>
                 <div class="agent-pill-role">Registered Agent</div>
@@ -434,240 +456,664 @@
         </div>
 
         <nav class="nav flex-column" style="margin-top: 8px;">
+
             <a class="nav-link" href="dashboard.html">
                 <i class="ti ti-layout-dashboard"></i> Dashboard
             </a>
+
             <a class="nav-link active" href="verify.html">
                 <i class="ti ti-id"></i> Identity Verification
             </a>
+
             <a class="nav-link" href="listings.html">
                 <i class="ti ti-building"></i> My Listings
             </a>
+
             <hr style="border-color: rgba(255,255,255,0.08); margin: 8px 22px;">
+
             <a class="nav-link text-danger" href="#" onclick="logout()">
                 <i class="ti ti-logout"></i> Logout
             </a>
+
         </nav>
 
-        <div class="sidebar-footer">IREA / FDVIS &nbsp;·&nbsp; Rental Trust Platform</div>
+        <div class="sidebar-footer">
+            IREA / FDVIS · Rental Trust Platform
+        </div>
+
     </div>
 
-    <!-- ── Main Content ── -->
+    <!-- Main -->
+
     <div class="main-content">
 
         <div class="page-header">
             <h1>Identity Verification</h1>
-            <div class="sub">Complete your identity verification to unlock premium features.</div>
+            <div class="sub">
+                Complete your identity verification to unlock premium features.
+            </div>
         </div>
 
-        <!-- Requirements note -->
+        <!-- Instructions -->
+
         <div class="instructions-note">
             <i class="ti ti-info-circle"></i>
+
             <div>
                 <strong>Verification requirements</strong>
+
                 <ul>
                     <li>Provide a clear photo of your government-issued ID</li>
                     <li>Provide a recent selfie for face matching</li>
                     <li>Ensure good lighting and clear visibility of your face</li>
                     <li>Face must match the ID document</li>
-                    <li>Files must be in JPG or PNG format, max 5 MB each</li>
+                    <li>Files must be JPG or PNG format, max 5MB each</li>
                 </ul>
             </div>
         </div>
 
         <form id="verification-form" enctype="multipart/form-data">
 
-            <!-- Section 1: Government ID -->
+            <!-- Government ID -->
+
             <div class="form-card">
+
                 <div class="form-card-header">
+
                     <div class="card-icon" style="background:#e6f1fb;">
                         <i class="ti ti-id" style="color:#185fa5;"></i>
                     </div>
+
                     <div>
                         <h4>Government-issued ID</h4>
-                        <p>Upload a photo of your passport, driver's licence, or national ID</p>
+
+                        <p>
+                            Upload a passport, driver's licence, or national ID
+                        </p>
                     </div>
+
                 </div>
+
                 <div class="form-card-body">
+
                     <div class="upload-zone" id="id-upload-zone">
+
                         <input type="file" id="id-image" name="id_image" accept="image/jpeg,image/jpg,image/png"
                             required>
+
                         <i class="ti ti-cloud-upload"></i>
-                        <div class="upload-label">Click to upload or drag &amp; drop</div>
-                        <div class="upload-sub">JPG or PNG — max 5 MB</div>
+
+                        <div class="upload-label">
+                            Click to upload or drag & drop
+                        </div>
+
+                        <div class="upload-sub">
+                            JPG or PNG — max 5 MB
+                        </div>
+
                     </div>
+
                     <div class="img-preview" id="id-preview"></div>
+
                 </div>
             </div>
 
-            <!-- Section 2: Selfie -->
+            <!-- Selfie -->
+
             <div class="form-card">
+
                 <div class="form-card-header">
+
                     <div class="card-icon" style="background:#eaf3de;">
                         <i class="ti ti-camera-selfie" style="color:#3b6d11;"></i>
                     </div>
+
                     <div>
                         <h4>Live selfie</h4>
-                        <p>Upload a recent selfie — your face must be clearly visible and unobstructed</p>
+                        <p>Capture a live selfie or upload one</p>
                     </div>
+
                 </div>
+
                 <div class="form-card-body">
-                    <div class="upload-zone" id="selfie-upload-zone">
-                        <input type="file" id="selfie" name="selfie" accept="image/jpeg,image/jpg,image/png" required>
-                        <i class="ti ti-cloud-upload"></i>
-                        <div class="upload-label">Click to upload or drag &amp; drop</div>
-                        <div class="upload-sub">JPG or PNG — max 5 MB</div>
+
+                    <!-- Toggle -->
+
+                    <div class="d-flex gap-3 mb-4">
+
+                        <button type="button" class="btn btn-outline-success active" id="camera-mode-btn">
+
+                            <i class="ti ti-camera"></i>
+                            Use Camera
+
+                        </button>
+
+                        <button type="button" class="btn btn-outline-secondary" id="upload-mode-btn">
+
+                            <i class="ti ti-upload"></i>
+                            Upload Selfie
+
+                        </button>
+
                     </div>
-                    <div class="img-preview" id="selfie-preview"></div>
+
+                    <!-- Camera Mode -->
+
+                    <div id="camera-section">
+
+                        <video id="selfie-video" autoplay playsinline></video>
+
+                        <canvas id="selfie-canvas" style="display:none;"></canvas>
+
+                        <div class="d-flex gap-2 mt-3">
+
+                            <button type="button" class="btn btn-success" id="capture-btn">
+
+                                <i class="ti ti-camera"></i>
+                                Capture Selfie
+
+                            </button>
+
+                            <button type="button" class="btn btn-secondary" id="retake-btn" style="display:none;">
+
+                                <i class="ti ti-refresh"></i>
+                                Retake
+
+                            </button>
+
+                        </div>
+
+                        <div class="img-preview" id="camera-preview"></div>
+
+                    </div>
+
+                    <!-- Upload Mode -->
+
+                    <div id="upload-section" style="display:none;">
+
+                        <div class="upload-zone" id="selfie-upload-zone">
+
+                            <input type="file" id="selfie" name="selfie" accept="image/jpeg,image/jpg,image/png">
+
+                            <i class="ti ti-cloud-upload"></i>
+
+                            <div class="upload-label">
+                                Click to upload or drag & drop
+                            </div>
+
+                            <div class="upload-sub">
+                                JPG or PNG — max 5 MB
+                            </div>
+
+                        </div>
+
+                        <div class="img-preview" id="selfie-preview"></div>
+
+                    </div>
+
                 </div>
+
             </div>
 
             <!-- Submit -->
+
             <div class="submit-area">
+
                 <button type="submit" class="btn-submit" id="submit-btn">
-                    <i class="ti ti-shield-check"></i> Verify Identity
+
+                    <i class="ti ti-shield-check"></i>
+                    Verify Identity
+
                 </button>
+
             </div>
 
-            <!-- Status Message — same id as original so JS works unchanged -->
+            <!-- Status -->
+
             <div class="status-message" id="status-message"></div>
 
         </form>
 
-    </div><!-- /main-content -->
+    </div>
 
     <script src="../assets/js/api.js"></script>
+
     <script>
-        /* ── Sidebar avatar initials (same pattern as dashboard) ── */
+
+        /* Sidebar */
+
         function setAvatar(name) {
+
             const parts = (name || '').trim().split(' ');
+
             const initials = parts.length >= 2
                 ? parts[0][0] + parts[parts.length - 1][0]
                 : (parts[0] || 'A')[0];
-            document.getElementById('sidebar-avatar').textContent = initials.toUpperCase();
-            document.getElementById('sidebar-name').textContent = name || 'Agent';
+
+            document.getElementById('sidebar-avatar').textContent =
+                initials.toUpperCase();
+
+            document.getElementById('sidebar-name').textContent =
+                name || 'Agent';
         }
 
-        /* ── Auth guard + populate sidebar (same pattern as dashboard) ── */
+        /* Auth */
+
         window.onload = async () => {
+
             const auth = await Iconics.check();
-            if (auth.status === 'success' && auth.data.user.role === 'agent') {
+
+            if (
+                auth.status === 'success' &&
+                auth.data.user.role === 'agent'
+            ) {
                 setAvatar(auth.data.user.full_name);
+                startCamera();
+
             } else {
                 window.location.href = '../auth.html';
             }
         };
 
-        /* ── Logout (same as dashboard) ── */
+        /* Logout */
+
         async function logout() {
+
             await Iconics.call('auth/logout', 'POST');
+
             window.location.href = '../auth.html';
         }
 
-        /* ────────────────────────────────────────────────
-           ORIGINAL LOGIC BELOW — NOT MODIFIED
-        ──────────────────────────────────────────────── */
+        /* Preview */
 
-        /* File preview — original logic, adapted to new upload-zone markup */
         function previewFile(event, zoneId, previewId) {
+
             const file = event.target.files[0];
+
             if (file) {
-                // Validate file size (max 5MB)
+
                 if (file.size > 5 * 1024 * 1024) {
                     alert('File size must be less than 5MB');
                     event.target.value = '';
                     return;
                 }
 
-                // Validate file type
-                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                const allowedTypes = [
+                    'image/jpeg',
+                    'image/jpg',
+                    'image/png'
+                ];
+
                 if (!allowedTypes.includes(file.type)) {
+
                     alert('Only JPG and PNG images are allowed');
+
                     event.target.value = '';
+
                     return;
                 }
 
                 const zone = document.getElementById(zoneId);
+
                 zone.classList.add('has-file');
-                zone.querySelector('i').className = 'ti ti-photo-check';
+
+                zone.querySelector('i').className =
+                    'ti ti-photo-check';
 
                 const reader = new FileReader();
+
                 reader.onload = function (e) {
+
                     document.getElementById(previewId).innerHTML =
+
                         `<img src="${e.target.result}" alt="Preview">` +
-                        `<div class="img-name"><i class="ti ti-check" style="font-size:12px;vertical-align:-1px;"></i> ${file.name}</div>`;
+
+                        `<div class="img-name">
+                            <i class="ti ti-check"
+                                style="font-size:12px;vertical-align:-1px;">
+                            </i>
+                            ${file.name}
+                        </div>`;
                 };
+
                 reader.readAsDataURL(file);
             }
         }
 
-        document.getElementById('id-image').addEventListener('change', function (e) {
-            previewFile(e, 'id-upload-zone', 'id-preview');
-        });
+        document.getElementById('id-image')
+            .addEventListener('change', function (e) {
 
-        document.getElementById('selfie').addEventListener('change', function (e) {
-            previewFile(e, 'selfie-upload-zone', 'selfie-preview');
-        });
+                previewFile(
+                    e,
+                    'id-upload-zone',
+                    'id-preview'
+                );
+            });
 
-        /* Form submission — original logic, not modified */
-        document.getElementById('verification-form').addEventListener('submit', async function (e) {
-            e.preventDefault();
+        document.getElementById('selfie')
+            .addEventListener('change', function (e) {
 
-            const submitBtn = document.getElementById('submit-btn');
-            const statusMsg = document.getElementById('status-message');
+                previewFile(
+                    e,
+                    'selfie-upload-zone',
+                    'selfie-preview'
+                );
+            });
 
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="ti ti-loader"></i> Verifying…';
-            statusMsg.className = 'status-message info';
-            statusMsg.innerHTML = '<strong>⏳ Processing:</strong> Analysing images and matching faces…';
+        /* Camera Logic */
+
+        const cameraModeBtn =
+            document.getElementById('camera-mode-btn');
+
+        const uploadModeBtn =
+            document.getElementById('upload-mode-btn');
+
+        const cameraSection =
+            document.getElementById('camera-section');
+
+        const uploadSection =
+            document.getElementById('upload-section');
+
+        const video =
+            document.getElementById('selfie-video');
+
+        const canvas =
+            document.getElementById('selfie-canvas');
+
+        const captureBtn =
+            document.getElementById('capture-btn');
+
+        const retakeBtn =
+            document.getElementById('retake-btn');
+
+        const cameraPreview =
+            document.getElementById('camera-preview');
+
+        let stream = null;
+
+        let capturedSelfieBlob = null;
+
+        /* Start Camera */
+
+        async function startCamera() {
 
             try {
-                const formData = new FormData(this);
 
-                const response = await fetch('http://localhost/Final/backend/index.php?route=agent&action=verify', {
-                    method: 'POST',
-                    body: formData,
-                    credentials: 'include'  // FIXED: Include cookies for session handling
+                stream = await navigator.mediaDevices.getUserMedia({
+
+                    video: {
+                        facingMode: "user"
+                    },
+
+                    audio: false
                 });
 
-                // Check if response is ok
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                video.srcObject = stream;
 
-                const result = await response.json();
+            } catch (err) {
 
-                if (result.success) {
-                    const verificationStatus = result.data.verification_status || 'processed';
-                    const confidence = result.data.confidence || 0;
-
-                    statusMsg.className = 'status-message success';
-                    statusMsg.innerHTML = `
-                        <strong>✓ Verification Successful!</strong><br>
-                        Status: <strong>${verificationStatus}</strong><br>
-                        Confidence: <strong>${confidence.toFixed(2)}%</strong><br>
-                        Redirecting to dashboard…
-                    `;
-                    submitBtn.innerHTML = '<i class="ti ti-circle-check"></i> Verified';
-
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 2500);
-                } else {
-                    statusMsg.className = 'status-message error';
-                    statusMsg.innerHTML = `<strong>✗ Verification Failed:</strong> ${result.message || 'Please try again with clearer images.'}`;
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="ti ti-shield-check"></i> Verify Identity';
-                }
-            } catch (error) {
-                console.error('Verification error:', error);
-                statusMsg.className = 'status-message error';
-                statusMsg.innerHTML = `<strong>✗ Error:</strong> ${error.message}. Please check your connection and try again.`;
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="ti ti-shield-check"></i> Verify Identity';
+                alert(
+                    'Unable to access camera: ' + err.message
+                );
             }
+        }
+
+        /* Stop Camera */
+
+        function stopCamera() {
+
+            if (stream) {
+
+                stream.getTracks()
+                    .forEach(track => track.stop());
+            }
+        }
+
+        /* Camera Mode */
+
+        cameraModeBtn.addEventListener('click', () => {
+
+            cameraModeBtn.classList.add(
+                'active',
+                'btn-outline-success'
+            );
+
+            uploadModeBtn.classList.remove('active');
+
+            cameraSection.style.display = 'block';
+
+            uploadSection.style.display = 'none';
+
+            startCamera();
         });
+
+        /* Upload Mode */
+
+        uploadModeBtn.addEventListener('click', () => {
+
+            uploadModeBtn.classList.add('active');
+
+            cameraModeBtn.classList.remove('active');
+
+            cameraSection.style.display = 'none';
+
+            uploadSection.style.display = 'block';
+
+            stopCamera();
+        });
+
+        /* Capture Selfie */
+
+        captureBtn.addEventListener('click', () => {
+
+            const context = canvas.getContext('2d');
+
+            canvas.width = video.videoWidth;
+
+            canvas.height = video.videoHeight;
+
+            context.drawImage(
+                video,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            canvas.toBlob(blob => {
+
+                capturedSelfieBlob = blob;
+
+                const imageUrl =
+                    URL.createObjectURL(blob);
+
+                cameraPreview.innerHTML = `
+                    <img src="${imageUrl}" alt="Captured Selfie">
+
+                    <div class="img-name">
+                        <i class="ti ti-check"></i>
+                        Selfie captured successfully
+                    </div>
+                `;
+
+                captureBtn.style.display = 'none';
+
+                retakeBtn.style.display = 'inline-block';
+
+            }, 'image/jpeg', 0.95);
+        });
+
+        /* Retake */
+
+        retakeBtn.addEventListener('click', () => {
+
+            capturedSelfieBlob = null;
+
+            cameraPreview.innerHTML = '';
+
+            captureBtn.style.display = 'inline-block';
+
+            retakeBtn.style.display = 'none';
+        });
+
+        /* Cleanup */
+
+        window.addEventListener('beforeunload', () => {
+            stopCamera();
+        });
+
+        /* Submit */
+
+        document.getElementById('verification-form')
+            .addEventListener('submit', async function (e) {
+
+                e.preventDefault();
+
+                const submitBtn =
+                    document.getElementById('submit-btn');
+
+                const statusMsg =
+                    document.getElementById('status-message');
+
+                submitBtn.disabled = true;
+
+                submitBtn.innerHTML =
+                    '<i class="ti ti-loader"></i> Verifying…';
+
+                statusMsg.className =
+                    'status-message info';
+
+                statusMsg.innerHTML =
+                    '<strong>⏳ Processing:</strong> Analysing images and matching faces…';
+
+                try {
+
+                    const formData = new FormData(this);
+
+                    /* Camera selfie */
+
+                    if (capturedSelfieBlob) {
+
+                        const selfieFile = new File(
+                            [capturedSelfieBlob],
+                            'live-selfie.jpg',
+                            {
+                                type: 'image/jpeg'
+                            }
+                        );
+
+                        formData.set(
+                            'selfie',
+                            selfieFile
+                        );
+                    }
+
+                    /* Validation */
+
+                    if (
+                        !capturedSelfieBlob &&
+                        !document.getElementById('selfie').files.length
+                    ) {
+
+                        throw new Error(
+                            'Please capture or upload a selfie'
+                        );
+                    }
+
+                    const response = await fetch(
+                        'http://localhost/Final/backend/index.php?route=agent&action=verify',
+                        {
+                            method: 'POST',
+                            body: formData,
+                            credentials: 'include'
+                        }
+                    );
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            `HTTP error! status: ${response.status}`
+                        );
+                    }
+
+                    const result =
+                        await response.json();
+
+                    if (result.success) {
+
+                        const verificationStatus =
+                            result.data.verification_status || 'processed';
+
+                        const confidence =
+                            result.data.confidence || 0;
+
+                        statusMsg.className =
+                            'status-message success';
+
+                        statusMsg.innerHTML = `
+                            <strong>✓ Verification Successful!</strong><br>
+
+                            Status:
+                            <strong>${verificationStatus}</strong><br>
+
+                            Confidence:
+                            <strong>${confidence.toFixed(2)}%</strong><br>
+
+                            Redirecting to dashboard…
+                        `;
+
+                        submitBtn.innerHTML =
+                            '<i class="ti ti-circle-check"></i> Verified';
+
+                        setTimeout(() => {
+
+                            stopCamera();
+
+                            window.location.href =
+                                'dashboard.html';
+
+                        }, 2500);
+
+                    } else {
+
+                        statusMsg.className =
+                            'status-message error';
+
+                        statusMsg.innerHTML = `
+                            <strong>✗ Verification Failed:</strong>
+                            ${result.message || 'Please try again with clearer images.'}
+                        `;
+
+                        submitBtn.disabled = false;
+
+                        submitBtn.innerHTML =
+                            '<i class="ti ti-shield-check"></i> Verify Identity';
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        'Verification error:',
+                        error
+                    );
+
+                    statusMsg.className =
+                        'status-message error';
+
+                    statusMsg.innerHTML = `
+                        <strong>✗ Error:</strong>
+                        ${error.message}
+                    `;
+
+                    submitBtn.disabled = false;
+
+                    submitBtn.innerHTML =
+                        '<i class="ti ti-shield-check"></i> Verify Identity';
+                }
+            });
+
     </script>
+
 </body>
 
 </html>

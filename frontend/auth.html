@@ -19,7 +19,6 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--bg-dull);
-            /* Stronger Grid Pattern */
             background-image:
                 linear-gradient(rgba(0, 0, 0, 0.07) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 0, 0, 0.07) 1px, transparent 1px);
@@ -65,6 +64,12 @@
             transform: translateY(-2px);
         }
 
+        .btn-auth:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .back-link {
             text-decoration: none;
             color: #6b7280;
@@ -89,6 +94,26 @@
             cursor: pointer;
             font-weight: 600;
         }
+
+        .alert-msg {
+            font-size: 0.85rem;
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .alert-msg.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+        }
+
+        .alert-msg.success {
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #86efac;
+        }
     </style>
 </head>
 
@@ -103,25 +128,29 @@
             Back to Home
         </a>
 
+        <!-- LOGIN SECTION -->
         <div id="login-section">
             <h2 class="auth-header">Welcome Back</h2>
+            <div id="login-msg" class="alert-msg"></div>
             <form id="loginForm">
                 <div class="mb-3">
                     <label class="form-label small fw-bold">Email Address</label>
-                    <input type="email" name="email" class="form-control" required placeholder="admin@irea.com">
+                    <input type="email" name="email" class="form-control" required placeholder="Email Address">
                 </div>
                 <div class="mb-4">
                     <label class="form-label small fw-bold">Password</label>
                     <input type="password" name="password" class="form-control" required placeholder="••••••••">
                 </div>
-                <button type="submit" class="btn-auth">Sign In</button>
+                <button type="submit" class="btn-auth" id="loginBtn">Sign In</button>
             </form>
             <p class="text-center mt-4 small">Need an account? <span class="toggle-link"
                     onclick="toggleAuth()">Register</span></p>
         </div>
 
+        <!-- REGISTER SECTION -->
         <div id="register-section" style="display: none;">
             <h2 class="auth-header">Create Account</h2>
+            <div id="register-msg" class="alert-msg"></div>
             <form id="registerForm">
                 <div class="mb-3">
                     <label class="form-label small fw-bold">Full Name</label>
@@ -142,7 +171,7 @@
                         <option value="agent">Agent</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-auth">Register</button>
+                <button type="submit" class="btn-auth" id="registerBtn">Register</button>
             </form>
             <p class="text-center mt-4 small">Already joined? <span class="toggle-link"
                     onclick="toggleAuth()">Login</span></p>
@@ -151,24 +180,83 @@
 
     <script src="assets/js/api.js"></script>
     <script>
+        // ── helpers ──────────────────────────────────────────────────────────
+        function showMsg(elId, message, type = 'error') {
+            const el = document.getElementById(elId);
+            el.textContent = Array.isArray(message) ? message.join(' ') : message;
+            el.className = `alert-msg ${type}`;
+            el.style.display = 'block';
+        }
+
+        function hideMsg(elId) {
+            const el = document.getElementById(elId);
+            el.style.display = 'none';
+        }
+
+        function setLoading(btnId, loading) {
+            const btn = document.getElementById(btnId);
+            btn.disabled = loading;
+            btn.textContent = loading ? 'Please wait...' : btn.dataset.label;
+        }
+
+        // Store original button labels
+        document.getElementById('loginBtn').dataset.label = 'Sign In';
+        document.getElementById('registerBtn').dataset.label = 'Register';
+
+        // ── toggle ────────────────────────────────────────────────────────────
         function toggleAuth() {
             const login = document.getElementById('login-section');
             const reg = document.getElementById('register-section');
             const isLogin = login.style.display !== 'none';
             login.style.display = isLogin ? 'none' : 'block';
             reg.style.display = isLogin ? 'block' : 'none';
+            hideMsg('login-msg');
+            hideMsg('register-msg');
         }
 
+        // ── LOGIN ─────────────────────────────────────────────────────────────
         document.getElementById('loginForm').onsubmit = async (e) => {
             e.preventDefault();
-            const data = Object.fromEntries(new FormData(e.target));
-            const res = await Iconics.login(data);
+            hideMsg('login-msg');
+            setLoading('loginBtn', true);
 
-            if (res.status === "success" && res.data.user) {
-                // REDIRECT LOGIC
-                Iconics.redirectByRole(res.data.user.role);
-            } else {
-                alert(res.message || "Invalid Login");
+            try {
+                const data = Object.fromEntries(new FormData(e.target));
+                const res = await Iconics.login(data);
+
+                if (res.status === 'success' && res.data.user) {
+                    showMsg('login-msg', 'Login successful! Redirecting...', 'success');
+                    Iconics.redirectByRole(res.data.user.role);
+                } else {
+                    showMsg('login-msg', res.message || 'Invalid credentials');
+                    setLoading('loginBtn', false);
+                }
+            } catch (err) {
+                showMsg('login-msg', 'Network error. Please try again.');
+                setLoading('loginBtn', false);
+            }
+        };
+
+        // ── REGISTER ──────────────────────────────────────────────────────────
+        document.getElementById('registerForm').onsubmit = async (e) => {
+            e.preventDefault();
+            hideMsg('register-msg');
+            setLoading('registerBtn', true);
+
+            try {
+                const data = Object.fromEntries(new FormData(e.target));
+                const res = await Iconics.register(data);
+
+                if (res.status === 'success' && res.data.user) {
+                    showMsg('register-msg', 'Account created! Redirecting...', 'success');
+                    Iconics.redirectByRole(res.data.user.role);
+                } else {
+                    showMsg('register-msg', res.message || 'Registration failed. Please try again.');
+                    setLoading('registerBtn', false);
+                }
+            } catch (err) {
+                showMsg('register-msg', 'Network error. Please try again.');
+                setLoading('registerBtn', false);
             }
         };
     </script>

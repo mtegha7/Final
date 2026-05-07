@@ -162,6 +162,45 @@
             font-size: 15px;
         }
 
+        /* ── Tabs ── */
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .tab-btn {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            color: #777;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-dark);
+            border-bottom-color: var(--accent-green);
+        }
+
+        .badge-count {
+            background: var(--accent-green);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 10px;
+            display: none;
+        }
+
         /* ── Summary pills ── */
         .summary-row {
             display: flex;
@@ -328,12 +367,18 @@
             color: #856404;
         }
 
-        .status-rejected {
+        .status-rejected,
+        .status-flagged {
             background: #f8d7da;
             color: #721c24;
         }
 
-        .status-flagged {
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-failed {
             background: #f8d7da;
             color: #721c24;
         }
@@ -398,6 +443,63 @@
             margin-bottom: 16px;
         }
 
+        /* ── Viewing request cards ── */
+        .viewing-card {
+            background: var(--card-bg);
+            border: 0.5px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 18px 20px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+            flex-wrap: wrap;
+        }
+
+        .viewing-card .vc-left {
+            flex: 1;
+        }
+
+        .viewing-card .vc-ref {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 4px;
+        }
+
+        .viewing-card .vc-property {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1a1a18;
+            margin-bottom: 2px;
+        }
+
+        .viewing-card .vc-client {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .viewing-card .vc-date {
+            font-size: 11px;
+            color: #bbb;
+            margin-top: 6px;
+        }
+
+        .viewing-card .vc-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .viewing-card .vc-amount {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--accent-green);
+            white-space: nowrap;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -435,114 +537,187 @@
         <div class="page-header">
             <div>
                 <h1>My property listings</h1>
-                <div class="sub">Manage your active properties and check verification status.</div>
+                <div class="sub">Manage your active properties and track viewing requests.</div>
             </div>
             <a href="create-listing.html" class="btn-add"><i class="ti ti-plus"></i> Add new listing</a>
         </div>
 
-        <!-- Summary pills -->
-        <div class="summary-row">
-            <div class="summary-pill">
-                <i class="ti ti-building" style="color:#185fa5;"></i>
-                <div>
-                    <div class="val" id="count-total">—</div>
-                    <div class="lbl">Total</div>
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab('listings', this)">
+                <i class="ti ti-building"></i> My Listings
+            </button>
+            <button class="tab-btn" onclick="switchTab('viewings', this)">
+                <i class="ti ti-calendar-event"></i> Viewing Requests
+                <span class="badge-count" id="viewings-badge">0</span>
+            </button>
+        </div>
+
+        <!-- ═══ LISTINGS TAB ═══ -->
+        <div id="tab-listings">
+            <!-- Summary pills -->
+            <div class="summary-row">
+                <div class="summary-pill">
+                    <i class="ti ti-building" style="color:#185fa5;"></i>
+                    <div>
+                        <div class="val" id="count-total">—</div>
+                        <div class="lbl">Total</div>
+                    </div>
+                </div>
+                <div class="summary-pill">
+                    <i class="ti ti-circle-check" style="color:#3b6d11;"></i>
+                    <div>
+                        <div class="val" id="count-approved">—</div>
+                        <div class="lbl">Approved</div>
+                    </div>
+                </div>
+                <div class="summary-pill">
+                    <i class="ti ti-clock" style="color:#854f0b;"></i>
+                    <div>
+                        <div class="val" id="count-pending">—</div>
+                        <div class="lbl">Pending</div>
+                    </div>
+                </div>
+                <div class="summary-pill">
+                    <i class="ti ti-alert-triangle" style="color:#a32d2d;"></i>
+                    <div>
+                        <div class="val" id="count-flagged">—</div>
+                        <div class="lbl">Flagged</div>
+                    </div>
                 </div>
             </div>
-            <div class="summary-pill">
-                <i class="ti ti-circle-check" style="color:#3b6d11;"></i>
-                <div>
-                    <div class="val" id="count-approved">—</div>
-                    <div class="lbl">Approved</div>
+
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h5>All listings</h5>
+                    <div class="filter-row">
+                        <button class="filter-btn active" onclick="filterListings('all', this)">All</button>
+                        <button class="filter-btn" onclick="filterListings('approved', this)">Approved</button>
+                        <button class="filter-btn" onclick="filterListings('pending', this)">Pending</button>
+                        <button class="filter-btn" onclick="filterListings('flagged', this)">Flagged</button>
+                    </div>
                 </div>
-            </div>
-            <div class="summary-pill">
-                <i class="ti ti-clock" style="color:#854f0b;"></i>
-                <div>
-                    <div class="val" id="count-pending">—</div>
-                    <div class="lbl">Pending</div>
-                </div>
-            </div>
-            <div class="summary-pill">
-                <i class="ti ti-alert-triangle" style="color:#a32d2d;"></i>
-                <div>
-                    <div class="val" id="count-flagged">—</div>
-                    <div class="lbl">Flagged</div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Price</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listings-table-body">
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <i class="ti ti-loader"></i>
+                                    <p>Loading your listings…</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
-        <div class="table-card">
-            <div class="table-card-header">
-                <h5>All listings</h5>
-                <div class="filter-row">
-                    <button class="filter-btn active" onclick="filterListings('all', this)">All</button>
-                    <button class="filter-btn" onclick="filterListings('approved', this)">Approved</button>
-                    <button class="filter-btn" onclick="filterListings('pending', this)">Pending</button>
-                    <button class="filter-btn" onclick="filterListings('flagged', this)">Flagged</button>
+        <!-- ═══ VIEWINGS TAB ═══ -->
+        <div id="tab-viewings" style="display:none;">
+            <div class="summary-row">
+                <div class="summary-pill">
+                    <i class="ti ti-calendar-event" style="color:#185fa5;"></i>
+                    <div>
+                        <div class="val" id="vcount-total">—</div>
+                        <div class="lbl">Total Requests</div>
+                    </div>
+                </div>
+                <div class="summary-pill">
+                    <i class="ti ti-circle-check" style="color:#3b6d11;"></i>
+                    <div>
+                        <div class="val" id="vcount-completed">—</div>
+                        <div class="lbl">Confirmed</div>
+                    </div>
+                </div>
+                <div class="summary-pill">
+                    <i class="ti ti-coin" style="color:#854f0b;"></i>
+                    <div>
+                        <div class="val" id="vcount-revenue">—</div>
+                        <div class="lbl">Total Earned (MWK)</div>
+                    </div>
                 </div>
             </div>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Property</th>
-                            <th>Price</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th class="text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="listings-table-body">
-                        <tr>
-                            <td colspan="5" class="empty-state"><i class="ti ti-loader"></i>
-                                <p>Loading your listings…</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h5>Viewing Requests</h5>
+                    <div class="filter-row">
+                        <button class="filter-btn active" onclick="filterViewings('all', this)">All</button>
+                        <button class="filter-btn" onclick="filterViewings('completed', this)">Confirmed</button>
+                        <button class="filter-btn" onclick="filterViewings('pending', this)">Pending</button>
+                        <button class="filter-btn" onclick="filterViewings('failed', this)">Failed</button>
+                    </div>
+                </div>
+                <div id="viewings-list" style="padding: 8px 0;">
+                    <div class="empty-state">
+                        <i class="ti ti-loader"></i>
+                        <p>Loading viewing requests…</p>
+                    </div>
+                </div>
             </div>
         </div>
+
     </div>
 
     <script src="../assets/js/api.js"></script>
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
         let allListings = [];
+        let allViewings = [];
+        let viewingsLoaded = false;
 
+        // ── Tab switching ─────────────────────────────────────────────────
+        function switchTab(tab, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-listings').style.display = tab === 'listings' ? 'block' : 'none';
+            document.getElementById('tab-viewings').style.display = tab === 'viewings' ? 'block' : 'none';
+            if (tab === 'viewings' && !viewingsLoaded) loadViewings();
+        }
+
+        // ── Listings ──────────────────────────────────────────────────────
         function renderListings(data) {
             const tbody = document.getElementById('listings-table-body');
             if (!data || data.length === 0) {
                 tbody.innerHTML = `
-          <tr><td colspan="5" class="empty-state">
-            <i class="ti ti-building"></i>
-            <p>No listings found.</p>
-            <a href="create-listing.html" style="font-size:13px;font-weight:600;color:var(--accent-green);">Add your first listing →</a>
-          </td></tr>`;
+                    <tr><td colspan="5" class="empty-state">
+                        <i class="ti ti-building"></i>
+                        <p>No listings found.</p>
+                        <a href="create-listing.html" style="font-size:13px;font-weight:600;color:var(--accent-green);">Add your first listing →</a>
+                    </td></tr>`;
                 return;
             }
             tbody.innerHTML = data.map(p => `
-        <tr data-status="${p.status}">
-          <td>
-            <div class="prop-title">${p.title}</div>
-            <div class="prop-area"><i class="ti ti-map-pin"></i>${p.area_name}</div>
-            <div class="prop-id">#${p.id}</div>
-          </td>
-          <td class="price-cell">K ${Number(p.price).toLocaleString()}</td>
-          <td class="type-cell">${p.property_type}</td>
-          <td><span class="badge-status status-${p.status}">${p.status}</span></td>
-          <td>
-            <div class="action-group">
-              <button class="btn-action edit" onclick="window.location.href='edit-listing.html?id=${p.id}'">
-                <i class="ti ti-edit"></i> Edit
-              </button>
-              <button class="btn-action del" onclick="deleteListing(${p.id})">
-                <i class="ti ti-trash"></i> Delete
-              </button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
+                <tr data-status="${p.status}">
+                    <td>
+                        <div class="prop-title">${p.title}</div>
+                        <div class="prop-area"><i class="ti ti-map-pin"></i>${p.area_name}</div>
+                        <div class="prop-id">#${p.id}</div>
+                    </td>
+                    <td class="price-cell">K ${Number(p.price).toLocaleString()}</td>
+                    <td class="type-cell">${p.property_type}</td>
+                    <td><span class="badge-status status-${p.status}">${p.status}</span></td>
+                    <td>
+                        <div class="action-group">
+                            <button class="btn-action edit" onclick="window.location.href='edit-listing.html?id=${p.id}'">
+                                <i class="ti ti-edit"></i> Edit
+                            </button>
+                            <button class="btn-action del" onclick="deleteListing(${p.id})">
+                                <i class="ti ti-trash"></i> Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
         }
 
         function filterListings(status, btn) {
@@ -559,21 +734,14 @@
             document.getElementById('count-flagged').textContent = data.filter(p => p.status === 'flagged' || p.status === 'rejected').length;
         }
 
-        /* ── FIX: route was "properties/list_all" (plural — file does not exist).
-           Corrected to "property/list_all" which maps to property.php?action=list_all.
-           Also scoped results to the logged-in agent's own listings server-side via
-           agent/dashboard; here we filter client-side by agent_id after fetching all. ── */
         async function loadMyListings() {
             const auth = await Iconics.check();
             if (!auth || auth.status !== 'success') return;
 
             const currentUserId = auth.data.user.id;
+            const res = await Iconics.call('property/list_all', 'GET');
 
-            // FIX: was "properties/list_all" — corrected to "property/list_all"
-            const res = await Iconics.call("property/list_all", "GET");
-
-            if (res.status === "success") {
-                // Filter to only this agent's listings
+            if (res.status === 'success') {
                 allListings = res.data.filter(p => String(p.agent_id) === String(currentUserId));
                 updateSummary(allListings);
                 renderListings(allListings);
@@ -587,28 +755,109 @@
         }
 
         async function deleteListing(id) {
-            if (confirm("Are you sure you want to delete this listing? This cannot be undone.")) {
-                // FIX: was "properties/delete" — corrected to "property/delete"
-                const res = await Iconics.call("property/delete", "POST", { id });
-                if (res.status === "success") {
+            if (confirm('Are you sure you want to delete this listing? This cannot be undone.')) {
+                const res = await Iconics.call('property/delete', 'POST', { id });
+                if (res.status === 'success') {
                     loadMyListings();
                 } else {
-                    alert("Error: " + res.message);
+                    alert('Error: ' + res.message);
                 }
             }
         }
 
+        // ── Viewings ──────────────────────────────────────────────────────
+        async function loadViewings() {
+            const res = await Iconics.call('payment/agent_viewings', 'GET');
+            viewingsLoaded = true;
+
+            if (res.status === 'success') {
+                allViewings = res.data;
+                updateViewingsSummary(allViewings);
+                renderViewings(allViewings);
+
+                // Show badge if there are confirmed viewings
+                const count = allViewings.filter(v => v.status === 'completed').length;
+                if (count > 0) {
+                    const badge = document.getElementById('viewings-badge');
+                    badge.textContent = count;
+                    badge.style.display = 'inline-block';
+                }
+            } else {
+                document.getElementById('viewings-list').innerHTML = `
+                    <div class="empty-state">
+                        <i class="ti ti-alert-circle"></i>
+                        <p>Failed to load viewing requests.</p>
+                    </div>`;
+            }
+        }
+
+        function renderViewings(data) {
+            const container = document.getElementById('viewings-list');
+            if (!data || data.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="ti ti-calendar-off"></i>
+                        <p>No viewing requests yet. Once clients book a viewing on your properties, they'll appear here.</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = data.map(v => `
+                <div class="viewing-card">
+                    <div class="vc-left">
+                        <div class="vc-ref">${v.transaction_reference}</div>
+                        <div class="vc-property">${v.property_title || 'Property #' + v.property_id}</div>
+                        <div class="vc-client">
+                            <i class="ti ti-user" style="font-size:12px;"></i>
+                            ${v.client_name || 'Client #' + v.client_id}
+                            ${v.client_email ? `&nbsp;·&nbsp; ${v.client_email}` : ''}
+                        </div>
+                        <div class="vc-date">
+                            <i class="ti ti-clock" style="font-size:11px;"></i>
+                            ${new Date(v.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                    </div>
+                    <div class="vc-right">
+                        <div>
+                            <div class="vc-amount">MWK ${Number(v.amount).toLocaleString()}</div>
+                            <div style="font-size:11px;color:#bbb;text-align:right;margin-top:2px;text-transform:capitalize;">
+                                ${v.payment_method.replace('_', ' ')}
+                            </div>
+                        </div>
+                        <span class="badge-status status-${v.status}">${v.status}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterViewings(status, btn) {
+            document.querySelectorAll('#tab-viewings .filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const filtered = status === 'all' ? allViewings : allViewings.filter(v => v.status === status);
+            renderViewings(filtered);
+        }
+
+        function updateViewingsSummary(data) {
+            const completed = data.filter(v => v.status === 'completed');
+            document.getElementById('vcount-total').textContent = data.length;
+            document.getElementById('vcount-completed').textContent = completed.length;
+            document.getElementById('vcount-revenue').textContent = completed
+                .reduce((sum, v) => sum + Number(v.amount), 0)
+                .toLocaleString();
+        }
+
+        // ── Auth + logout ─────────────────────────────────────────────────
         async function logout() {
-            await Iconics.call("auth/logout", "POST");
-            window.location.href = "../auth.html";
+            await Iconics.call('auth/logout', 'POST');
+            window.location.href = '../auth.html';
         }
 
         window.onload = async () => {
             const auth = await Iconics.check();
-            if (auth.status === "success" && auth.data.user.role === 'agent') {
+            if (auth.status === 'success' && auth.data.user.role === 'agent') {
                 loadMyListings();
             } else {
-                window.location.href = "../auth.html";
+                window.location.href = '../auth.html';
             }
         };
     </script>

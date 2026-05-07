@@ -14,33 +14,197 @@
         :root {
             --primary-dark: #0f1923;
             --accent-green: #35ac39;
-            --bg-grid: rgba(15, 25, 35, 0.03);
+            --bg-page: #f4f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.07);
+            --radius-md: 8px;
+            --radius-lg: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f4f5f7;
-            background-image: linear-gradient(var(--bg-grid) 1px, transparent 1px), linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+            background: var(--bg-page);
+            background-image: linear-gradient(rgba(15, 25, 35, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(15, 25, 35, 0.03) 1px, transparent 1px);
             background-size: 30px 30px;
         }
 
-        .property-card {
+        /* ── Sidebar ── */
+        .sidebar {
+            height: 100vh;
+            background: var(--primary-dark);
+            color: white;
+            position: fixed;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            padding: 22px 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .sidebar-brand h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 19px;
+            color: var(--accent-green);
+            margin: 0;
+        }
+
+        .sidebar-brand .sub {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.32);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .sidebar-user {
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .sidebar-user span {
+            display: block;
+            font-weight: 600;
+            color: white;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .nav-link {
+            color: #adb5bd;
+            padding: 11px 22px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav-link i {
+            font-size: 16px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            border-left-color: var(--accent-green);
+        }
+
+        .nav-link.text-danger {
+            color: #f87171 !important;
+        }
+
+        .nav-link.text-danger:hover {
+            border-left-color: #dc3545;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 14px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.25);
+            text-align: center;
+        }
+
+        /* ── Main ── */
+        .main-content {
+            margin-left: 220px;
+            padding: 36px 40px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .page-header .sub {
+            font-size: 13px;
+            color: #777;
+            margin-top: 4px;
+        }
+
+        /* ── Tabs ── */
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .tab-btn {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 20px;
             border: none;
-            border-radius: 12px;
+            background: transparent;
+            color: #777;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-dark);
+            border-bottom-color: var(--accent-green);
+        }
+
+        /* ── Property cards ── */
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .property-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            transition: transform 0.3s ease;
-            background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 0.5px solid var(--border-light);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            transition: transform 0.25s, box-shadow 0.25s;
         }
 
         .property-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
         }
 
         .property-image {
-            height: 200px;
+            height: 190px;
             background-size: cover;
             background-position: center;
+            background-color: #dde1e7;
             position: relative;
         }
 
@@ -50,234 +214,1150 @@
             left: 10px;
             background: var(--primary-dark);
             color: white;
-            padding: 5px 12px;
+            padding: 4px 12px;
             border-radius: 4px;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 13px;
         }
 
-        .save-btn {
+        .type-badge {
             position: absolute;
             top: 10px;
-            right: 10px;
-            background: white;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--primary-dark);
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: capitalize;
+        }
+
+        .card-body-inner {
+            padding: 16px;
+        }
+
+        .card-body-inner h6 {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1a1a18;
+            margin-bottom: 4px;
+        }
+
+        .card-location {
+            font-size: 12px;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 14px;
+        }
+
+        .btn-book {
+            width: 100%;
+            background: var(--primary-dark);
+            color: white;
             border: none;
+            border-radius: var(--radius-md);
+            padding: 9px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-book:hover {
+            background: #1a2a3a;
+        }
+
+        /* ── Bookings table ── */
+        .table-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 0.5px solid var(--border-light);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .table-card-header {
+            padding: 16px 22px;
+            border-bottom: 0.5px solid var(--border-light);
+        }
+
+        .table-card-header h5 {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            margin: 0;
+            color: #1a1a18;
+        }
+
+        .table thead th {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #999;
+            text-transform: uppercase;
+            border-bottom: 0.5px solid #eee;
+            padding: 12px 18px;
+            background: #fafaf9;
+        }
+
+        .table tbody td {
+            font-size: 13px;
+            vertical-align: middle;
+            padding: 14px 18px;
+            border-color: #f5f5f3;
+        }
+
+        .badge-status {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px;
+            color: #ccc;
+        }
+
+        .empty-state i {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 10px;
+            opacity: 0.4;
+        }
+
+        .empty-state p {
+            font-size: 13px;
+            margin: 0;
+        }
+
+        /* ── Payment Modal ── */
+        .payment-step {
+            display: none;
+        }
+
+        .payment-step.active {
+            display: block;
+        }
+
+        .fee-display {
+            background: linear-gradient(135deg, var(--primary-dark), #1a2a3a);
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .fee-display .amount {
+            font-size: 32px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-green);
+        }
+
+        .fee-display .label {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        .property-summary {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .property-summary strong {
+            color: #1a1a18;
+        }
+
+        .property-summary .text-muted {
+            font-size: 12px;
+        }
+
+        .payment-method-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .method-tab {
+            flex: 1;
+            padding: 10px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: var(--radius-md);
+            background: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.2s;
+            color: #666;
+        }
+
+        .method-tab.active {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            background: #f0fdf4;
+        }
+
+        .form-label-sm {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .custom-input {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            font-size: 13px;
+            width: 100%;
+            font-family: 'Montserrat', sans-serif;
+            transition: border 0.2s;
+        }
+
+        .custom-input:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            background: white;
+        }
+
+        .btn-pay {
+            width: 100%;
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 13px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 16px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-pay:hover {
+            background: #2d8f30;
+        }
+
+        .btn-pay:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .secure-note {
+            text-align: center;
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 10px;
+        }
+
+        /* ── Receipt ── */
+        .receipt {
+            background: #fafafa;
+            border: 1px dashed #d1d5db;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            font-size: 13px;
+        }
+
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px dashed #d1d5db;
+        }
+
+        .receipt-header .checkmark {
+            width: 52px;
+            height: 52px;
+            background: var(--accent-green);
             border-radius: 50%;
-            width: 35px;
-            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #d9534f;
-            cursor: pointer;
+            margin: 0 auto 12px;
+            font-size: 24px;
+            color: white;
         }
 
-        /* Payment Modal Styling */
-        .payment-box {
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 15px;
-            background: #fafafa;
+        .receipt-header h5 {
+            font-family: 'Playfair Display', serif;
+            color: #1a1a18;
+            margin-bottom: 4px;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .receipt-row:last-child {
+            border-bottom: none;
+        }
+
+        .receipt-row .key {
+            color: #888;
+        }
+
+        .receipt-row .val {
+            font-weight: 600;
+            color: #1a1a18;
+        }
+
+        .receipt-ref {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            background: #f3f4f6;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .btn-print {
+            width: 100%;
+            background: var(--primary-dark);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 11px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .receipt,
+            .receipt * {
+                visibility: visible;
+            }
+
+            .receipt {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 d-none d-md-block sidebar bg-dark text-white vh-100 position-fixed">
-                <div class="p-4 text-center">
-                    <h2 class="mb-4" style="font-family:'Playfair Display'">Iconics</h2>
-                    <div id="client-name" class="small mb-4">Welcome, User</div>
-                    <hr>
-                    <ul class="nav flex-column">
-                        <li class="nav-item mb-2"><a href="#" class="nav-link text-white"><i
-                                    class="ti ti-smart-home"></i> Explore</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link text-white"><i class="ti ti-heart"></i>
-                                Saved</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link text-white"><i
-                                    class="ti ti-calendar-event"></i> My Bookings</a></li>
-                    </ul>
-                </div>
-            </nav>
 
-            <main class="col-md-10 offset-md-2 p-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 style="font-family:'Playfair Display'">Available Properties</h3>
-                    <button class="btn btn-outline-danger btn-sm" onclick="logout()">Logout</button>
-                </div>
-
-                <div class="row" id="property-grid">
-                </div>
-            </main>
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <h2>Iconics</h2>
+            <div class="sub">FDVIS Platform</div>
         </div>
+        <div class="sidebar-user">
+            Welcome back,
+            <span id="client-name">—</span>
+        </div>
+        <nav class="nav flex-column" style="margin-top: 8px;">
+            <a class="nav-link active" onclick="showTab('explore', this)"><i class="ti ti-smart-home"></i> Explore</a>
+            <a class="nav-link" onclick="showTab('bookings', this)"><i class="ti ti-calendar-event"></i> My Bookings</a>
+            <hr style="border-color: rgba(255,255,255,0.08); margin: 8px 22px;">
+            <a class="nav-link text-danger" onclick="logout()"><i class="ti ti-logout"></i> Logout</a>
+        </nav>
+        <div class="sidebar-footer">IREA / FDVIS &nbsp;·&nbsp; Rental Trust Platform</div>
     </div>
 
-    <div class="modal fade" id="paymentModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Book Viewing</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <i class="ti ti-credit-card text-success" style="font-size: 3rem;"></i>
-                    <h4 class="my-3">Viewing Fee: MWK 10,000</h4>
-                    <p class="text-muted">A viewing fee is required to confirm your appointment with the verified agent.
-                    </p>
+    <div class="main-content">
 
-                    <div class="payment-box mb-3">
-                        <label class="form-label text-start d-block small fw-bold">SIMULATED PAYMENT GATEWAY</label>
-                        <input type="text" class="form-control mb-2" placeholder="Card / Mobile Money Number">
-                        <div class="row g-2">
-                            <div class="col-6"><input type="text" class="form-control" placeholder="MM/YY"></div>
-                            <div class="col-6"><input type="text" class="form-control" placeholder="CVV"></div>
-                        </div>
-                    </div>
+        <!-- EXPLORE TAB -->
+        <div id="tab-explore" class="tab-content">
+            <div class="page-header">
+                <div>
+                    <h1>Available Properties</h1>
+                    <div class="sub">Browse verified listings and book a viewing appointment.</div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="btn-process-payment">Pay & Book Now</button>
+            </div>
+            <div class="property-grid" id="property-grid">
+                <div class="empty-state" style="grid-column:1/-1">
+                    <i class="ti ti-loader"></i>
+                    <p>Loading properties…</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOOKINGS TAB -->
+        <div id="tab-bookings" class="tab-content" style="display:none;">
+            <div class="page-header">
+                <div>
+                    <h1>My Bookings</h1>
+                    <div class="sub">Track your viewing appointments and payment history.</div>
+                </div>
+            </div>
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h5>Viewing Appointments</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Reference</th>
+                                <th>Property</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th class="text-end">Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookings-tbody">
+                            <tr>
+                                <td colspan="7" class="empty-state">
+                                    <i class="ti ti-loader"></i>
+                                    <p>Loading bookings…</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         PAYMENT MODAL
+    ═══════════════════════════════════════════════════ -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 460px;">
+            <div class="modal-content" style="border-radius: 16px; border: none; overflow: hidden;">
+                <div class="modal-header" style="border-bottom: 0.5px solid #f0f0f0; padding: 18px 24px;">
+                    <h5 class="modal-title fw-bold" style="font-size:15px;" id="modal-title">Book a Viewing</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 24px;">
+
+                    <!-- STEP 1: Payment Form -->
+                    <div class="payment-step active" id="step-form">
+                        <div class="fee-display">
+                            <div class="amount">MWK 10,000</div>
+                            <div class="label">Viewing Fee — One-time payment</div>
+                        </div>
+
+                        <div class="property-summary" id="modal-property-summary">
+                            <strong id="modal-property-title">—</strong><br>
+                            <span class="text-muted" id="modal-property-area">—</span>
+                        </div>
+
+                        <div class="payment-method-tabs">
+                            <button class="method-tab active" onclick="selectMethod('card', this)">
+                                <i class="ti ti-credit-card"
+                                    style="font-size:16px;display:block;margin-bottom:4px;"></i>
+                                Card
+                            </button>
+                            <button class="method-tab" onclick="selectMethod('mpamba', this)">
+                                <i class="ti ti-device-mobile"
+                                    style="font-size:16px;display:block;margin-bottom:4px;"></i>
+                                Mpamba
+                            </button>
+                            <button class="method-tab" onclick="selectMethod('airtel_money', this)">
+                                <i class="ti ti-wifi" style="font-size:16px;display:block;margin-bottom:4px;"></i>
+                                Airtel Money
+                            </button>
+                        </div>
+
+                        <!-- Card fields -->
+                        <div id="fields-card">
+                            <div class="mb-3">
+                                <label class="form-label-sm">Cardholder Name</label>
+                                <input type="text" class="custom-input" id="card-name" placeholder="e.g. John Banda">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label-sm">Card Number</label>
+                                <input type="text" class="custom-input" id="card-number"
+                                    placeholder="0000 0000 0000 0000" maxlength="19">
+                            </div>
+                            <div style="display:flex;gap:10px;">
+                                <div style="flex:1;">
+                                    <label class="form-label-sm">Expiry</label>
+                                    <input type="text" class="custom-input" id="card-expiry" placeholder="MM / YY"
+                                        maxlength="7">
+                                </div>
+                                <div style="flex:1;">
+                                    <label class="form-label-sm">CVV</label>
+                                    <input type="password" class="custom-input" id="card-cvv" placeholder="•••"
+                                        maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mobile money fields -->
+                        <div id="fields-mobile" style="display:none;">
+                            <div class="mb-3">
+                                <label class="form-label-sm">Mobile Number</label>
+                                <input type="text" class="custom-input" id="mobile-number"
+                                    placeholder="e.g. 0881234567">
+                            </div>
+                            <p style="font-size:12px;color:#888;margin-top:8px;">
+                                <i class="ti ti-info-circle"></i>
+                                A simulated USSD push will be sent to this number to confirm payment.
+                            </p>
+                        </div>
+
+                        <button class="btn-pay" id="btn-pay" onclick="processPayment()">
+                            Pay MWK 10,000
+                        </button>
+                        <p class="secure-note"><i class="ti ti-lock"></i> Simulated secure payment — no real charge</p>
+                    </div>
+
+                    <!-- STEP 2: Processing -->
+                    <div class="payment-step" id="step-processing" style="text-align:center; padding: 30px 0;">
+                        <div class="spinner-border text-success mb-3" role="status" style="width:3rem;height:3rem;">
+                        </div>
+                        <h6 class="fw-bold">Processing Payment</h6>
+                        <p style="font-size:13px;color:#888;margin-top:6px;" id="processing-msg">Connecting to gateway…
+                        </p>
+                    </div>
+
+                    <!-- STEP 3: Receipt -->
+                    <div class="payment-step" id="step-receipt">
+                        <div class="receipt" id="receipt-content">
+                            <div class="receipt-header">
+                                <div class="checkmark"><i class="ti ti-check"></i></div>
+                                <h5>Payment Confirmed!</h5>
+                                <p style="font-size:12px;color:#888;margin:0;">Your viewing has been booked
+                                    successfully.</p>
+                            </div>
+                            <div class="receipt-row">
+                                <span class="key">Reference</span>
+                                <span class="val receipt-ref" id="rec-ref">—</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span class="key">Property</span>
+                                <span class="val" id="rec-property">—</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span class="key">Amount Paid</span>
+                                <span class="val" id="rec-amount">MWK 10,000</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span class="key">Method</span>
+                                <span class="val" id="rec-method">—</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span class="key">Date & Time</span>
+                                <span class="val" id="rec-date">—</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span class="key">Status</span>
+                                <span class="val" style="color:var(--accent-green);">✓ Completed</span>
+                            </div>
+                        </div>
+                        <button class="btn-print" onclick="printReceipt()">
+                            <i class="ti ti-printer"></i> Print / Save Receipt
+                        </button>
+                        <button class="btn-pay" style="margin-top:8px; background: var(--primary-dark);"
+                            onclick="closeModal()">
+                            Done
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        // Use the Iconics core utility for API calls
-        const Iconics = {
-            call: async (route, method = 'GET', data = null) => {
-                const options = { method, headers: { 'Content-Type': 'application/json' } };
-                if (data) options.body = JSON.stringify(data);
-                const res = await fetch(`../../api/index.php?route=${route}`, options);
-                return res.json();
-            },
-            check: async () => {
-                const res = await fetch('../../api/index.php?route=auth&action=check');
-                return res.json();
+        // ─────────────────────────────────────────────────────────────
+        // STATE
+        // ─────────────────────────────────────────────────────────────
+        let selectedProperty = null;
+        let selectedMethod = 'card';
+        let paymentModalInstance = null;
+
+        const propertyMap = {};
+        const bookingMap = {};
+
+        console.log('Bootstrap loaded:', typeof bootstrap);
+
+        // ─────────────────────────────────────────────────────────────
+        // TAB SWITCHING
+        // ─────────────────────────────────────────────────────────────
+        function showTab(tab, el) {
+            document.querySelectorAll('.tab-content').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            const target = document.getElementById('tab-' + tab);
+
+            if (target) {
+                target.style.display = 'block';
+            }
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            if (el) {
+                el.classList.add('active');
+            }
+
+            if (tab === 'bookings') {
+                loadBookings();
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // AUTH GUARD
+        // ─────────────────────────────────────────────────────────────
+        window.onload = async () => {
+            try {
+                const auth = await Iconics.check();
+
+                const user = auth?.data?.user || auth?.data || {};
+
+                if (!auth || auth.status !== 'success' || user.role !== 'client') {
+                    window.location.href = '../auth.html';
+                    return;
+                }
+
+                document.getElementById('client-name').textContent =
+                    user.full_name || user.name || 'Client';
+
+                await loadProperties();
+
+            } catch (err) {
+                console.error('Authentication error:', err);
+                alert('Failed to load dashboard.');
             }
         };
 
+        // ─────────────────────────────────────────────────────────────
+        // LOAD PROPERTIES
+        // ─────────────────────────────────────────────────────────────
         async function loadProperties() {
-            const res = await Iconics.call('properties', 'GET');
-            const grid = document.getElementById('property-grid');
-            grid.innerHTML = '';
+            try {
+                const grid = document.getElementById('property-grid');
 
-            if (res.status === 'success') {
-                res.data.forEach(p => {
-                    grid.innerHTML += `
-                        <div class="col-md-4 mb-4">
-                            <div class="property-card shadow-sm">
-                                <div class="property-image" style="background-image: url('../../uploads/properties/${p.image || 'default.jpg'}')">
-                                    <div class="price-badge">MWK ${parseFloat(p.price).toLocaleString()}</div>
-                                    <button class="save-btn" onclick="saveProperty(${p.id})"><i class="ti ti-heart"></i></button>
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column:1/-1">
+                        <i class="ti ti-loader"></i>
+                        <p>Loading properties…</p>
+                    </div>
+                `;
+
+                const res = await Iconics.call('property/approved', 'GET');
+
+                if (
+                    res &&
+                    res.status === 'success' &&
+                    Array.isArray(res.data) &&
+                    res.data.length > 0
+                ) {
+
+                    res.data.forEach(property => {
+                        propertyMap[property.id] = property;
+                    });
+
+                    grid.innerHTML = res.data.map(property => `
+                        <div class="property-card">
+    
+                            <div class="property-image"
+                                 style="background-image:url('../../uploads/properties/${property.image_url || property.image || 'default.jpg'}')">
+    
+                                <div class="type-badge">
+                                    ${property.property_type || 'Property'}
                                 </div>
-                                <div class="p-3">
-                                    <h6 class="fw-bold mb-1">${p.title}</h6>
-                                    <p class="small text-muted mb-3"><i class="ti ti-map-pin"></i> ${p.area_name}</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="badge bg-light text-dark border">${p.property_type}</span>
-                                        <button class="btn btn-primary btn-sm" onclick="initiateBooking(${p.id})">Book Viewing</button>
-                                    </div>
+    
+                                <div class="price-badge">
+                                    MWK ${Number(property.price || 0).toLocaleString()}
                                 </div>
+    
                             </div>
+    
+                            <div class="card-body-inner">
+    
+                                <h6>${property.title || 'Untitled Property'}</h6>
+    
+                                <div class="card-location">
+                                    <i class="ti ti-map-pin"></i>
+                                    ${property.area_name || 'Unknown Area'}
+                                </div>
+    
+                                <button
+                                    class="btn-book"
+                                    type="button"
+                                    onclick="openPaymentModal(${property.id})">
+    
+                                    <i class="ti ti-calendar-plus"></i>
+                                    Book Viewing — MWK 10,000
+    
+                                </button>
+    
+                            </div>
+    
+                        </div>
+                    `).join('');
+
+                } else {
+
+                    grid.innerHTML = `
+                        <div class="empty-state" style="grid-column:1/-1">
+                            <i class="ti ti-building-off"></i>
+                            <p>No approved properties found.</p>
                         </div>
                     `;
-                });
+                }
+
+            } catch (err) {
+                console.error('Load properties error:', err);
+
+                document.getElementById('property-grid').innerHTML = `
+                    <div class="empty-state" style="grid-column:1/-1">
+                        <i class="ti ti-alert-circle"></i>
+                        <p>Failed to load properties.</p>
+                    </div>
+                `;
             }
         }
 
-        let selectedPropertyId = null;
-        function initiateBooking(id) {
-            selectedPropertyId = id;
-            const modal = new bootstrap.Modal(document.getElementById('paymentModal'));
-            modal.show();
+        // ─────────────────────────────────────────────────────────────
+        // LOAD BOOKINGS
+        // ─────────────────────────────────────────────────────────────
+        async function loadBookings() {
+            try {
+                const tbody = document.getElementById('bookings-tbody');
+
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <i class="ti ti-loader"></i>
+                            <p>Loading bookings…</p>
+                        </td>
+                    </tr>
+                `;
+
+                const res = await Iconics.call('payment/my_bookings', 'GET');
+
+                if (
+                    res &&
+                    res.status === 'success' &&
+                    Array.isArray(res.data) &&
+                    res.data.length > 0
+                ) {
+
+                    res.data.forEach(booking => {
+                        bookingMap[booking.id] = booking;
+                    });
+
+                    tbody.innerHTML = res.data.map(booking => `
+                        <tr>
+    
+                            <td>
+                                <span class="receipt-ref">
+                                    ${booking.transaction_reference || '—'}
+                                </span>
+                            </td>
+    
+                            <td>
+                                ${booking.property_title || ('#' + booking.property_id)}
+                            </td>
+    
+                            <td>
+                                MWK ${Number(booking.amount || 0).toLocaleString()}
+                            </td>
+    
+                            <td style="text-transform:capitalize;">
+                                ${(booking.payment_method || '').replace('_', ' ')}
+                            </td>
+    
+                            <td>
+                                <span class="badge-status status-${booking.status}">
+                                    ${booking.status}
+                                </span>
+                            </td>
+    
+                            <td>
+                                ${new Date(booking.created_at).toLocaleDateString('en-GB', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric'
+                    })}
+                            </td>
+    
+                            <td class="text-end">
+                                ${booking.status === 'completed'
+                            ? `
+                                        <button
+                                            class="btn-book"
+                                            onclick="showReceipt(${booking.id})">
+                                            View
+                                        </button>
+                                    `
+                            : '—'
+                        }
+                            </td>
+    
+                        </tr>
+                    `).join('');
+
+                } else {
+
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="empty-state">
+                                <i class="ti ti-calendar-off"></i>
+                                <p>No bookings yet.</p>
+                            </td>
+                        </tr>
+                    `;
+                }
+
+            } catch (err) {
+                console.error('Load bookings error:', err);
+            }
         }
 
-        document.getElementById('btn-process-payment').onclick = async () => {
-            const btn = document.getElementById('btn-process-payment');
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
-            btn.disabled = true;
+        // ─────────────────────────────────────────────────────────────
+        // OPEN PAYMENT MODAL
+        // ─────────────────────────────────────────────────────────────
+        function openPaymentModal(propertyId) {
 
-            // Simulate Gateway Delay
-            setTimeout(async () => {
-                // In a real scenario, this would call a booking/payment API
-                alert('Payment Successful! Your viewing for Property #' + selectedPropertyId + ' has been scheduled.');
-                bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
-                btn.innerHTML = 'Pay & Book Now';
-                btn.disabled = false;
-            }, 2000);
-        };
+            try {
 
-        function saveProperty(id) {
-            alert('Property #' + id + ' added to your favorites.');
+                selectedProperty = propertyMap[propertyId];
+
+                if (!selectedProperty) {
+                    alert('Property details not loaded.');
+                    return;
+                }
+
+                resetPaymentModal();
+
+                document.getElementById('modal-property-title').textContent =
+                    selectedProperty.title || 'Property';
+
+                document.getElementById('modal-property-area').textContent =
+                    selectedProperty.area_name || '';
+
+                const modalEl = document.getElementById('paymentModal');
+
+                if (!modalEl) {
+                    alert('Payment modal not found.');
+                    return;
+                }
+
+                paymentModalInstance =
+                    bootstrap.Modal.getOrCreateInstance(modalEl);
+
+                paymentModalInstance.show();
+
+            } catch (err) {
+                console.error('Open modal error:', err);
+                alert('Failed to open payment modal.');
+            }
         }
 
+        // ─────────────────────────────────────────────────────────────
+        // RESET PAYMENT MODAL
+        // ─────────────────────────────────────────────────────────────
+        function resetPaymentModal() {
+
+            showStep('form');
+
+            document.querySelectorAll('.custom-input').forEach(input => {
+                input.value = '';
+            });
+
+            const firstTab = document.querySelector('.method-tab');
+
+            if (firstTab) {
+                selectMethod('card', firstTab);
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // SELECT PAYMENT METHOD
+        // ─────────────────────────────────────────────────────────────
+        function selectMethod(method, btn) {
+
+            selectedMethod = method;
+
+            document.querySelectorAll('.method-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            if (btn) {
+                btn.classList.add('active');
+            }
+
+            document.getElementById('fields-card').style.display =
+                method === 'card' ? 'block' : 'none';
+
+            document.getElementById('fields-mobile').style.display =
+                method !== 'card' ? 'block' : 'none';
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // SHOW STEP
+        // ─────────────────────────────────────────────────────────────
+        function showStep(step) {
+
+            document.querySelectorAll('.payment-step').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            const target = document.getElementById('step-' + step);
+
+            if (target) {
+                target.classList.add('active');
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // PROCESS PAYMENT
+        // ─────────────────────────────────────────────────────────────
+        async function processPayment() {
+
+            try {
+
+                if (!selectedProperty) {
+                    alert('No property selected.');
+                    return;
+                }
+
+                // VALIDATION
+                if (selectedMethod === 'card') {
+
+                    const name = document.getElementById('card-name').value.trim();
+                    const number = document.getElementById('card-number').value.trim();
+                    const expiry = document.getElementById('card-expiry').value.trim();
+                    const cvv = document.getElementById('card-cvv').value.trim();
+
+                    if (!name || !number || !expiry || !cvv) {
+                        alert('Please fill in all card details.');
+                        return;
+                    }
+
+                } else {
+
+                    const mobile = document.getElementById('mobile-number').value.trim();
+
+                    if (!mobile) {
+                        alert('Please enter mobile number.');
+                        return;
+                    }
+                }
+
+                showStep('processing');
+
+                const msgEl = document.getElementById('processing-msg');
+
+                const messages = [
+                    'Connecting to gateway…',
+                    'Verifying payment details…',
+                    'Awaiting confirmation…',
+                    'Finalising transaction…'
+                ];
+
+                let index = 0;
+
+                const ticker = setInterval(() => {
+                    msgEl.textContent =
+                        messages[Math.min(index++, messages.length - 1)];
+                }, 800);
+
+                const res = await Iconics.call('payment/initiate', 'POST', {
+                    property_id: selectedProperty.id,
+                    payment_method: selectedMethod,
+                    amount: 10000
+                });
+
+                clearInterval(ticker);
+
+                if (res && res.status === 'success') {
+
+                    document.getElementById('rec-ref').textContent =
+                        res.data.reference || 'N/A';
+
+                    document.getElementById('rec-property').textContent =
+                        selectedProperty.title || 'Property';
+
+                    document.getElementById('rec-amount').textContent =
+                        'MWK 10,000';
+
+                    document.getElementById('rec-method').textContent =
+                        selectedMethod
+                            .replace('_', ' ')
+                            .replace(/\b\w/g, c => c.toUpperCase());
+
+                    document.getElementById('rec-date').textContent =
+                        new Date().toLocaleString('en-GB', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+
+                    showStep('receipt');
+
+                    loadBookings();
+
+                } else {
+
+                    showStep('form');
+
+                    alert(
+                        'Payment failed: ' +
+                        (res?.message || 'Unknown error')
+                    );
+                }
+
+            } catch (err) {
+
+                console.error('Payment processing error:', err);
+
+                showStep('form');
+
+                alert('Payment processing failed.');
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // SHOW RECEIPT
+        // ─────────────────────────────────────────────────────────────
+        function showReceipt(bookingId) {
+
+            try {
+
+                const booking = bookingMap[bookingId];
+
+                if (!booking) {
+                    return;
+                }
+
+                resetPaymentModal();
+
+                document.getElementById('rec-ref').textContent =
+                    booking.transaction_reference || '—';
+
+                document.getElementById('rec-property').textContent =
+                    booking.property_title || ('#' + booking.property_id);
+
+                document.getElementById('rec-amount').textContent =
+                    'MWK ' + Number(booking.amount || 0).toLocaleString();
+
+                document.getElementById('rec-method').textContent =
+                    (booking.payment_method || '')
+                        .replace('_', ' ')
+                        .replace(/\b\w/g, c => c.toUpperCase());
+
+                document.getElementById('rec-date').textContent =
+                    new Date(booking.created_at).toLocaleString('en-GB', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                showStep('receipt');
+
+                const modalEl = document.getElementById('paymentModal');
+
+                paymentModalInstance =
+                    bootstrap.Modal.getOrCreateInstance(modalEl);
+
+                paymentModalInstance.show();
+
+            } catch (err) {
+                console.error('Receipt error:', err);
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // PRINT RECEIPT
+        // ─────────────────────────────────────────────────────────────
+        function printReceipt() {
+            window.print();
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // CLOSE MODAL
+        // ─────────────────────────────────────────────────────────────
+        function closeModal() {
+
+            if (paymentModalInstance) {
+                paymentModalInstance.hide();
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // LOGOUT
+        // ─────────────────────────────────────────────────────────────
         async function logout() {
-            await Iconics.call('auth', 'GET', { action: 'logout' });
+
+            try {
+
+                await Iconics.call('auth/logout', 'POST');
+
+            } catch (err) {
+                console.error('Logout error:', err);
+            }
+
             window.location.href = '../auth.html';
         }
-
-        window.onload = async () => {
-            const auth = await Iconics.check();
-            if (auth.status !== 'success') {
-                window.location.href = '../auth.html';
-                return;
-            }
-            document.getElementById('client-name').innerText = "Welcome, " + auth.data.user.full_name;
-            loadProperties();
-        };
     </script>
 
-    <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content payment-card">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title fw-bold">Secure Payment</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="payment-form">
-                        <div class="mb-4">
-                            <label class="form-label text-muted small">CARDHOLDER NAME</label>
-                            <input type="text" class="form-control custom-input" placeholder="e.g. John Doe" required>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label text-muted small">CARD NUMBER</label>
-                            <div class="input-group">
-                                <span class="input-group-text custom-input border-end-0"><i
-                                        class="ti ti-credit-card"></i></span>
-                                <input type="text" class="form-control custom-input border-start-0"
-                                    placeholder="0000 0000 0000 0000" required>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-7 mb-4">
-                                <label class="form-label text-muted small">EXPIRATION DATE</label>
-                                <input type="text" class="form-control custom-input" placeholder="MM / YY" required>
-                            </div>
-                            <div class="col-md-5 mb-4">
-                                <label class="form-label text-muted small">CVV</label>
-                                <input type="password" class="form-control custom-input" placeholder="***" maxlength="3"
-                                    required>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold mt-2">
-                            Confirm Payment
-                        </button>
-
-                        <div class="text-center mt-3">
-                            <span class="text-muted small"><i class="ti ti-lock"></i> Encrypted & Secure</span>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 
 </html>
