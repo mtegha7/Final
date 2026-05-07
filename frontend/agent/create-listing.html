@@ -722,8 +722,7 @@
             try {
                 const formData = new FormData(this);
 
-                // FIX: raw fetch with FormData — do NOT set Content-Type header,
-                // the browser sets multipart/form-data + boundary automatically.
+
                 const res = await fetch(
                     'http://localhost/Final/backend/api/property.php?action=create',
                     {

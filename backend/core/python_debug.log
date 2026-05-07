@@ -75,3 +75,39 @@ WARNING:tensorflow:From C:\Users\Mtegha\AppData\Local\Programs\Python\Python310\
 I0000 00:00:1778134284.290748    1780 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
 {"status": "success", "verified": false, "confidence": 50.95, "distance": 0.490545}
+
+====================
+COMMAND:
+python "C:\xampp\htdocs\Final/python/face_verify.py" "C:\xampp\htdocs\Final\backend\controllers/../../uploads/ids/id_31_1778155104.jpg" "C:\xampp\htdocs\Final\backend\controllers/../../uploads/ids/selfie_31_1778155104.jpg"
+
+EXIT CODE:
+0
+
+OUTPUT:
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1778155105.317401    6552 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1778155108.008240    6552 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING:tensorflow:From C:\Users\Mtegha\AppData\Local\Programs\Python\Python310\lib\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+I0000 00:00:1778155116.028015    6552 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+{"status": "success", "verified": false, "confidence": 43.12, "distance": 0.568756}
+
+====================
+COMMAND:
+python "C:\xampp\htdocs\Final/python/face_verify.py" "C:\xampp\htdocs\Final\backend\controllers/../../uploads/ids/id_31_1778155592.jpg" "C:\xampp\htdocs\Final\backend\controllers/../../uploads/ids/selfie_31_1778155592.jpg"
+
+EXIT CODE:
+0
+
+OUTPUT:
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1778155593.323965   22108 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1778155595.734805   22108 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING:tensorflow:From C:\Users\Mtegha\AppData\Local\Programs\Python\Python310\lib\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+I0000 00:00:1778155603.646715   22108 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+{"status": "success", "verified": true, "confidence": 84.66, "distance": 0.153378}
