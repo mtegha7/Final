@@ -5,49 +5,45 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>IREA - Real Estate Platform</title>
+    <title>IREA – Real Estate Platform</title>
 
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/fonts/themify-icons.css">
 
     <style>
+        /* ════════════════════════════════════════════════
+           DESIGN TOKENS — aligned with dashboard.html
+        ════════════════════════════════════════════════ */
         :root {
-            --primary: #1a1a2e;
-            --accent: #c9a167;
-            --accent-light: #e8d5b7;
-            --accent-dark: #a98851;
-            --surface: #FFFFFF;
-            --surface-alt: #f8f9fa;
-            --surface-dark: #2a2a3e;
-            --border: #e0e0e0;
-            --text-primary: #1a1a2e;
-            --text-secondary: #666666;
-            --text-tertiary: #999999;
-            --success: #28a745;
-            --info: #17a2b8;
-            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.15);
-            --radius-sm: 4px;
+            --primary-dark: #0f1923;
+            --accent-green: #35ac39;
+            --accent-green-d: #279b2b;
+            --bg-page: #f4f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.07);
             --radius-md: 8px;
-            --radius-lg: 12px;
+            --radius-lg: 14px;
+            --text-muted: #777;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.09);
+            --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.14);
         }
 
-        * {
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--surface);
-            color: var(--text-primary);
+            font-family: 'Montserrat', sans-serif;
+            background: var(--card-bg);
+            color: var(--primary-dark);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
@@ -63,23 +59,47 @@
             line-height: 1.2;
         }
 
-        /* NAVBAR */
+        /* ════════════ PRELOADER ════════════ */
+        .preloader {
+            position: fixed;
+            inset: 0;
+            background: var(--primary-dark);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .preloader .status p {
+            font-family: 'Playfair Display', serif;
+            font-size: 52px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+
+        .preloader .status span {
+            color: var(--accent-green);
+        }
+
+        /* ════════════ NAVBAR ════════════ */
         .site-navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-            box-shadow: var(--shadow-sm);
+            background: rgba(15, 25, 35, 0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .navbar-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 16px 40px;
+            padding: 0 40px;
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -93,154 +113,177 @@
 
         .irea-brand {
             font-family: 'Playfair Display', serif;
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 800;
-            color: var(--primary) !important;
+            color: white !important;
             text-decoration: none !important;
             letter-spacing: -0.02em;
         }
 
         .irea-brand span {
-            color: var(--accent);
+            color: var(--accent-green);
         }
 
         .nav-menu {
             display: flex;
             gap: 32px;
             list-style: none;
-            margin: 0;
         }
 
         .nav-menu a {
-            color: var(--text-primary);
+            color: rgba(255, 255, 255, 0.65);
             text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            transition: color 0.3s;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            transition: color 0.2s;
         }
 
         .nav-menu a:hover {
-            color: var(--accent);
+            color: white;
         }
 
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
         }
 
-        .btn {
-            padding: 10px 24px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: var(--radius-sm);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-outline {
-            border: 2px solid var(--primary);
-            color: var(--primary);
+        .btn-nav-outline {
+            padding: 9px 22px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            color: rgba(255, 255, 255, 0.85);
             background: transparent;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: all 0.2s;
         }
 
-        .btn-outline:hover {
-            background: var(--primary);
-            color: var(--surface);
+        .btn-nav-outline:hover {
+            border-color: white;
+            color: white;
         }
 
-        .btn-primary {
-            background: var(--accent);
-            color: var(--surface);
-            border: 2px solid var(--accent);
+        .btn-nav-primary {
+            padding: 9px 22px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
         }
 
-        .btn-primary:hover {
-            background: var(--accent-dark);
-            border-color: var(--accent-dark);
+        .btn-nav-primary:hover {
+            background: var(--accent-green-d);
+            color: white;
+            transform: translateY(-1px);
         }
 
-        /* HERO SECTION */
+        /* ════════════ HERO ════════════ */
         .home_bg {
             position: relative;
-            height: 650px;
+            height: 680px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(rgba(26, 26, 46, 0.7), rgba(26, 26, 46, 0.7)),
+            background:
+                linear-gradient(rgba(15, 25, 35, 0.72), rgba(15, 25, 35, 0.72)),
                 url('assets/img/bg/home-bg.jpg') no-repeat center center;
             background-size: cover;
-            margin-top: 68px;
+            margin-top: 64px;
         }
 
         .hero-content {
             max-width: 1400px;
+            width: 100%;
             margin: 0 auto;
             padding: 0 40px;
             text-align: center;
         }
 
+        .hero-eyebrow {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent-green);
+            background: rgba(53, 172, 57, 0.12);
+            border: 1px solid rgba(53, 172, 57, 0.25);
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
         .hero-text h1 {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            color: var(--surface);
+            font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+            color: white;
             margin-bottom: 16px;
             font-weight: 800;
         }
 
         .hero-text p {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.78);
             margin-bottom: 40px;
-            max-width: 700px;
+            max-width: 580px;
             margin-left: auto;
             margin-right: auto;
+            font-weight: 400;
         }
 
-        /* SEARCH BAR */
+        /* ── Search bar ── */
         .search-container {
-            background: var(--surface);
+            background: var(--card-bg);
             border-radius: var(--radius-lg);
-            padding: 32px;
+            padding: 28px 32px;
             box-shadow: var(--shadow-xl);
-            max-width: 900px;
+            max-width: 860px;
             margin: 0 auto;
+            border: 0.5px solid var(--border-light);
         }
 
         .search-tabs {
             display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-            border-bottom: 2px solid var(--border);
+            gap: 4px;
+            margin-bottom: 22px;
+            border-bottom: 1.5px solid #eee;
             padding-bottom: 0;
         }
 
         .search-tab {
-            padding: 12px 24px;
+            padding: 10px 22px;
             background: transparent;
             border: none;
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text-secondary);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
             cursor: pointer;
             position: relative;
-            transition: all 0.3s;
+            transition: color 0.2s;
         }
 
         .search-tab.active {
-            color: var(--accent);
+            color: var(--primary-dark);
         }
 
         .search-tab.active::after {
             content: '';
             position: absolute;
-            bottom: -2px;
+            bottom: -1.5px;
             left: 0;
             right: 0;
             height: 2px;
-            background: var(--accent);
+            background: var(--accent-green);
+            border-radius: 2px;
         }
 
         .search-form {
@@ -256,53 +299,59 @@
         }
 
         .form-group label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 7px;
         }
 
         .form-group input,
         .form-group select {
-            padding: 12px 16px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 15px;
-            font-family: inherit;
-            transition: all 0.3s;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-family: 'Montserrat', sans-serif;
+            background: #f9fafb;
+            color: var(--primary-dark);
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: var(--accent);
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px rgba(53, 172, 57, 0.12);
         }
 
         .btn-search {
-            padding: 12px 32px;
-            background: var(--accent);
-            color: var(--surface);
-            font-weight: 600;
+            padding: 10px 28px;
+            background: var(--primary-dark);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-md);
             cursor: pointer;
-            transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: background 0.2s, transform 0.15s;
+            white-space: nowrap;
         }
 
         .btn-search:hover {
-            background: var(--accent-dark);
+            background: #1c2e40;
+            transform: translateY(-1px);
         }
 
-        /* STATS SECTION */
+        /* ════════════ STATS ════════════ */
         .stats-section {
-            background: var(--surface-alt);
-            padding: 64px 0;
-            border-bottom: 1px solid var(--border);
+            background: var(--primary-dark);
+            padding: 52px 0;
         }
 
         .stats-container {
@@ -310,30 +359,30 @@
             margin: 0 auto;
             padding: 0 40px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 48px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 40px;
             text-align: center;
         }
 
         .stat-item h3 {
-            font-size: 2.5rem;
-            color: var(--accent);
-            margin-bottom: 8px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 800;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            color: var(--accent-green);
+            margin-bottom: 6px;
         }
 
         .stat-item p {
-            font-size: 14px;
-            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
         }
 
-        /* SECTION */
+        /* ════════════ LISTINGS SECTION ════════════ */
         .section-padding {
             padding: 80px 0;
+            background: var(--bg-page);
         }
 
         .section-container {
@@ -345,62 +394,73 @@
         .section-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 48px;
+            align-items: flex-end;
+            margin-bottom: 40px;
         }
 
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
+        .section-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
             margin-bottom: 8px;
         }
 
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+        }
+
         .section-title p {
-            color: var(--text-secondary);
-            font-size: 1rem;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 4px;
         }
 
         .view-all {
-            color: var(--accent);
+            color: var(--accent-green);
             text-decoration: none;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: gap 0.3s;
+            gap: 6px;
+            transition: gap 0.2s;
         }
 
         .view-all:hover {
-            gap: 12px;
+            gap: 10px;
+            color: var(--accent-green-d);
         }
 
-        /* PROPERTY CARDS */
+        /* ── Property cards ── */
         #listings-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: 32px;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 28px;
         }
 
         .single_property {
-            background: var(--surface);
+            background: var(--card-bg);
             border-radius: var(--radius-lg);
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 0.5px solid var(--border-light);
             box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
             cursor: pointer;
         }
 
         .single_property:hover {
-            transform: translateY(-8px);
+            transform: translateY(-6px);
             box-shadow: var(--shadow-xl);
         }
 
         .property-image-wrapper {
             position: relative;
             overflow: hidden;
-            height: 260px;
-            background: var(--surface-alt);
+            height: 240px;
+            background: #e5e7eb;
         }
 
         .single_property img {
@@ -411,87 +471,103 @@
         }
 
         .single_property:hover img {
-            transform: scale(1.1);
+            transform: scale(1.08);
         }
 
         .property-badges {
             position: absolute;
-            top: 16px;
-            left: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            top: 14px;
+            left: 14px;
         }
 
         .property-badge {
-            background: var(--accent);
-            color: var(--surface);
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
-            font-size: 11px;
+            background: var(--accent-green);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.06em;
         }
 
         .property-badge.sale {
-            background: var(--success);
+            background: var(--accent-green);
         }
 
         .property-favorite {
             position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 36px;
-            height: 36px;
+            top: 14px;
+            right: 14px;
+            width: 34px;
+            height: 34px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s;
             border: none;
+            transition: background 0.2s, color 0.2s;
+            color: var(--text-muted);
         }
 
         .property-favorite:hover {
-            background: var(--accent);
-            color: var(--surface);
+            background: var(--primary-dark);
+            color: white;
         }
 
         .single_property_content {
-            padding: 24px;
+            padding: 22px 24px;
         }
 
         .property-price {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--accent);
-            margin-bottom: 12px;
-            font-family: 'Inter', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* green accent on price */
+        .property-price::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            margin-right: 8px;
+            vertical-align: middle;
+            margin-bottom: 2px;
         }
 
         .property-title {
-            font-size: 20px;
-            color: var(--primary);
-            margin-bottom: 8px;
-            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
         }
 
         .property-location {
             display: flex;
             align-items: center;
-            gap: 6px;
-            color: var(--text-tertiary);
-            font-size: 14px;
-            margin-bottom: 16px;
+            gap: 5px;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-bottom: 14px;
+        }
+
+        .property-location i {
+            color: var(--accent-green);
         }
 
         .property-description {
-            font-size: 14px;
-            color: var(--text-secondary);
+            font-size: 12px;
+            color: var(--text-muted);
             line-height: 1.6;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -500,29 +576,30 @@
 
         .property-features {
             display: flex;
-            gap: 20px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
+            gap: 18px;
+            padding-top: 14px;
+            border-top: 0.5px solid var(--border-light);
         }
 
         .feature-item {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            color: var(--text-secondary);
+            gap: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
         }
 
         .feature-item i {
-            color: var(--accent);
-            font-size: 16px;
+            color: var(--accent-green);
+            font-size: 14px;
         }
 
-        /* FOOTER */
+        /* ════════════ FOOTER ════════════ */
         .footer-area {
-            background: var(--primary);
+            background: var(--primary-dark);
             padding: 64px 0 24px;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.75);
         }
 
         .footer-content {
@@ -540,27 +617,30 @@
 
         .footer-brand {
             font-family: 'Playfair Display', serif;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 800;
-            color: var(--surface);
-            margin-bottom: 16px;
+            color: white;
+            margin-bottom: 14px;
         }
 
         .footer-brand span {
-            color: var(--accent);
+            color: var(--accent-green);
         }
 
         .footer-text {
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.7;
-            margin-bottom: 24px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.75;
         }
 
         .footer-section h4 {
-            color: var(--surface);
-            font-size: 16px;
-            margin-bottom: 16px;
-            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 18px;
         }
 
         .footer-links {
@@ -568,60 +648,50 @@
         }
 
         .footer-links li {
-            margin-bottom: 12px;
+            margin-bottom: 11px;
         }
 
         .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
-            transition: color 0.3s;
+            font-size: 13px;
+            transition: color 0.2s;
         }
 
         .footer-links a:hover {
-            color: var(--accent);
+            color: var(--accent-green);
+        }
+
+        .footer-links li:not(:has(a)) {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 13px;
         }
 
         .footer-bottom {
-            padding-top: 32px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
+            padding-top: 28px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .footer-bottom p {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.3);
         }
 
-        /* PRELOADER */
-        .preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--surface);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease;
+        .footer-accent-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            opacity: 0.6;
         }
 
-        .preloader .status p {
-            font-family: 'Playfair Display', serif;
-            font-size: 48px;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        .preloader .status span {
-            color: var(--accent);
-        }
-
-        /* ANIMATIONS */
+        /* ════════════ ANIMATIONS ════════════ */
         .fade-in {
             opacity: 0;
-            animation: fadeIn 0.8s ease forwards;
+            animation: fadeIn 0.7s ease forwards;
         }
 
         .fade-in-up {
@@ -638,7 +708,7 @@
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(24px);
             }
 
             to {
@@ -671,7 +741,7 @@
             animation-delay: 0.6s;
         }
 
-        /* RESPONSIVE */
+        /* ════════════ RESPONSIVE ════════════ */
         @media (max-width: 1200px) {
             .footer-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -688,8 +758,8 @@
             }
 
             #listings-grid {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 24px;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 20px;
             }
 
             .stats-container {
@@ -699,11 +769,7 @@
 
         @media (max-width: 768px) {
             .navbar-container {
-                padding: 16px 24px;
-            }
-
-            .irea-brand {
-                font-size: 24px;
+                padding: 0 24px;
             }
 
             .hero-content {
@@ -711,11 +777,11 @@
             }
 
             .home_bg {
-                height: 500px;
+                height: 580px;
             }
 
             .search-container {
-                padding: 24px;
+                padding: 22px 20px;
             }
 
             .section-container {
@@ -739,6 +805,11 @@
 
             .footer-content {
                 padding: 0 24px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 12px;
             }
         }
     </style>
@@ -764,8 +835,8 @@
                 </ul>
             </div>
             <div class="nav-actions">
-                <a href="auth.html" class="btn btn-outline">Sign In</a>
-                <a href="auth.html" class="btn btn-primary">List Property</a>
+                <a href="auth.html" class="btn-nav-outline">Sign In</a>
+                <a href="auth.html" class="btn-nav-primary">List Property</a>
             </div>
         </div>
     </header>
@@ -773,20 +844,21 @@
     <section id="home" class="home_bg">
         <div class="hero-content fade-in-up">
             <div class="hero-text">
+                <span class="hero-eyebrow">Trusted Real Estate Platform</span>
                 <h1>Find Your Dream Home</h1>
-                <p>Discover properties across the country with IREA - your trusted real estate partner</p>
+                <p>Discover verified properties across the country with IREA — your trusted real estate partner.</p>
             </div>
 
             <div class="search-container">
                 <div class="search-tabs">
-                    <button class="search-tab active">Buy</button>
-                    <button class="search-tab">Rent</button>
-                    <button class="search-tab">Sell</button>
+                    <button class="search-tab active" onclick="setTab(this)">Buy</button>
+                    <button class="search-tab" onclick="setTab(this)">Rent</button>
+                    <button class="search-tab" onclick="setTab(this)">Sell</button>
                 </div>
-                <form class="search-form">
+                <div class="search-form">
                     <div class="form-group">
                         <label>Location</label>
-                        <input type="text" placeholder="City, neighborhood, or ZIP code">
+                        <input type="text" placeholder="City, neighbourhood, or area">
                     </div>
                     <div class="form-group">
                         <label>Property Type</label>
@@ -802,17 +874,17 @@
                         <label>Price Range</label>
                         <select>
                             <option>Any Price</option>
-                            <option>$0 - $200K</option>
-                            <option>$200K - $500K</option>
-                            <option>$500K - $1M</option>
-                            <option>$1M+</option>
+                            <option>K0 – K5M</option>
+                            <option>K5M – K15M</option>
+                            <option>K15M – K30M</option>
+                            <option>K30M+</option>
                         </select>
                     </div>
                     <button type="button" class="btn-search">
                         <i class="fa fa-search"></i>
                         Search
                     </button>
-                </form>
+                </div>
             </div>
         </div>
     </section>
@@ -842,11 +914,12 @@
         <div class="section-container">
             <div class="section-header">
                 <div class="section-title">
+                    <div class="section-label">Handpicked for you</div>
                     <h2>Featured Properties</h2>
-                    <p>Handpicked properties available now</p>
+                    <p>Verified listings available right now</p>
                 </div>
                 <a href="#" class="view-all">
-                    View All Properties
+                    View all properties
                     <i class="fa fa-arrow-right"></i>
                 </a>
             </div>
@@ -854,7 +927,7 @@
         </div>
     </section>
 
-    <footer class="footer-area">
+    <footer class="footer-area" id="contact">
         <div class="footer-content">
             <div class="footer-grid">
                 <div class="footer-section">
@@ -865,16 +938,16 @@
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul class="footer-links">
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Properties</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#latest-listings">Properties</a></li>
                         <li><a href="#">Agents</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Support</h4>
                     <ul class="footer-links">
-                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Help Centre</a></li>
                         <li><a href="#">Terms of Service</a></li>
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">FAQ</a></li>
@@ -883,15 +956,16 @@
                 <div class="footer-section">
                     <h4>Contact</h4>
                     <ul class="footer-links">
-                        <li>info@irea.com</li>
-                        <li>+1 (555) 123-4567</li>
-                        <li>123 Real Estate Ave</li>
-                        <li>New York, NY 10001</li>
+                        <li>info@irea.mw</li>
+                        <li>+265 1 234 567</li>
+                        <li>Lilongwe, Malawi</li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>© 2026 IREA. All Rights Reserved.</p>
+                <div class="footer-accent-dot"></div>
+                <p>FDVIS · Rental Trust Platform</p>
             </div>
         </div>
     </footer>
@@ -900,6 +974,7 @@
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 
     <script>
+        /* Preloader */
         window.addEventListener("load", () => {
             setTimeout(() => {
                 const loader = document.getElementById("preloader");
@@ -910,53 +985,49 @@
             }, 500);
         });
 
+        /* Search tab toggle */
+        function setTab(el) {
+            document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        /* Load properties */
         async function loadProperties() {
             try {
                 const response = await fetch('/Final/backend/api/property.php');
                 const result = await response.json();
 
                 if (result.status === "success") {
-                    const listingsContainer = document.getElementById('listings-grid');
-                    listingsContainer.innerHTML = "";
+                    const grid = document.getElementById('listings-grid');
+                    grid.innerHTML = "";
 
                     result.data.forEach((p, index) => {
-                        const card = `
-                    <div class="single_property fade-in-up stagger-${Math.min(index + 1, 6)}">
-                        <div class="property-image-wrapper">
-                            <img src="assets/img/property/1.jpg" alt="${p.title}" />
-                            <div class="property-badges">
-                                <span class="property-badge sale">For Sale</span>
-                            </div>
-                            <button class="property-favorite">
-                                <i class="fa fa-heart-o"></i>
-                            </button>
-                        </div>
-                        <div class="single_property_content">
-                            <div class="property-price">$${Number(p.price).toLocaleString()}</div>
-                            <h4 class="property-title">${p.title}</h4>
-                            <div class="property-location">
-                                <i class="fa fa-map-marker"></i>
-                                <span>${p.area_name || 'Location Available'}</span>
-                            </div>
-                            <p class="property-description">${p.description || 'Beautiful property with modern amenities and excellent location. Perfect for families looking for a comfortable home.'}</p>
-                            <div class="property-features">
-                                <div class="feature-item">
-                                    <i class="fa fa-bed"></i>
-                                    <span>3 Beds</span>
+                        grid.innerHTML += `
+                        <div class="single_property fade-in-up stagger-${Math.min(index + 1, 6)}">
+                            <div class="property-image-wrapper">
+                                <img src="assets/img/property/1.jpg" alt="${p.title}" />
+                                <div class="property-badges">
+                                    <span class="property-badge sale">For Sale</span>
                                 </div>
-                                <div class="feature-item">
-                                    <i class="fa fa-bath"></i>
-                                    <span>2 Baths</span>
+                                <button class="property-favorite">
+                                    <i class="fa fa-heart-o"></i>
+                                </button>
+                            </div>
+                            <div class="single_property_content">
+                                <div class="property-price">K ${Number(p.price).toLocaleString()}</div>
+                                <div class="property-title">${p.title}</div>
+                                <div class="property-location">
+                                    <i class="fa fa-map-marker"></i>
+                                    <span>${p.area_name || 'Location Available'}</span>
                                 </div>
-                                <div class="feature-item">
-                                    <i class="fa fa-arrows-alt"></i>
-                                    <span>2,400 sqft</span>
+                                <p class="property-description">${p.description || 'Beautiful property with modern amenities and excellent location. Perfect for families looking for a comfortable home.'}</p>
+                                <div class="property-features">
+                                    <div class="feature-item"><i class="fa fa-bed"></i><span>3 Beds</span></div>
+                                    <div class="feature-item"><i class="fa fa-bath"></i><span>2 Baths</span></div>
+                                    <div class="feature-item"><i class="fa fa-arrows-alt"></i><span>2,400 sqft</span></div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                `;
-                        listingsContainer.innerHTML += card;
+                        </div>`;
                     });
                 }
             } catch (error) {

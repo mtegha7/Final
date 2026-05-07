@@ -270,6 +270,154 @@
             background: #1a2a3a;
         }
 
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-details {
+            background: transparent;
+            color: var(--primary-dark);
+            border: 1.5px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 9px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-details:hover {
+            border-color: var(--primary-dark);
+            background: #f4f5f7;
+        }
+
+        /* ── Property Details Modal ── */
+        .detail-image {
+            height: 210px;
+            border-radius: var(--radius-lg);
+            background-size: cover;
+            background-position: center;
+            background-color: #dde1e7;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .detail-type-pill {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--primary-dark);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .detail-price-pill {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: var(--accent-green);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 5px 14px;
+            border-radius: 20px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .detail-field {
+            background: #f9fafb;
+            border: 0.5px solid #e5e7eb;
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+        }
+
+        .detail-field .df-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: #9ca3af;
+            margin-bottom: 4px;
+        }
+
+        .detail-field .df-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a18;
+        }
+
+        .detail-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .detail-description {
+            font-size: 13px;
+            font-weight: 400;
+            color: #555;
+            line-height: 1.65;
+        }
+
+        .detail-agent-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .detail-agent-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(53, 172, 57, 0.12);
+            color: var(--accent-green);
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .detail-agent-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a18;
+        }
+
+        .btn-book-from-detail {
+            width: 100%;
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 13px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 6px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-book-from-detail:hover {
+            background: #2d8f30;
+        }
+
         /* ── Bookings table ── */
         .table-card {
             background: var(--card-bg);
@@ -813,7 +961,7 @@
 
     <!-- PROPERTY DETAILS MODAL -->
     <div class="modal fade" id="propertyDetailsModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="max-width: 520px;">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
             <div class="modal-content" style="border-radius: 16px; border: none; overflow: hidden;">
 
                 <div class="modal-header" style="border-bottom: 0.5px solid #f0f0f0; padding: 18px 24px;">
@@ -823,30 +971,52 @@
 
                 <div class="modal-body" style="padding: 24px;">
 
-                    <div id="detail-image"
-                        style="height:200px;background:#ddd;border-radius:10px;background-size:cover;background-position:center;margin-bottom:15px;">
+                    <!-- Image with overlaid badges -->
+                    <div class="detail-image" id="detail-image">
+                        <span class="detail-type-pill" id="detail-type">—</span>
+                        <span class="detail-price-pill" id="detail-price">—</span>
                     </div>
 
-                    <div style="font-size:11px;color:#888;text-transform:uppercase;">Title</div>
-                    <div style="font-weight:700;margin-bottom:10px;" id="detail-title">—</div>
+                    <!-- Title full-width -->
+                    <div class="detail-grid">
+                        <div class="detail-field full">
+                            <div class="df-label">Property Title</div>
+                            <div class="df-value" id="detail-title">—</div>
+                        </div>
 
-                    <div style="font-size:11px;color:#888;text-transform:uppercase;">Price</div>
-                    <div style="font-weight:700;margin-bottom:10px;" id="detail-price">—</div>
+                        <!-- Area + Trust Score side by side -->
+                        <div class="detail-field">
+                            <div class="df-label"><i class="ti ti-map-pin" style="font-size:11px;"></i> Area</div>
+                            <div class="df-value" id="detail-area">—</div>
+                        </div>
+                        <div class="detail-field">
+                            <div class="df-label"><i class="ti ti-shield-check" style="font-size:11px;"></i> Agent Trust
+                            </div>
+                            <div class="df-value" id="detail-trust">—</div>
+                        </div>
 
-                    <div style="font-size:11px;color:#888;text-transform:uppercase;">Type</div>
-                    <div style="font-weight:700;margin-bottom:10px;" id="detail-type">—</div>
+                        <!-- Description full-width -->
+                        <div class="detail-field full">
+                            <div class="df-label">Description</div>
+                            <div class="detail-description" id="detail-description">—</div>
+                        </div>
 
-                    <div style="font-size:11px;color:#888;text-transform:uppercase;">Area</div>
-                    <div style="font-weight:700;margin-bottom:10px;" id="detail-area">—</div>
+                        <!-- Agent full-width -->
+                        <div class="detail-field full">
+                            <div class="df-label">Listed by</div>
+                            <div class="detail-agent-row">
+                                <div class="detail-agent-avatar" id="detail-agent-avatar">—</div>
+                                <div class="detail-agent-name" id="detail-agent">—</div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <div style="font-size:11px;color:#888;text-transform:uppercase;">Description</div>
-                    <div style="font-weight:500;margin-bottom:10px;" id="detail-description">—</div>
-
-                    <div style="font-size:11px;color:#888;text-transform:uppercase;">Agent</div>
-                    <div style="font-weight:600;" id="detail-agent">—</div>
+                    <button class="btn-book-from-detail" id="detail-book-btn" onclick="bookFromDetail()">
+                        <i class="ti ti-calendar-plus"></i>
+                        Book Viewing — MWK 10,000
+                    </button>
 
                 </div>
-
             </div>
         </div>
     </div>
@@ -948,41 +1118,48 @@
 
                     grid.innerHTML = res.data.map(property => `
                         <div class="property-card">
-    
+
                             <div class="property-image"
                                  style="background-image:url('../../uploads/properties/${property.image_url || property.image || 'default.jpg'}')">
-    
+
                                 <div class="type-badge">
                                     ${property.property_type || 'Property'}
                                 </div>
-    
+
                                 <div class="price-badge">
                                     MWK ${Number(property.price || 0).toLocaleString()}
                                 </div>
-    
+
                             </div>
-    
+
                             <div class="card-body-inner">
-    
+
                                 <h6>${property.title || 'Untitled Property'}</h6>
-    
+
                                 <div class="card-location">
                                     <i class="ti ti-map-pin"></i>
                                     ${property.area_name || 'Unknown Area'}
                                 </div>
-    
-                                <button
-                                    class="btn-book"
-                                    type="button"
-                                    onclick="openPaymentModal(${property.id})">
-    
-                                    <i class="ti ti-calendar-plus"></i>
-                                    Book Viewing — MWK 10,000
-    
-                                </button>
-    
+
+                                <div class="card-actions">
+                                    <button
+                                        class="btn-details"
+                                        type="button"
+                                        onclick="openDetailsModal(${property.id})">
+                                        <i class="ti ti-eye"></i>
+                                        Details
+                                    </button>
+                                    <button
+                                        class="btn-book"
+                                        type="button"
+                                        onclick="openPaymentModal(${property.id})">
+                                        <i class="ti ti-calendar-plus"></i>
+                                        Book
+                                    </button>
+                                </div>
+
                             </div>
-    
+
                         </div>
                     `).join('');
 
@@ -1103,6 +1280,78 @@
             } catch (err) {
                 console.error('Load bookings error:', err);
             }
+        }
+
+
+        // OPEN DETAILS MODAL
+
+        let detailsModalInstance = null;
+        let detailPropertyId = null;
+
+        function openDetailsModal(propertyId) {
+            try {
+                const property = propertyMap[propertyId];
+                if (!property) {
+                    alert('Property details not loaded.');
+                    return;
+                }
+
+                detailPropertyId = propertyId;
+
+                // Image
+                const imgUrl = property.image_url || property.image || '';
+                const imageEl = document.getElementById('detail-image');
+                imageEl.style.backgroundImage = imgUrl
+                    ? `url('../../uploads/properties/${imgUrl}')`
+                    : 'none';
+
+                // Overlaid pills
+                document.getElementById('detail-type').textContent =
+                    property.property_type || 'Property';
+                document.getElementById('detail-price').textContent =
+                    'MWK ' + Number(property.price || 0).toLocaleString();
+
+                // Fields
+                document.getElementById('detail-title').textContent =
+                    property.title || '—';
+                document.getElementById('detail-area').textContent =
+                    property.area_name || '—';
+                document.getElementById('detail-description').textContent =
+                    property.description || 'No description provided.';
+
+                // Trust score
+                const trust = property.trust_score;
+                document.getElementById('detail-trust').textContent =
+                    trust != null ? Number(trust).toFixed(1) + ' / 100' : 'N/A';
+
+                // Agent avatar initials
+                const agentName = property.full_name || property.agent_name || 'Unknown Agent';
+                const parts = agentName.trim().split(' ');
+                const initials = parts.length >= 2
+                    ? parts[0][0] + parts[parts.length - 1][0]
+                    : (parts[0] || 'A')[0];
+                document.getElementById('detail-agent-avatar').textContent =
+                    initials.toUpperCase();
+                document.getElementById('detail-agent').textContent = agentName;
+
+                const modalEl = document.getElementById('propertyDetailsModal');
+                detailsModalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+                detailsModalInstance.show();
+
+            } catch (err) {
+                console.error('Open details modal error:', err);
+                alert('Failed to open property details.');
+            }
+        }
+
+
+        // BOOK FROM DETAILS MODAL
+
+        function bookFromDetail() {
+            if (!detailPropertyId) return;
+            if (detailsModalInstance) detailsModalInstance.hide();
+            // Small delay so detail modal fully closes before payment modal opens
+            setTimeout(() => openPaymentModal(detailPropertyId), 300);
         }
 
 

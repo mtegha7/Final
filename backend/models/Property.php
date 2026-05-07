@@ -14,8 +14,10 @@ class Property
     public function create($data)
     {
         $sql = "INSERT INTO properties 
-                (agent_id, title, description, price, property_type, area_name, latitude, longitude, status, is_flagged)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        (agent_id, title, description, price, property_type,
+         area_name, latitude, longitude, image_hash,
+         status, is_flagged)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             $data['agent_id'],
@@ -26,6 +28,7 @@ class Property
             $data['area_name'],
             $data['latitude'],
             $data['longitude'],
+            $data['image_hash'],
             $data['status'] ?? 'pending',
             $data['is_flagged'] ?? 0
         ]);

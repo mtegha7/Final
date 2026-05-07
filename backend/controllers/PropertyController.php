@@ -43,8 +43,6 @@ class PropertyController
             return;
         }
 
-        // FIX: initialize $isDuplicate and $targetFile before any early-return
-        // branches so they are always defined when referenced later.
         $isDuplicate = false;
         $targetFile  = null;
 
@@ -103,14 +101,7 @@ class PropertyController
             }
 
             // 6. Duplicate image check — only when we have a valid hash.
-            // FIX: the original query selected `image_hash` FROM `properties`,
-            // but that column did not exist in the schema (it only existed on
-            // the `property_images` child table). This caused every query to
-            // fail silently, returning zero rows, and the $isDuplicate flag was
-            // also never initialized before the foreach, producing PHP notices.
-            // The fix is twofold:
-            //   a) The column now exists on `properties` (see schema.sql fix).
-            //   b) $isDuplicate is initialized to false above, before any branch.
+
             if ($imageHash !== null) {
                 $db = Database::getInstance()->conn;
                 $hashStmt = $db->prepare(
@@ -174,8 +165,7 @@ class PropertyController
             }
 
             // 10. Run fraud analysis
-            // FIX: inject the inserted property_id so FraudDetectionService can
-            // associate fraud log entries with the correct listing row.
+
             require_once __DIR__ . '/../services/FraudDetectionService.php';
             $data['property_id'] = $newId;
             $fraudService = new FraudDetectionService();
