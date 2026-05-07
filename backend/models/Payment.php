@@ -1,7 +1,5 @@
 <?php
 
-// Payment model requires the database to already be loaded via index.php → config/database.php
-// We guard here in case the model is ever instantiated directly.
 if (!class_exists('Database')) {
     require_once dirname(__DIR__) . '/config/database.php';
 }
@@ -15,14 +13,7 @@ class Payment
         $this->db = Database::getInstance()->conn;
     }
 
-    /**
-     * Insert a new pending payment record.
-     * Returns the generated transaction reference string, or false on failure.
-     *
-     * FIX: Original model had ($propertyId, $clientId, $amount, $method) in the
-     * signature but PaymentController was calling it as ($propertyId, $amount, $method)
-     * — missing $clientId entirely. Signature and controller are now aligned.
-     */
+
     public function initTransaction($propertyId, $clientId, $amount, $method)
     {
         $ref  = 'TXN-' . strtoupper(uniqid());
